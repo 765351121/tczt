@@ -5,7 +5,15 @@ export const routes = [
   {
     path: '/',
     component: BasicLayout,
-    name: 'BasicLayout'
+    name: 'BasicLayout',
+    redirect: '/home',
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import(/* webpackChunkName: "home" */ '@/views/home/index.vue')
+      },
+    ],
   },
   {
     path: '/user',

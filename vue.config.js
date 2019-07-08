@@ -1,18 +1,18 @@
 const path = require('path')
 const webpack = require('webpack')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
 module.exports = {
   configureWebpack: {
-    
+
   },
 
   chainWebpack: (config) => {
     config.resolve.alias
-      .set('@$', resolve('src')) 
+      .set('@$', resolve('src'))
   },
   devServer: {
     // development server port 8000
@@ -25,4 +25,11 @@ module.exports = {
     //   }
     // }
   },
+  css: {
+    loaderOptions: {
+      less: {
+        javascriptEnabled: true
+      }
+    }
+  }
 }
