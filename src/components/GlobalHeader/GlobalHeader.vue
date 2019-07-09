@@ -2,10 +2,18 @@
     <div class="wrap">
       <div>
         <div>
-          l
-          <a-button type="primary">Button</a-button>
+          <img src="@/assets/icons/hot_line.png" alt="" width="14px" height="14px">
+          <span style="margin-left: 5px">400-085-6566(工作日 9:00-18:00)</span>
         </div>
-        <div>r</div>
+        <div>
+          <span>登录</span>|
+          <span>注册</span>|
+          <span>帮助中心</span>
+          <span>
+            <i><img src="@/assets/icons/rmb.png" alt=""></i>
+            我要借款
+          </span>
+        </div>
       </div>
 
     </div>
@@ -20,6 +28,8 @@ export default {
 
 <style lang="less" scoped>
   .wrap {
+    overflow-x: visible;
+    min-width: 1200px;
     background-color: #303438;
     height: 40px;
     line-height: 40px;
@@ -27,21 +37,37 @@ export default {
     font-size: 14px;
     &>div {
       width: 1200px;
-      border: 1px solid #0ff;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       &>div {
         &:first-child {
-          border: 1px solid #f0f;
           flex: 1;
           text-align: left;
         }
         &:last-child {
-          border: 1px solid #0f0;
           flex: 1;
           text-align: right;
+          &>span {
+            display: inline-block;
+            padding: 0 8px;
+            cursor: pointer;
+            &:last-child {
+              margin-left: 20px;
+              i {
+                display: inline-block;
+                position: relative;
+                width: 14px;
+                height: 14px;
+                img {
+                  position: absolute;
+                  top: 1px;
+                  left: 0;
+                }
+              }
+            }
+          }
         }
       }
     }

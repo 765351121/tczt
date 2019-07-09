@@ -22,10 +22,10 @@ export default {
 
 <style lang="less" scoped>
   .root-wrap {
-    //width: 1200px;
-    //border: 1px solid #0ff;
-    //margin: 0 auto;
-    //min-height: 100vh;
+    background-color: #303438;
+    height: 40px;
+    line-height: 40px;
+    overflow: visible;
   }
 </style>
 
