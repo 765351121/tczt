@@ -3,9 +3,7 @@
     <GlobalHeader />
     <GlobalNav />
     <Banner />
-    <div class="content">
-      111
-    </div>
+    <div class="content"><router-view /></div>
     
 
 
@@ -33,13 +31,13 @@ export default {
   .root-wrap {
     background-color: #303438;
     height: 40px;
-    line-height: 40px;
+    //line-height: 40px;
     overflow: visible;
   }
   .content {
-    border: 1px solid #0ff;
     width: 1200px;
-    margin: 0 auto;
+    margin:15px auto;
+    min-height: 30vh;
   }
 </style>
 
