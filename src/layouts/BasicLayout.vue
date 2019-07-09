@@ -4,7 +4,7 @@
     <GlobalNav />
     <Banner />
     <div class="content"><router-view /></div>
-    
+    <GlobalFooter />
 
 
   </div>
@@ -15,6 +15,7 @@
 import GlobalHeader from '@/components/GlobalHeader'
 import GlobalNav from '@/components/GlobalNav'
 import Banner from '@/components/Banner'
+import GlobalFooter from '@/components/GlobalFooter'
 
 export default {
   name: 'basiclayout',
@@ -22,6 +23,7 @@ export default {
     GlobalHeader,
     GlobalNav,
     Banner,
+    GlobalFooter,
   }
 }
 </script>
@@ -36,7 +38,7 @@ export default {
   }
   .content {
     width: 1200px;
-    margin:15px auto;
+    margin: 20px auto;
     min-height: 30vh;
   }
 </style>
