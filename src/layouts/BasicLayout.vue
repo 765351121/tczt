@@ -1,6 +1,7 @@
 <template>
   <div class="root-wrap">
     <GlobalHeader />
+    <GlobalNav />
     
 
 
@@ -10,11 +11,13 @@
 
 <script>
 import GlobalHeader from '@/components/GlobalHeader'
+import GlobalNav from '@/components/GlobalNav'
 
 export default {
   name: 'basiclayout',
   components: {
     GlobalHeader,
+    GlobalNav,
   }
 }
 </script>
