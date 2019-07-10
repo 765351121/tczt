@@ -18,7 +18,7 @@
 
 <script>
 import Scat from './components/Scat'
-import { getHomeScatList } from '@/services/api'
+import { getHomeScatList } from '@/services/home'
 
 export default {
   name: 'home',
@@ -44,12 +44,14 @@ export default {
     }
   },
   mounted() {
-    console.log('...........')
-    getHomeScatList().then(response => {
+    // console.log('...........')
+    // console.log(this.$store.state)
+    this.$store.dispatch({
+      type: 'getHomeScatList',
+      payload: { a: 1 },
+    }).then(response => {
       console.log(response)
     })
-    console.log('===========')
-    
   }
 }
 </script>
