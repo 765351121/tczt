@@ -12,7 +12,6 @@
           :class="(ii + 1) % 2 == 0? 'even' : ''" 
         />
       </div>
-
     </div>
   </div>
 </template>
@@ -52,9 +51,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  &>div {
-    
-  }
 }
 
 .scat-img {
