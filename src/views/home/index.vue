@@ -18,6 +18,7 @@
 
 <script>
 import Scat from './components/Scat'
+import { getHomeScatList } from '@/services/api'
 
 export default {
   name: 'home',
@@ -41,18 +42,20 @@ export default {
         },
       ]
     }
+  },
+  mounted() {
+    console.log('...........')
+    getHomeScatList()
+    
   }
 }
 </script>
-
-
 <style lang="less" scoped>
 .wrap {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-
 .scat-img {
   img {
     display: inline-block;
@@ -60,7 +63,6 @@ export default {
     height: 390px;
   }
 }
-
 .scat-list {
   width: 100%;
   height: 390px;
@@ -84,12 +86,8 @@ export default {
     }
   }
 }
-
 .even {
   margin-left: 15px;
 }
-
-
-
 </style>
 
