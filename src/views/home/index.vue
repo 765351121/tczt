@@ -48,6 +48,7 @@ export default {
     getHomeScatList().then(response => {
       console.log(response)
     })
+    console.log('===========')
     
   }
 }

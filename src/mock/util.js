@@ -1,18 +1,18 @@
 const responseBody = {
   message: '',
   timestamp: 0,
-  result: null,
-  code: 0
+  data: null,
+  status: 0
 }
 
-export const builder = (data, message, code = 0, headers = {}) => {
-  responseBody.result = data
+export const builder = (data, message, status = 0, headers = {}) => {
+  responseBody.data = data
   if (message !== undefined && message !== null) {
     responseBody.message = message
   }
-  if (code !== undefined && code !== 0) {
-    responseBody.code = code
-    responseBody._status = code
+  if (status !== undefined && status !== 0) {
+    responseBody.status = status
+    responseBody._status = status
   }
   if (headers !== null && typeof headers === 'object' && Object.keys(headers).length > 0) {
     responseBody._headers = headers
