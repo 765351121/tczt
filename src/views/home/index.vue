@@ -45,7 +45,9 @@ export default {
   },
   mounted() {
     console.log('...........')
-    getHomeScatList()
+    getHomeScatList().then(response => {
+      console.log(response)
+    })
     
   }
 }

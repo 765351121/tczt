@@ -7,6 +7,8 @@ import './registerServiceWorker'
 import './global.less'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
+// mock
+import './mock'
 
 Vue.use(Antd)
 
