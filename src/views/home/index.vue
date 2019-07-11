@@ -19,6 +19,8 @@
 <script>
 import Scat from './components/Scat'
 import { getHomeScatList } from '@/services/home'
+import { checkErrorCode } from '@/utils/utils'
+
 
 export default {
   name: 'home',
@@ -27,31 +29,25 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          name: 1
-        },
-        {
-          name: 2
-        },
-        {
-          name: 3
-        },
-        {
-          name: 4
-        },
-      ]
+      list: []
     }
   },
+  methods: {
+    getHomeScatList() {
+      this.$store.dispatch({
+        type: 'getHomeScatList',
+        payload: {},
+      }).then(response => {
+        console.log(response)
+        if (!checkErrorCode(response)) {
+          return false;
+        }
+        this.list = response.data
+      })
+    },
+  },
   mounted() {
-    // console.log('...........')
-    // console.log(this.$store.state)
-    this.$store.dispatch({
-      type: 'getHomeScatList',
-      payload: { a: 1 },
-    }).then(response => {
-      console.log(response)
-    })
+    this.getHomeScatList()
   }
 }
 </script>

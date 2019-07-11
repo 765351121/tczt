@@ -13,7 +13,7 @@ const home = {
 
   actions: {
     // 首页散标列表
-    getHomeScatList ({ commit, state }, { payload }) {
+    getHomeScatList ({ state, commit }, { payload }) {
       return new Promise((resolve, reject) => {
         getHomeScatList().then(response => {
           commit('getHomeScatList_success', response.data)
