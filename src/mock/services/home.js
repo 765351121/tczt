@@ -15,7 +15,7 @@ const scatList = (opts) => {
     "minInvestmentAmount": 1000.0000,
     "productCode": "20190617162007bdxx4329",
     "productId": 157,
-    "productName": "22222",
+    "productName": "标的1001",
     "productState": 10,
     "repaymentMode": "5"
   }, {
@@ -29,7 +29,7 @@ const scatList = (opts) => {
     "minInvestmentAmount": 1000.0000,
     "productCode": "20190617161932bdxx3927",
     "productId": 156,
-    "productName": "33333",
+    "productName": "标的1002",
     "productState": 10,
     "repaymentMode": "5"
   }, {
@@ -43,7 +43,7 @@ const scatList = (opts) => {
     "minInvestmentAmount": 1000.0000,
     "productCode": "20190615182007bdxx0839",
     "productId": 148,
-    "productName": "123123123",
+    "productName": "标的1003",
     "productState": 10,
     "repaymentMode": "5"
   }, {
@@ -57,7 +57,7 @@ const scatList = (opts) => {
     "minInvestmentAmount": 1000.0000,
     "productCode": "20190615181915bdxx2737",
     "productId": 147,
-    "productName": "333",
+    "productName": "标的1004",
     "productState": 10,
     "repaymentMode": "5"
   }]

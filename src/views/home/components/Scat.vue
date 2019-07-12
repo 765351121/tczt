@@ -12,7 +12,7 @@
         </div>
         <div class="bottom_wrap">
           <span>约定年化利率</span>
-          <span>剩余可投{{ maxSaleVolume }}元</span>
+          <span>剩余可投{{ $utils.formatCurrency(maxSaleVolume) }}元</span>
         </div>
       </div>
     </div>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { formatCurrency } from '@/utils/utils'
+
 export default {
   name: 'scat',
   props: {
