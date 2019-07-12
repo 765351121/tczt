@@ -10,6 +10,7 @@
           v-for="(i, ii) in list" 
           :key="ii" 
           :class="(ii + 1) % 2 == 0? 'even' : ''" 
+          v-bind="i"
         />
       </div>
     </div>
@@ -38,7 +39,6 @@ export default {
         type: 'getHomeScatList',
         payload: {},
       }).then(response => {
-        console.log(response)
         if (!checkErrorCode(response)) {
           return false;
         }

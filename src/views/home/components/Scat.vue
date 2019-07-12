@@ -3,16 +3,16 @@
     <div class="wrap">
       <div>
         <div class="title-wrap">
-          <span>标的111</span>
-          <span>发售中</span>
+          <span>{{ productName }}</span>
+          <span>{{ formatProductState() }}</span>
         </div>
         <div class="center_wrap">
-          <span>5.8%</span>
-          <span>出借期限30天</span>
+          <span>{{ annualYield }}%</span>
+          <span>出借期限{{ loanTimeLimit }}天</span>
         </div>
         <div class="bottom_wrap">
           <span>约定年化利率</span>
-          <span>剩余可投3500.00元</span>
+          <span>剩余可投{{ maxSaleVolume }}元</span>
         </div>
       </div>
     </div>
@@ -22,6 +22,79 @@
 <script>
 export default {
   name: 'scat',
+  props: {
+    productName: {  //产品名称
+      type: String,
+      required: false,
+      default: '',
+    },
+    annualYield: {  //约定年化利率
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    productState: { //产品状态
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    loanTimeLimit: {  //出借期限
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    maxSaleVolume: {  //剩余可投
+      type: Number,
+      required: false,
+      default: 0,
+    },
+  },
+  data() {
+    return {
+     
+    }
+  },
+  methods: {
+    formatProductState() {
+      let txt = '' 
+      let { productState: code } = this
+      /**
+       * @code Number
+       *  10 发售中
+       *  20已满标
+       *  30 还款中
+       *  40 已结清
+       *  50 已流标 
+       *  51 已撤标
+       */
+      switch (code) {
+        case 10:
+          txt = '发售中';
+          break;
+        case 20:
+          txt = '已满标';
+          break;
+        case 30:
+          txt = '还款中';
+          break;
+        case 40:
+          txt = '已结清';
+          break;
+        case 50:
+          txt = '已流标';
+          break;
+        case 51:
+          txt = '已撤标';
+          break;
+        default:
+          txt = '发售中';
+      }
+      return txt
+    }
+  },
+  mounted() {
+
+  }
 }
 </script>
 
