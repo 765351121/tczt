@@ -2,11 +2,9 @@
   <div class="root-wrap">
     <GlobalHeader />
     <GlobalNav />
-    <Banner />
+    <Banner v-if="name == 'home'" />
     <div class="content"><router-view /></div>
     <GlobalFooter />
-
-
   </div>
 </template>
 
@@ -24,6 +22,14 @@ export default {
     GlobalNav,
     Banner,
     GlobalFooter,
+  },
+  data() {
+    return {
+      name: '',
+    }
+  },
+  mounted() {
+    this.name = this.$route.name
   }
 }
 </script>
