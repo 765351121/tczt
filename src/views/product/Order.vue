@@ -49,14 +49,11 @@
 
 <script>
 export default {
-  name: "order"
+  name: "order",
 };
 </script>
 
 <style lang="less" scoped>
-.wrap {
-  //border: 1px solid #0ff;
-}
 .fix-Wrap {
   //border: 1px solid #0ff;
   display: flex;

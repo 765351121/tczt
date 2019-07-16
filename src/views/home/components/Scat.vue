@@ -1,6 +1,6 @@
 <template>
   <div class="root-scat">
-    <div class="wrap">
+    <div class="wrap" @click="handleItemClick">
       <div>
         <div class="title-wrap">
           <span>{{ productName }}</span>
@@ -92,7 +92,12 @@ export default {
           txt = '发售中';
       }
       return txt
-    }
+    },
+    handleItemClick () {
+      this.$router.push({
+        name: '/product/order',
+      })
+    },
   },
   mounted() {
 

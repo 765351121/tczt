@@ -12,8 +12,8 @@ export const routes = [{
         component: () => import( /* webpackChunkName: "home" */ '@/views/home/index.vue')
       },
       {
-        path: '/product/order',
-        name: 'order',
+        path: '/product/order/:data',
+        name: '/product/order',
         component: () => import( /* webpackChunkName: "order" */ '@/views/product/Order.vue')
       }
     ],
