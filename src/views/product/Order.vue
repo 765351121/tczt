@@ -33,7 +33,7 @@
               </div>
             </div>
             <div class="progress">
-              <a-progress :percent="50" size="small" status="active" />
+              <a-progress :percent="50" size="small" status="active"/>
             </div>
             <div class="payment">
               <img src="@/assets/images/product/payment.png" alt>
@@ -41,7 +41,28 @@
             </div>
           </div>
         </div>
-        <div class="action-wrap">222</div>
+        <div class="action-wrap">
+          <div class="amount-wrap">
+            <div>
+              剩余可投金额：
+              <span>1,400.00 元</span>
+            </div>
+            <div>
+              您的账户余额：
+              <a-button type="primary">登录后可以查看</a-button>
+            </div>
+          </div>
+          <div class="invest-wrap">
+            <div>买入金额</div>
+            <div>
+              <a-input-search 
+                placeholder="1000元起投，1元递增" 
+                enterButton="立即加入" 
+                size="large" 
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -49,7 +70,7 @@
 
 <script>
 export default {
-  name: "order",
+  name: "order"
 };
 </script>
 
@@ -137,7 +158,44 @@ export default {
 .action-wrap {
   border: 1px solid #f0f;
   width: 40%;
+
 }
+
+.amount-wrap {
+  background-color: #fff;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  color: #666;
+  padding: 10px 20px;
+  &>div:first-child {
+    span {
+      font-size: 14px;
+      font-family: "Microsoft YaHei";
+      font-weight: bolder;
+      color: #333;
+    }
+  }
+  &>div:last-child {
+    margin-top: 15px;
+  }
+  button {
+    font-size: 13px;
+    color: #fff;
+  }
+  :global {
+    .ant-btn {
+      height: 30px;
+    }
+  }
+}
+
+.invest-wrap {
+  background-color: #fff;
+  margin-top: 15px;
+  padding: 10px 20px;
+}
+
+
 </style>
 
 
