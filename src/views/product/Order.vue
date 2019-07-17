@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="invest-wrap">
-            <div>买入金额</div>
+            <div style="margin-bottom: 10px">买入金额</div>
             <div>
               <a-input-search 
                 placeholder="1000元起投，1元递增" 
@@ -61,10 +61,35 @@
                 size="large" 
               />
             </div>
+            <div style="margin-top: 10px">预计出借回报：0.00 元</div>
+            <div style="margin-top: 20px" class="checkbox">
+              <a-checkbox @change="onChange">
+                我已阅读并同意
+                <a href="http://www.baidu.com" target="_blank">《借款合同》</a>
+              </a-checkbox>
+              <div style="padding-left: 22px"><a href="http://www.baidu.com" target="_blank">《网络借贷风险和禁止性行为提示及资金来源合法承诺》</a></div>
+            </div>
+            <div></div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="tab-wrap">
+      <a-tabs defaultActiveKey="1" @change="callback">
+        <a-tab-pane tab="项目详情" key="1">
+          111
+        </a-tab-pane>
+        <a-tab-pane tab="借款方信息" key="2">
+          222
+        </a-tab-pane>
+        <a-tab-pane tab="出借记录" key="3">
+          333
+        </a-tab-pane>
+      </a-tabs>
+
+    </div>
+
   </div>
 </template>
 
@@ -156,9 +181,7 @@ export default {
 }
 
 .action-wrap {
-  border: 1px solid #f0f;
   width: 40%;
-
 }
 
 .amount-wrap {
@@ -193,6 +216,30 @@ export default {
   background-color: #fff;
   margin-top: 15px;
   padding: 10px 20px;
+  padding-bottom: 48px;
+  .checkbox {
+    a {
+      font-size: 12px;
+    }
+  }
+}
+
+.tab-wrap {
+  background-color: #fff;
+  margin-top: 20px;
+  min-height: 580px;
+  padding: 30px;
+  
+
+  :global {
+    .ant-tabs-nav-container {
+      color: #666;
+      font-size: 20px;
+      font-family: "Microsoft YaHei";
+    }
+  }
+
+
 }
 
 
