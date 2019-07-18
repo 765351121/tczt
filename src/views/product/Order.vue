@@ -78,7 +78,7 @@
     <div class="tab-wrap">
       <a-tabs defaultActiveKey="1" @change="callback">
         <a-tab-pane tab="项目详情" key="1">
-          111
+          <Details />
         </a-tab-pane>
         <a-tab-pane tab="借款方信息" key="2">
           222
@@ -94,8 +94,13 @@
 </template>
 
 <script>
+import Details from './components/Details'
+
 export default {
-  name: "order"
+  name: "order",
+  components: {
+    Details,
+  }
 };
 </script>
 
@@ -205,10 +210,9 @@ export default {
     font-size: 13px;
     color: #fff;
   }
-  :global {
-    .ant-btn {
-      height: 30px;
-    }
+
+  /deep/ .ant-btn {
+    height: 30px;
   }
 }
 
@@ -229,15 +233,13 @@ export default {
   margin-top: 20px;
   min-height: 580px;
   padding: 30px;
-  
 
-  :global {
-    .ant-tabs-nav-container {
-      color: #666;
-      font-size: 20px;
-      font-family: "Microsoft YaHei";
-    }
+  /deep/ .ant-tabs-nav-container {
+    color: #666;
+    font-size: 20px;
+    font-family: "Microsoft YaHei";
   }
+  
 
 
 }
