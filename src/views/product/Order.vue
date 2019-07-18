@@ -84,7 +84,7 @@
           <BorrowInfo :userInfo="merchantUserInfo"  />
         </a-tab-pane>
         <a-tab-pane tab="出借记录" key="3">
-          333
+          <InvestOrder :investOrder="investOrder" />
         </a-tab-pane>
       </a-tabs>
 
@@ -96,6 +96,7 @@
 <script>
 import Details from './components/Details'
 import BorrowInfo from './components/BorrowInfo'
+import InvestOrder from './components/InvestOrder'
 import { checkErrorCode } from '@/utils/utils'
 
 export default {
@@ -103,14 +104,17 @@ export default {
   components: {
     Details,
     BorrowInfo,
+    InvestOrder,
   },
   data() {
     return {
       scatProduct: {},
       merchantUserInfo: {},
+      investOrder: {},
     }
   },
   methods: {
+    // 获取散标产品信息
     getScatterProduct() {
       this.$store.dispatch({
         type: 'getScatterProduct',
@@ -124,6 +128,7 @@ export default {
         this.scatProduct = response.data
       })
     },
+    // 获取用户信息
     getMerchantUserInfo() {
       this.$store.dispatch({
         type: 'getMerchantUserInfo',
@@ -138,6 +143,22 @@ export default {
         this.merchantUserInfo = response.data
       })
     },
+    // 获取出借记录信息
+    getInvestOrder() {
+      this.$store.dispatch({
+        type: 'getInvestOrder',
+        payload: {
+          productId: '20190329185836bdxx9354',
+        },
+      }).then(response => {
+        console.log(response)
+        if (!checkErrorCode(response)) {
+          return false;
+        }
+        this.investOrder = response.data
+      })
+    },
+    
 
 
 
@@ -148,6 +169,8 @@ export default {
     this.getScatterProduct() 
     // /assetMerchant/userInfo/merchantUserInfo?targetStatus=10&platformUserNo=PN1901311428427961381116319
     this.getMerchantUserInfo()
+    // /finance/usercenter/order/getInvestOrder?productId=20190329185836bdxx9354
+    this.getInvestOrder()
   
   },
 };

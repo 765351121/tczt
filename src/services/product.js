@@ -19,7 +19,14 @@ export async function getMerchantUserInfo (params) {
     data: params
   })
 }
-
+// 获取出借记录信息
+export async function getInvestOrder (params) {
+  return axios({
+    url: `${mockPath}/usercenter/order/getInvestOrder`,
+    method: 'post',
+    data: params
+  })
+}
 
 
 

@@ -1,9 +1,10 @@
-import { getScatterProduct, getMerchantUserInfo } from '@/services/product'
+import { getScatterProduct, getMerchantUserInfo, getInvestOrder } from '@/services/product'
 
 const product = {
   state: {
     scatProduct: {},
     merchantUserInfo: {},
+    investOrder: {},
   },
 
   mutations: {
@@ -13,6 +14,10 @@ const product = {
     getMerchantUserInfo_success: (state, payload) => {
       state.merchantUserInfo = payload
     },
+    getInvestOrder_success: (state, payload) => {
+      state.investOrder = payload
+    },
+    
 
     
   },
@@ -36,8 +41,17 @@ const product = {
         })
       })
     },
+    // 获取出借记录信息
+    getInvestOrder ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getInvestOrder().then(response => {
+          commit('getInvestOrder_success', response.data)
+          return resolve(response)
+        })
+      })
+    },
 
-
+    
     
 
   }

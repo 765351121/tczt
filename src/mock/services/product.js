@@ -3,6 +3,56 @@ import {
   builder
 } from '../util'
 
+// 获取出借记录信息
+
+const getInvestOrder = (opts) => {
+  let data = {
+    "targetName": null,
+    "targetCode": null,
+    "status": null,
+    "periodType": null,
+    "period": null,
+    "rate": null,
+    "orderAmount": null,
+    "exceptIncome": null,
+    "loadDate": null,
+    "orderDate": null,
+    "interestDate": null,
+    "protocol": null,
+    "platformUserNo": null,
+    "productId": null,
+    "orderId": null,
+    "rows": [{
+      "userName": "丁琳",
+      "phone": "188****8058",
+      "orderAmount": 5000.00,
+      "orderTime": "2019-04-02 09:57:28"
+    }, {
+      "userName": "宋晓刚",
+      "phone": "133****7720",
+      "orderAmount": 1000.00,
+      "orderTime": "2019-04-01 20:17:19"
+    }, {
+      "userName": "宦勇琼",
+      "phone": "137****7680",
+      "orderAmount": 10000.00,
+      "orderTime": "2019-04-01 16:35:15"
+    }, {
+      "userName": "张芬芬",
+      "phone": "138****9623",
+      "orderAmount": 10000.00,
+      "orderTime": "2019-03-31 16:42:28"
+    }, {
+      "userName": "郝为",
+      "phone": "135****1191",
+      "orderAmount": 50000.00,
+      "orderTime": "2019-03-31 12:57:32"
+    }]
+  }
+
+  return builder(data)
+}
+
 // 订单页散标产品信息
 const merchantUserInfo = (opts) => {
   let data = {
@@ -143,3 +193,4 @@ const scatProduct = (opts) => {
 
 Mock.mock(/\/mock\/usercenter\/product\/scatterProduct/, 'post', scatProduct)
 Mock.mock(/\/mock\/userInfo\/merchantUserInfo/, 'post', merchantUserInfo)
+Mock.mock(/\/mock\/usercenter\/order\/getInvestOrder/, 'post', getInvestOrder)
