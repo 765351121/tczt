@@ -81,7 +81,7 @@
           <Details :details="scatProduct.productDetails" />
         </a-tab-pane>
         <a-tab-pane tab="借款方信息" key="2">
-          222
+          <BorrowInfo :userInfo="merchantUserInfo"  />
         </a-tab-pane>
         <a-tab-pane tab="出借记录" key="3">
           333
@@ -95,16 +95,19 @@
 
 <script>
 import Details from './components/Details'
+import BorrowInfo from './components/BorrowInfo'
 import { checkErrorCode } from '@/utils/utils'
 
 export default {
   name: "order",
   components: {
     Details,
+    BorrowInfo,
   },
   data() {
     return {
       scatProduct: {},
+      merchantUserInfo: {},
     }
   },
   methods: {
@@ -121,11 +124,31 @@ export default {
         this.scatProduct = response.data
       })
     },
+    getMerchantUserInfo() {
+      this.$store.dispatch({
+        type: 'getMerchantUserInfo',
+        payload: {
+          targetStatus: '10',
+          platformUserNo: 'PN1901311428427961381116319'
+        },
+      }).then(response => {
+        if (!checkErrorCode(response)) {
+          return false;
+        }
+        this.merchantUserInfo = response.data
+      })
+    },
+
+
+
+    
   },
   mounted() {
     // /finance/usercenter/product/scatterProduct
     this.getScatterProduct() 
-
+    // /assetMerchant/userInfo/merchantUserInfo?targetStatus=10&platformUserNo=PN1901311428427961381116319
+    this.getMerchantUserInfo()
+  
   },
 };
 </script>

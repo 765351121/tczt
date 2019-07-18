@@ -4,6 +4,71 @@ import {
 } from '../util'
 
 // 订单页散标产品信息
+const merchantUserInfo = (opts) => {
+  let data = {
+    "id": null,
+    "mobile": null,
+    "merchantCode": null,
+    "merchantName": "天津****公司",
+    "loginPassword": null,
+    "loginSlat": null,
+    "registerTime": null,
+    "firstLoginTime": null,
+    "status": null,
+    "location": "天津市",
+    "ratio": null,
+    "description": null,
+    "createTime": null,
+    "updateTime": null,
+    "industry": "科学研究和技术服务业",
+    "incomeAndLiabilities": "无负债",
+    "overdueSixMonths": "无逾期",
+    "loansFromOtherP2pPlatforms": "无其他网络借贷平台借款",
+    "borrowersFinance": null,
+    "borrowersFunds": null,
+    "loansFromOtherPlatforms": "无其他平台借款",
+    "borrowersLoanAbility": null,
+    "borrowersOverdue": null,
+    "borrowersLawsuit": null,
+    "borrowersPenalties": null,
+    "remark": null,
+    "merchantAbbreviation": null,
+    "unitType": null,
+    "registrationType": null,
+    "merchantRegistrationType": null,
+    "legalAscription": "李**",
+    "horizontalText": null,
+    "lowerChordCharacter": null,
+    "signature": null,
+    "auditStatus": null,
+    "merchantLevel": null,
+    "foundingTime": "2018-01-22",
+    "regCapital": null,
+    "realCapital": null,
+    "registeredAddressProvince": null,
+    "registeredAddressCity": null,
+    "workAddressProvince": null,
+    "workAddressCity": null,
+    "workAddress": null,
+    "companyTel": null,
+    "email": null,
+    "region": null,
+    "enterpriceType": null,
+    "overdueHistoryTimes": 0,
+    "overdueHistoryAmount": 0,
+    "repayHistoryTimes": 0,
+    "contact": null,
+    "contactPhone": null,
+    "contactEmail": null,
+    "unifiedCode": null,
+    "creditAmount": null,
+    "creditTotalAmount": null,
+    "openAccountStatus": null
+  }
+  return builder(data)
+}
+
+// 订单页散标产品信息
 const scatProduct = (opts) => {
   let data = {
     "id": 130,
@@ -72,4 +137,9 @@ const scatProduct = (opts) => {
   return builder(data)
 }
 
+
+
+
+
 Mock.mock(/\/mock\/usercenter\/product\/scatterProduct/, 'post', scatProduct)
+Mock.mock(/\/mock\/userInfo\/merchantUserInfo/, 'post', merchantUserInfo)
