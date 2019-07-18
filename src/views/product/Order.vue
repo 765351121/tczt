@@ -63,7 +63,7 @@
             </div>
             <div style="margin-top: 10px">预计出借回报：0.00 元</div>
             <div style="margin-top: 20px" class="checkbox">
-              <a-checkbox @change="onChange">
+              <a-checkbox>
                 我已阅读并同意
                 <a href="http://www.baidu.com" target="_blank">《借款合同》</a>
               </a-checkbox>
@@ -76,9 +76,9 @@
     </div>
 
     <div class="tab-wrap">
-      <a-tabs defaultActiveKey="1" @change="callback">
+      <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="项目详情" key="1">
-          <Details />
+          <Details :details="scatProduct.productDetails" />
         </a-tab-pane>
         <a-tab-pane tab="借款方信息" key="2">
           222
@@ -95,12 +95,38 @@
 
 <script>
 import Details from './components/Details'
+import { checkErrorCode } from '@/utils/utils'
 
 export default {
   name: "order",
   components: {
     Details,
-  }
+  },
+  data() {
+    return {
+      scatProduct: {},
+    }
+  },
+  methods: {
+    getScatterProduct() {
+      this.$store.dispatch({
+        type: 'getScatterProduct',
+        payload: {
+          productCode: '20190702134228bdxx1599'
+        },
+      }).then(response => {
+        if (!checkErrorCode(response)) {
+          return false;
+        }
+        this.scatProduct = response.data
+      })
+    },
+  },
+  mounted() {
+    // /finance/usercenter/product/scatterProduct
+    this.getScatterProduct() 
+
+  },
 };
 </script>
 

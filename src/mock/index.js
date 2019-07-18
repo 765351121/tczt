@@ -6,6 +6,7 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   // 防止 vuex 中的 GetInfo 早于 mock 运行，导致无法 mock 请求返回结果
   require('./services/user')
   require('./services/home')
+  require('./services/product')
 
   Mock.setup({
     timeout: 1000 // setter delay time
