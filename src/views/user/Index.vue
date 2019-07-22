@@ -21,12 +21,12 @@ export default {
 
 <style lang="less" scoped>
 .wrap {
-  padding: 150px 0;
+  padding: 110px 0;
   .content {
     padding: 0 50px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    //align-items: center;
   }
 }
 .form-wrap {
@@ -34,6 +34,7 @@ export default {
   width: 480px;
   min-height: 426px;
   padding: 50px 60px;
+  border-radius: 5px;
 }
 </style>
 
