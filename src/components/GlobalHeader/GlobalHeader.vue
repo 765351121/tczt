@@ -6,8 +6,8 @@
           <span style="margin-left: 5px">400-085-6566(工作日 9:00-18:00)</span>
         </div>
         <div>
-          <span>登录</span>|
-          <span>注册</span>|
+          <span><router-link to="/user/login">登录</router-link></span>|
+          <span><router-link to="/user/register">注册</router-link></span>|
           <span>帮助中心</span>
           <span>
             <i><img src="@/assets/icons/rmb.png" alt=""></i>
@@ -66,6 +66,10 @@ export default {
                   left: 0;
                 }
               }
+            }
+            a {
+              color: #fff;
+              text-decoration: none;
             }
           }
         }

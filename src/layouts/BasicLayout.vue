@@ -28,9 +28,20 @@ export default {
       name: '',
     }
   },
+  methods: {
+    setBasic() {
+      this.name = this.$route.name
+    },
+    watchRoute(){
+      this.setBasic()
+    }
+  },
   mounted() {
-    this.name = this.$route.name
-  }
+    this.setBasic()
+  },
+  watch: {
+    '$route':'watchRoute'
+  },
 }
 </script>
 
