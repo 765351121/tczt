@@ -9,22 +9,26 @@ export const routes = [{
   children: [{
       path: '/home',
       name: 'home',
-      component: () => import( /* webpackChunkName: "home" */ '@/views/home/index.vue')
+      component: () => import('@/views/home/index.vue')
     },
     {
       path: '/product/order',
       name: '/product/order',
-      component: () => import( /* webpackChunkName: "order" */ '@/views/product/Order.vue')
+      component: () => import('@/views/product/Order.vue')
     },
     // user related...
     {
       path: '/user',
       name: 'user',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/user/Index.vue'),
+      component: () => import('@/views/user/Index.vue'),
       children: [{
         path: '/user/login',
         name: 'login',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/user/components/Login.vue')
+        component: () => import('@/views/user/components/Login.vue')
+      },{
+        path: '/user/register',
+        name: 'register',
+        component: () => import('@/views/user/components/Register.vue')
       }]
     }
   ]

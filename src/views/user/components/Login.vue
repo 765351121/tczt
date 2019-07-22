@@ -34,7 +34,7 @@
       </div>
       <div class="reg-wrap">
         没有账号？
-        <router-link to="/">立即注册</router-link>
+        <router-link to="/user/register">立即注册</router-link>
       </div>
     </div>
   </div>

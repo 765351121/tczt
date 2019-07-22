@@ -31,9 +31,9 @@ export default {
 }
 .form-wrap {
   background-color: #fff;
-  width: 480px;
+  width: 525px;
   min-height: 426px;
-  padding: 50px 60px;
+  padding: 50px 50px;
   border-radius: 5px;
 }
 </style>
