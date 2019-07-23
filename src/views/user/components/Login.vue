@@ -70,9 +70,16 @@ export default {
   },
   methods: {
     handleLoginSuccess() {
-      this.$router.push({ name: '/home' })
+      this.$store.dispatch({
+        type: 'getUserInfo',
+        payload: {}
+      }).then(response => {
+        console.log('...........')
+        console.log(response)
+      })
+      //this.$router.push({ name: '/home' })
     },
-    
+
     login(values, response) {
       const { encryInfo, randomId } = response.data;
       const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
