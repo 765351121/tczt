@@ -1,6 +1,10 @@
 import message from 'ant-design-vue/es/message';
 import CryptoJS from 'crypto-js';
+import WebStorageCache from 'web-storage-cache';
 import regexp from './regexp';
+
+const wsCache = new WebStorageCache();
+const wsSessionCache = new WebStorageCache({ storage: 'sessionStorage' });
 
 export default {
   regexp,
@@ -154,5 +158,27 @@ export function encryptAES(content, key) {
       cipher[attr] = aesEncrypted(content[attr], key)
     })
     return cipher
+  }
+}
+
+// handle webStorage
+export const handleWebStorage = cache => {
+  cache = cache === 'session' ? wsSessionCache : wsCache
+  return {
+    setItem: (map) => {
+      Object.keys(map).map(i => cache.set(i, map[i]))
+    },
+    getItem: (set) => {
+      if (typeof set === 'string') {
+        return cache.get(set)
+      }
+      let effect = [...new Set(set)].map(i => ({
+        [i]: cache.get(i)
+      }))
+      return Object.assign(new Object(), ...effect)
+    },
+    clearItem: (key) => {
+      return cache.delete(key)
+    }
   }
 }
