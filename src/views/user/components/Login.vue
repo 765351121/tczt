@@ -1,59 +1,120 @@
 <template>
   <div>
-    <div class="wrap">
-      <div class="title">用户登录</div>
-      <div class="form-wrap">
-        <a-form>
+    <a-form :form="form" @submit="handleSubmit">
+      <div class="wrap">
+        <div class="title">用户登录</div>
+        <div class="form-wrap">
           <a-form-item>
-            <a-input placeholder="请输入手机号"/>
+            <a-input
+              maxlength="11"
+              placeholder="请输入手机号"
+              v-decorator="['userAcc', {
+                rules: [{
+                  required: true, 
+                  pattern: $utils.default.regexp.phone,
+                  validator: validateUserAcc,
+                }],
+              }]"
+            />
           </a-form-item>
-        </a-form>
-        <div class="pwd-wrap">
-          <a-form>
+          <div class="pwd-wrap">
             <a-form-item>
-              <a-input 
-                placeholder="请输入登录密码" 
-                :type="state.iconStatus && 'text' || 'password'" 
+              <a-input
+                maxlength="20"
+                placeholder="请输入登录密码"
+                :type="state.iconStatus && 'text' || 'password'"
+                v-decorator="['userPwd', {
+                  rules: [{
+                    required: true, 
+                    validator: validateUserPwd,
+                  }],
+                }]"
               />
             </a-form-item>
-          </a-form>
-          <span class="icon-wrap" @click="changeIcon">
-            <a-icon 
-              slot="suffix" 
-              style="font-size: 16px; color:rgb(24, 144, 255)"
-              :type="state.iconStatus && 'eye' || 'eye-invisible'" 
-            />
-          </span>
+            <span class="icon-wrap" @click="changeIcon">
+              <a-icon
+                slot="suffix"
+                style="font-size: 16px; color:rgb(24, 144, 255)"
+                :type="state.iconStatus && 'eye' || 'eye-invisible'"
+              />
+            </span>
+          </div>
+        </div>
+        <div class="forget-pwd-wrap">
+          <span>忘记密码？</span>
+        </div>
+        <div class="btn-wrap">
+          <a-button type="primary" size="large" block html-type="submit">登录</a-button>
+        </div>
+        <div class="reg-wrap">
+          没有账号？
+          <router-link to="/user/register">立即注册</router-link>
         </div>
       </div>
-      <div class="forget-pwd-wrap">
-        <span>忘记密码？</span>
-      </div>
-      <div class="btn-wrap">
-        <a-button type="primary" size="large" block>登录</a-button>
-      </div>
-      <div class="reg-wrap">
-        没有账号？
-        <router-link to="/user/register">立即注册</router-link>
-      </div>
-    </div>
+    </a-form>
   </div>
 </template>
 
 <script>
+import { checkErrorCode } from "@/utils/utils";
+
 export default {
   name: "T-login",
   data() {
     return {
       state: {
-        iconStatus: true,
-      }
-    }
+        iconStatus: true
+      },
+      form: this.$form.createForm(this)
+    };
   },
   methods: {
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          console.log('err')
+          return false
+        }
+        console.log('succ')
+      });
+    },
+
     changeIcon() {
-      console.log('...........')
-      this.state.iconStatus = !this.state.iconStatus
+      this.state.iconStatus = !this.state.iconStatus;
+    },
+
+    validateUserAcc(rule, value, callback) {
+      if (!rule.pattern.test(value)) {
+        return callback(
+          <span>
+            <a-icon
+              type="exclamation-circle"
+              theme="twoTone"
+              twoToneColor="#f5222d"
+            />
+            &nbsp;请输入正确的手机号
+          </span>
+        );
+      }
+      return callback();
+    },
+
+    validateUserPwd(rule, value, callback) {
+      console.log(".............");
+      if (!value) {
+        return callback(
+          <span>
+            <a-icon
+              type="exclamation-circle"
+              theme="twoTone"
+              twoToneColor="#f5222d"
+            />
+            &nbsp;请输入密码
+          </span>
+        );
+      }
+      return callback();
     }
   }
 };
@@ -88,9 +149,9 @@ export default {
     .icon-wrap {
       display: inline-block;
       position: absolute;
-      top: 50%;
+      top: 10px;
       right: 10px;
-      transform: translateY(-50%);
+      //transform: translateY(-50%);
       cursor: pointer;
     }
   }

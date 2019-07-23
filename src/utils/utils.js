@@ -1,4 +1,9 @@
 import message from 'ant-design-vue/es/message'
+import regexp from './regexp';
+
+export default {
+  regexp,
+}
 
 //检查请求结果的错误码
 export function checkErrorCode(result) {
