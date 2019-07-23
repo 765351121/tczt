@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { checkErrorCode, encryptAES } from "@/utils/utils";
+import { checkErrorCode, encryptAES, handleWebStorage } from "@/utils/utils";
 
 export default {
   name: "T-login",
@@ -65,19 +65,23 @@ export default {
       state: {
         iconStatus: true
       },
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      ws: handleWebStorage(),
     };
   },
   methods: {
     handleLoginSuccess() {
+      this.ws.setItem({ user: 'user-123' })
       this.$store.dispatch({
         type: 'getUserInfo',
         payload: {}
       }).then(response => {
-        console.log('...........')
-        console.log(response)
+        //console.log('...........')
+        //console.log(response)
+
       })
       //this.$router.push({ name: '/home' })
+      
     },
 
     login(values, response) {
