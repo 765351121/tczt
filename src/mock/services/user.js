@@ -3,6 +3,13 @@ import {
   builder
 } from '../util'
 
+
+// 登录
+const login = (options) => {
+  let data = null
+  return builder(data)
+}
+
 // 加密随机串
 const getEncryInfo = (options) => {
   let data = {
@@ -13,3 +20,6 @@ const getEncryInfo = (options) => {
 }
 
 Mock.mock(/\/mock\/usercenter\/client\/common\/getEncryInfo/, 'post', getEncryInfo)
+Mock.mock(/\/mock\/usercenter\/client\/login/, 'post', login)
+
+

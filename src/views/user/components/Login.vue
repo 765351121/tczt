@@ -69,14 +69,30 @@ export default {
     };
   },
   methods: {
+    handleLoginSuccess() {
+      this.$router.push({ name: '/home' })
+    },
+    
     login(values, response) {
-      console.log("...............");
-      console.log(response);
       const { encryInfo, randomId } = response.data;
       const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
-      console.log(userAcc)
-      console.log(userPwd)
-
+      this.$store
+        .dispatch({
+          type: "login",
+          payload: {
+            randomId,
+            userAcc,
+            userPwd,
+            platform: "pc"
+          }
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+           this.$message.success('登录成功');
+          this.handleLoginSuccess();
+        });
     },
 
     handleSubmit(e) {

@@ -12,5 +12,15 @@ export async function getEncryInfo (params) {
   })
 }
 
+// 登录
+export async function login (params) {
+  return axios({
+    url: `${mockPath}/usercenter/client/login`,
+    method: 'post',
+    data: params
+  })
+}
+
+
 
 
