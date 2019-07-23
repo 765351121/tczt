@@ -77,6 +77,14 @@ export default {
           return false
         }
         console.log('succ')
+        this.$store.dispatch({
+          type: 'getEncryInfo',
+          payload: {}
+        }).then(response => {
+          console.log(response);
+        })
+
+
       });
     },
 
