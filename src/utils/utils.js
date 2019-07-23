@@ -1,4 +1,5 @@
-import message from 'ant-design-vue/es/message'
+import message from 'ant-design-vue/es/message';
+import CryptoJS from 'crypto-js';
 import regexp from './regexp';
 
 export default {
@@ -132,4 +133,26 @@ export function formatCurByObj(parms) {
     attr != 'errorCode' && attr != 'errorMessage' && (res[attr] = formatCurrency(parms[attr]))
   })
   return res
+}
+
+function aesEncrypted(text, key) {
+  return CryptoJS.AES.encrypt(text, CryptoJS.enc.Utf8.parse(key), {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    })
+    .toString()
+}
+
+// AES加密：
+export function encryptAES(content, key) {
+  if (typeof content === 'string' || typeof content === 'number') {
+    return aesEncrypted(content, key)
+  }
+  if (typeof content === 'object') {
+    let cipher = {}
+    Object.keys(content).forEach(attr => {
+      cipher[attr] = aesEncrypted(content[attr], key)
+    })
+    return cipher
+  }
 }

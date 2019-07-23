@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { checkErrorCode } from "@/utils/utils";
+import { checkErrorCode, encryptAES } from "@/utils/utils";
 
 export default {
   name: "T-login",
@@ -69,22 +69,33 @@ export default {
     };
   },
   methods: {
+    login(values, response) {
+      console.log("...............");
+      console.log(response);
+      const { encryInfo, randomId } = response.data;
+      const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
+      console.log(userAcc)
+      console.log(userPwd)
+
+    },
+
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!!err) {
-          console.log('err')
-          return false
+          return false;
         }
-        console.log('succ')
-        this.$store.dispatch({
-          type: 'getEncryInfo',
-          payload: {}
-        }).then(response => {
-          console.log(response);
-        })
-
-
+        this.$store
+          .dispatch({
+            type: "getEncryInfo",
+            payload: {}
+          })
+          .then(response => {
+            if (!checkErrorCode(response)) {
+              return false;
+            }
+            this.login(values, response);
+          });
       });
     },
 
@@ -109,7 +120,6 @@ export default {
     },
 
     validateUserPwd(rule, value, callback) {
-      console.log(".............");
       if (!value) {
         return callback(
           <span>
