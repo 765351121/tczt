@@ -3,6 +3,11 @@ import {
   builder
 } from '../util'
 
+// 登出
+const logout = (options) => {
+  let data = null
+  return builder(data)
+}
 
 // 登录
 const login = (options) => {
@@ -21,5 +26,6 @@ const getEncryInfo = (options) => {
 
 Mock.mock(/\/mock\/usercenter\/client\/common\/getEncryInfo/, 'post', getEncryInfo)
 Mock.mock(/\/mock\/usercenter\/client\/login/, 'post', login)
+Mock.mock(/\/mock\/usercenter\/client\/logout/, 'post', logout)
 
 

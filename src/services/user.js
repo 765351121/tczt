@@ -21,6 +21,15 @@ export async function login (params) {
   })
 }
 
+// 登出
+export async function logout (params) {
+  return axios({
+    url: `${mockPath}/usercenter/client/logout`,
+    method: 'post',
+    data: params
+  })
+}
+
 
 
 

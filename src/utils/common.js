@@ -36,6 +36,11 @@ export const accountTemplate = {
   },
  */
 
+ // 更改Mock账户状态：account
+export const resetAccountStatus = content => {
+  ws.setItem({ account: { ...accountTemplate }})
+}
+
 // 更改Mock账户状态：account
 export const updateAccountStatus = content => {
   ws.setItem({ account: { ...Object.assign({ ...(ws.getItem('account') || {}) }, { ...content }) } })

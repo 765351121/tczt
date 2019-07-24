@@ -1,4 +1,4 @@
-import { getEncryInfo, login, } from '@/services/user'
+import { getEncryInfo, login, logout, } from '@/services/user'
 
 const user = {
   state: {
@@ -26,6 +26,15 @@ const user = {
         })
       })
     },
+    // 登出
+    logout ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        logout().then(response => {
+          return resolve(response)
+        })
+      })
+    },
+    
 
 
 

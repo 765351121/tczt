@@ -16,7 +16,7 @@
         </div>
         <div class="effect" v-if="userInfo.isLogin">
           <span v-text="`您好，${userInfo.userAcc}`"></span>|
-          <span>
+          <span @click="handleLogout">
             安全退出
           </span>|
         </div>
@@ -41,9 +41,19 @@ export default {
       required: true,
       default: () => {},
     },
+    logout: {
+      type: Function,
+      required: true,
+      default: () => null,
+    }
   },
   data() {
     return {
+    }
+  },
+  methods: {
+    handleLogout() {
+      this.logout()
     }
   },
 };

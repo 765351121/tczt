@@ -90,7 +90,7 @@ export default {
           payload: {}
         })
         .then(response => {
-          console.log(response);
+          //console.log(response);
           this.$router.push({ name: '/home' })
         });
     },

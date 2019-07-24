@@ -1,6 +1,9 @@
 <template>
   <div class="root-wrap">
-    <GlobalHeader :userInfo="$store.state.global.userInfo"/>
+    <GlobalHeader 
+      :userInfo="$store.state.global.userInfo"
+      :logout="logout"
+    />
     <GlobalNav/>
     <Banner v-if="name == '/home'"/>
     <div class="content">
@@ -16,8 +19,8 @@ import GlobalHeader from "@/components/GlobalHeader";
 import GlobalNav from "@/components/GlobalNav";
 import Banner from "@/components/Banner";
 import GlobalFooter from "@/components/GlobalFooter";
-import { handleWebStorage } from "@/utils/utils";
-import { updateAccountStatus, accountTemplate } from "@/utils/common";
+import { handleWebStorage, checkErrorCode } from "@/utils/utils";
+import { updateAccountStatus, accountTemplate, resetAccountStatus } from "@/utils/common";
 
 export default {
   name: "basiclayout",
@@ -34,6 +37,21 @@ export default {
     };
   },
   methods: {
+    resetMockAccount() {
+      resetAccountStatus()
+    },
+    logout () {
+      this.$store.dispatch({
+        type: 'logout'
+      })
+      .then(response => {
+        if (!checkErrorCode(response)) {
+          return false
+        }
+        this.resetMockAccount()
+        this.getUserInfo()
+      })
+    },
     setBasic() {
       this.name = this.$route.name;
     },
@@ -51,9 +69,9 @@ export default {
         .dispatch({
           type: "getUserInfo"
         })
-        .then(response => {
-          console.log(response);
-        });
+        // .then(response => {
+        //   console.log(response);
+        // });
     }
   },
   beforeUpdate() {
