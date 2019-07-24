@@ -2,11 +2,13 @@ import { getUserInfo } from '@/services/global'
 
 const global = {
   state: {
- 
+    userInfo: {},
   },
 
   mutations: {
-    
+    getUserInfo_success: (state, payload) => {
+      state.userInfo = payload
+    },
   },
 
   actions: {
@@ -14,6 +16,7 @@ const global = {
     getUserInfo ({ state, commit }, { payload }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
+          commit('getUserInfo_success', response.data)
           return resolve(response)
         })
       })
