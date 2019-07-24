@@ -182,3 +182,8 @@ export const handleWebStorage = cache => {
     }
   }
 }
+
+// 脱敏phone
+export function tmPhone(phone) {
+	return `${!!phone && phone.substring(0,3)}****${!!phone && phone.substring(7)}`
+}

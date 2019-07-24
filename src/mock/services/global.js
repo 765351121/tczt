@@ -9,10 +9,8 @@ const ws = handleWebStorage()
 
 // userInfo
 const userInfo = (options) => {
-  console.log('===============');
-  let a = ws.getItem('user')
-  console.log(a);
-  let data = {}
+  let account = ws.getItem('account')
+  let data = { ...account }
   return builder(data)
 }
 

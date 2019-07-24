@@ -14,6 +14,8 @@ import GlobalHeader from '@/components/GlobalHeader'
 import GlobalNav from '@/components/GlobalNav'
 import Banner from '@/components/Banner'
 import GlobalFooter from '@/components/GlobalFooter'
+import { handleWebStorage } from "@/utils/utils";
+import { updateAccountStatus, accountTemplate } from "@/utils/common";
 
 export default {
   name: 'basiclayout',
@@ -26,6 +28,7 @@ export default {
   data() {
     return {
       name: '',
+      ws: handleWebStorage(),
     }
   },
   methods: {
@@ -38,6 +41,10 @@ export default {
   },
   mounted() {
     this.setBasic()
+    updateAccountStatus({
+      ...accountTemplate,
+      ...(this.ws.getItem('account') || {})
+    })
   },
   watch: {
     '$route':'watchRoute'

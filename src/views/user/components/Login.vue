@@ -56,7 +56,13 @@
 </template>
 
 <script>
-import { checkErrorCode, encryptAES, handleWebStorage } from "@/utils/utils";
+import {
+  checkErrorCode,
+  encryptAES,
+  handleWebStorage,
+  tmPhone
+} from "@/utils/utils";
+import { updateAccountStatus, deleteWs } from "@/utils/common";
 
 export default {
   name: "T-login",
@@ -66,22 +72,27 @@ export default {
         iconStatus: true
       },
       form: this.$form.createForm(this),
-      ws: handleWebStorage(),
+      ws: handleWebStorage()
     };
   },
   methods: {
+    mockAccount() {
+      updateAccountStatus({
+        isLogin: true,
+        userAcc: tmPhone(this.form.getFieldValue("userAcc"))
+      });
+    },
     handleLoginSuccess() {
-      this.ws.setItem({ user: 'user-123' })
-      this.$store.dispatch({
-        type: 'getUserInfo',
-        payload: {}
-      }).then(response => {
-        //console.log('...........')
-        //console.log(response)
-
-      })
-      //this.$router.push({ name: '/home' })
-      
+      this.mockAccount()
+      this.$store
+        .dispatch({
+          type: "getUserInfo",
+          payload: {}
+        })
+        .then(response => {
+          console.log(response);
+          this.$router.push({ name: '/home' })
+        });
     },
 
     login(values, response) {
@@ -101,7 +112,7 @@ export default {
           if (!checkErrorCode(response)) {
             return false;
           }
-           this.$message.success('登录成功');
+          this.$message.success("登录成功");
           this.handleLoginSuccess();
         });
     },
