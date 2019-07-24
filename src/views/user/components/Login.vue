@@ -44,7 +44,7 @@
           <span>忘记密码？</span>
         </div>
         <div class="btn-wrap">
-          <a-button type="primary" size="large" block html-type="submit">登录</a-button>
+          <a-button type="primary" :loading="loading" size="large" block html-type="submit">登录</a-button>
         </div>
         <div class="reg-wrap">
           没有账号？
@@ -72,7 +72,8 @@ export default {
         iconStatus: true
       },
       form: this.$form.createForm(this),
-      ws: handleWebStorage()
+      ws: handleWebStorage(),
+      loading: false,
     };
   },
   methods: {
@@ -91,6 +92,7 @@ export default {
         })
         .then(response => {
           //console.log(response);
+          this.loading = false
           this.$router.push({ name: '/home' })
         });
     },
@@ -123,6 +125,7 @@ export default {
         if (!!err) {
           return false;
         }
+        this.loading = true
         this.$store
           .dispatch({
             type: "getEncryInfo",
