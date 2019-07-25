@@ -30,6 +30,22 @@ export async function logout (params) {
   })
 }
 
+// 发送短信验证码
+export async function sendsms (params) {
+  return axios({
+    url: `${mockPath}/usercenter/client/sms/pc`,
+    method: 'post',
+    data: params
+  })
+}
 
+// 注册
+export async function regist (params) {
+  return axios({
+    url: `${mockPath}/usercenter/client/regist`,
+    method: 'post',
+    data: params
+  })
+}
 
 

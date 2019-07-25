@@ -3,6 +3,19 @@ import {
   builder
 } from '../util'
 
+
+// 注册
+const regist = (options) => {
+  let data = null
+  return builder(data)
+}
+
+// 发送短信验证码
+const smspc = (options) => {
+  let data = null
+  return builder(data)
+}
+
 // 登出
 const logout = (options) => {
   let data = null
@@ -27,5 +40,10 @@ const getEncryInfo = (options) => {
 Mock.mock(/\/mock\/usercenter\/client\/common\/getEncryInfo/, 'post', getEncryInfo)
 Mock.mock(/\/mock\/usercenter\/client\/login/, 'post', login)
 Mock.mock(/\/mock\/usercenter\/client\/logout/, 'post', logout)
+Mock.mock(/\/mock\/usercenter\/client\/sms\/pc/, 'post', smspc)
+Mock.mock(/\/mock\/usercenter\/client\/regist/, 'post', regist)
+
+
+
 
 

@@ -1,4 +1,4 @@
-import { getEncryInfo, login, logout, } from '@/services/user'
+import { getEncryInfo, login, logout, sendsms, regist } from '@/services/user'
 
 const user = {
   state: {
@@ -34,6 +34,26 @@ const user = {
         })
       })
     },
+    // 发送短信验证码
+    sendsms ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        sendsms().then(response => {
+          return resolve(response)
+        })
+      })
+    },
+    // 注册
+    regist ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        regist().then(response => {
+          return resolve(response)
+        })
+      })
+    },
+
+    
+
+    
     
 
 

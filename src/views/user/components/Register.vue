@@ -41,7 +41,7 @@
 
           <div class="sms-code-wrap">
             <a-form-item>
-              <a-input 
+              <a-input
                 maxlength="6"
                 placeholder="请输入短信验证码"
                 v-decorator="['vericode', {
@@ -82,11 +82,11 @@
         </div>
 
         <div class="btn-wrap">
-          <a-button type="primary" size="large" block>立即注册</a-button>
+          <a-button type="primary" size="large" block :disabled="!state.checked" html-type="submit">立即注册</a-button>
         </div>
 
         <div class="checkbox">
-          <a-checkbox>
+          <a-checkbox :checked="state.checked" @change="handleCheckbox">
             我已阅读并同意
             <a href="http://www.baidu.com" target="_blank">《天辰智投平台用户注册及服务协议》</a>
           </a-checkbox>
@@ -102,6 +102,8 @@
 </template>
 
 <script>
+import { checkErrorCode, encryptAES } from "@/utils/utils";
+
 export default {
   name: "T-register",
   data() {
@@ -111,15 +113,66 @@ export default {
         imgvc: 1,
         imgArr: new Array(7).join(),
         count: 0,
-        tips: "获取验证码"
+        tips: "获取验证码",
+        checked: true
       }
     };
   },
   methods: {
-
+    // 注册
+    regist(values, response) {
+      const { encryInfo, randomId } = response.data;
+      const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
+      this.$store
+        .dispatch({
+          type: "regist",
+          payload: {
+            ...values,
+            randomId,
+            userAcc,
+            userPwd,
+            channelid: "pc",
+            platform: "pc",
+            source: "p2p"
+          }
+        })
+        .then(response => {
+          console.log('注册', response);
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.$message.success("注册成功");
+        });
+    },
+    // 提交
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          return false;
+        }
+        //this.loading = true
+        // /finance/usercenter/client/regist
+        this.$store
+          .dispatch({
+            type: "getEncryInfo",
+            payload: {}
+          })
+          .then(response => {
+            if (!checkErrorCode(response)) {
+              return false;
+            }
+            this.regist(values, response);
+          });
+      });
+    },
+    // 注册协议勾选框
+    handleCheckbox(e) {
+      this.state.checked = e.target.checked;
+    },
     // 校验用户密码
     validateUserPwd(rule, value, callback) {
-      if (!!value &&!rule.pattern.test(value)) {
+      if (!!value && !rule.pattern.test(value)) {
         return callback(
           <span>
             <a-icon
@@ -135,14 +188,14 @@ export default {
     },
     // 校验短信验证码
     validateVericode(rule, value, callback) {
-      if (!!value && (value.length < 6 || (value.indexOf(" ") > -1))) {
+      if (!!value && (value.length < 6 || value.indexOf(" ") > -1)) {
         return callback("请输入6位验证码");
       }
       return callback();
     },
     // 校验图形验证码
     validateCaptcha(rule, value, callback) {
-      if (!!value && (value.length < 4 || (value.indexOf(" ") > -1))) {
+      if (!!value && (value.length < 4 || value.indexOf(" ") > -1)) {
         return callback("请输入4位图形验证码");
       }
       return callback();
@@ -163,8 +216,6 @@ export default {
       }
       return callback();
     },
-    // 提交
-    handleSubmit(e) {},
     // 刷新图形验证码
     getImgvc() {
       // mock for getImgvc
@@ -190,7 +241,32 @@ export default {
     },
     // 获取短信验证码
     handleSmsCode() {
-      this.smsCountDown();
+      this.form.validateFields(
+        ["userAcc", "captcha"],
+        { force: true },
+        (err, values) => {
+          if (!!err) {
+            return false;
+          }
+          this.smsCountDown();
+          // /finance/usercenter/client/sms/pc
+
+          this.$store
+            .dispatch({
+              type: "sendsms",
+              payload: {
+                ...values,
+                smsType: "regist"
+              }
+            })
+            .then(response => {
+              if (!checkErrorCode(response)) {
+                return false;
+              }
+              this.$message.success("验证码已发送");
+            });
+        }
+      );
     }
   }
 };
