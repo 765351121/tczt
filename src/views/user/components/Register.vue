@@ -88,6 +88,7 @@
             block
             :disabled="!state.checked"
             html-type="submit"
+            :loading="state.loading"
           >立即注册</a-button>
         </div>
 
@@ -105,7 +106,13 @@
       </div>
     </a-form>
 
-    <a-modal width="480px" :visible="state.visible" :centered="true" :footer="null">
+    <a-modal 
+      width="480px" 
+      :visible="state.visible" 
+      :centered="true" 
+      :footer="null"
+      @cancel="() => handleCancel()"
+    >
       <div class="modal-content-wrap">
         <div class="img-wrap">
           <img src="@/assets/images/status/success.png" alt>
@@ -115,11 +122,12 @@
           <span>请前往开户认证，认证成功即可出借</span>
         </div>
         <div class="btn-wrap">
-          <a-button type="primary" size="large" block>立即开户</a-button>
+          <a-button type="primary" size="large" block @click="handleOpenAccount">立即开户</a-button>
         </div>
         <div class="tips-wrap">
           先不开户，
-          <router-link to="/">随便逛逛</router-link>
+          <!-- <router-link to="/">随便逛逛</router-link> -->
+          <span @click="handleCancel">随便逛逛</span>
         </div>
       </div>
     </a-modal>
@@ -127,7 +135,13 @@
 </template>
 
 <script>
-import { checkErrorCode, encryptAES } from "@/utils/utils";
+import {
+  checkErrorCode,
+  encryptAES,
+  handleWebStorage,
+  tmPhone
+} from "@/utils/utils";
+import { updateAccountStatus, deleteWs } from "@/utils/common";
 
 export default {
   name: "T-register",
@@ -140,11 +154,79 @@ export default {
         count: 0,
         tips: "获取验证码",
         checked: true,
-        visible: true
+        visible: false,
+        loading: false,
+        backUrl: '/',
       }
     };
   },
   methods: {
+    mockAccount() {
+      updateAccountStatus({
+        isLogin: true,
+        userAcc: tmPhone(this.form.getFieldValue("userAcc"))
+      });
+    },
+    handleLoginSuccess() {
+      this.mockAccount()
+      this.$store
+        .dispatch({
+          type: "getUserInfo",
+          payload: {}
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          return this.$router.push({ name: this.state.backUrl })
+        });
+    },
+    login(values, response) {
+      values = this.form.getFieldsValue(['userAcc', 'userPwd'])
+      const { encryInfo, randomId } = response.data;
+      const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
+      this.$store
+        .dispatch({
+          type: "login",
+          payload: {
+            randomId,
+            userAcc,
+            userPwd,
+            platform: "pc"
+          }
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.handleLoginSuccess();
+        });
+    },
+    getEncryInfo() {
+      this.$store
+        .dispatch({
+          type: "getEncryInfo",
+          payload: {}
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.login(null, response);
+        });
+    },
+    // 立即开户
+    handleOpenAccount() {
+      this.state.backUrl = '/login'
+      this.state.visible = false
+      this.getEncryInfo()
+    },
+    // modal cancel
+    handleCancel(type) {
+      this.state.backUrl = '/home'
+      this.state.visible = false
+      this.getEncryInfo()
+    },
     // 注册
     regist(values, response) {
       const { encryInfo, randomId } = response.data;
@@ -167,7 +249,9 @@ export default {
           if (!checkErrorCode(response)) {
             return false;
           }
-          this.$message.success("注册成功");
+          //this.$message.success("注册成功");
+          this.state.loading = false
+          this.state.visible = true
         });
     },
     // 提交
@@ -177,8 +261,7 @@ export default {
         if (!!err) {
           return false;
         }
-        //this.loading = true
-        // /finance/usercenter/client/regist
+        this.state.loading = true
         this.$store
           .dispatch({
             type: "getEncryInfo",
@@ -411,6 +494,11 @@ export default {
     color: rgba(0, 0, 0, 0.65);
     text-align: center;
     margin-top: 30px;
+    span {
+      font-size: 14px;
+      color: #0181fe;
+      cursor: pointer;
+    }
   }
 }
 </style>

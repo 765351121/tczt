@@ -23,11 +23,11 @@ export const routes = [{
       component: () => import('@/views/user/Index.vue'),
       children: [{
         path: '/user/login',
-        name: 'login',
+        name: '/login',
         component: () => import('@/views/user/components/Login.vue')
       },{
         path: '/user/register',
-        name: 'register',
+        name: '/register',
         component: () => import('@/views/user/components/Register.vue')
       }]
     }
