@@ -1,64 +1,103 @@
 <template>
   <div>
-    <div class="wrap">
-      <div class="title">免费注册</div>
-      <div class="form-wrap">
-        <a-form>
+    <a-form :form="form" @submit="handleSubmit">
+      <div class="wrap">
+        <div class="title">免费注册</div>
+        <div class="form-wrap">
           <a-form-item>
-            <a-input placeholder="请输入手机号"/>
+            <a-input
+              maxlength="11"
+              placeholder="请输入手机号"
+              v-decorator="['userAcc', {
+                rules: [{
+                  required: true, 
+                  pattern: $utils.default.regexp.phone,
+                  validator: validateUserAcc,
+                }],
+              }]"
+            />
           </a-form-item>
-        </a-form>
 
-        <div class="imgvc-wrap">
-          <a-form>
+          <div class="imgvc-wrap">
             <a-form-item>
-              <a-input placeholder="请输入图形验证码"/>
+              <a-input
+                maxlength="4"
+                placeholder="请输入图形验证码"
+                v-decorator="['captcha', {
+                  rules: [{
+                    required: true,
+                    message: '图形验证码不能为空',
+                    //whitespace: true,
+                  },{
+                    validator: validateCaptcha,
+                  }],
+                }]"
+              />
             </a-form-item>
-          </a-form>
-          <span class="imgvc" @click="getImgvc">
-            <img :src="require(`@/assets/images/imgvc/${state.imgvc}.jpg`)" alt>
-          </span>
+            <span class="imgvc" @click="getImgvc">
+              <img :src="require(`@/assets/images/imgvc/${state.imgvc}.jpg`)" alt>
+            </span>
+          </div>
+
+          <div class="sms-code-wrap">
+            <a-form-item>
+              <a-input 
+                maxlength="6"
+                placeholder="请输入短信验证码"
+                v-decorator="['vericode', {
+                  rules: [{
+                    required: true,
+                    message: '短信验证码不能为空',
+                  },{
+                    validator: validateVericode,
+                  }],
+                }]"
+              />
+            </a-form-item>
+            <span class="sms-code-btn">
+              <a-button
+                block
+                @click="handleSmsCode"
+                :disabled="!!state.count"
+                v-text="!state.count && state.tips || (`${state.count}s后可重发`)"
+              ></a-button>
+            </span>
+          </div>
+
+          <a-form-item>
+            <a-input
+              maxlength="16"
+              placeholder="6-16位，数字、字母、下划线至少两种元素组成"
+              v-decorator="['userPwd', {
+                rules: [{
+                  required: true,
+                  message: '密码不能为空',
+                },{
+                  pattern: $utils.default.regexp.pwdPatter,
+                  validator: validateUserPwd,
+                }],
+              }]"
+            />
+          </a-form-item>
         </div>
 
-        <div class="sms-code-wrap">
-          <a-form>
-            <a-form-item>
-              <a-input placeholder="请输入短信验证码"/>
-            </a-form-item>
-          </a-form>
-          <span class="sms-code-btn">
-            <a-button 
-              block 
-              @click="handleSmsCode"
-              :disabled="!!state.count"
-              v-text="!state.count && state.tips || (`${state.count}s后可重发`)"
-            ></a-button>
-          </span>
+        <div class="btn-wrap">
+          <a-button type="primary" size="large" block>立即注册</a-button>
         </div>
 
-        <a-form>
-          <a-form-item>
-            <a-input placeholder="6-16位字符，数字、字母、下划线至少两种元素组成"/>
-          </a-form-item>
-        </a-form>
-      </div>
+        <div class="checkbox">
+          <a-checkbox>
+            我已阅读并同意
+            <a href="http://www.baidu.com" target="_blank">《天辰智投平台用户注册及服务协议》</a>
+          </a-checkbox>
+        </div>
 
-      <div class="btn-wrap">
-        <a-button type="primary" size="large" block>立即注册</a-button>
+        <div class="login-wrap">
+          已有账号？
+          <router-link to="/user/login">马上登录</router-link>
+        </div>
       </div>
-
-      <div class="checkbox">
-        <a-checkbox>
-          我已阅读并同意
-          <a href="http://www.baidu.com" target="_blank">《天辰智投平台用户注册及服务协议》</a>
-        </a-checkbox>
-      </div>
-
-      <div class="login-wrap">
-        已有账号？
-        <router-link to="/user/login">马上登录</router-link>
-      </div>
-    </div>
+    </a-form>
   </div>
 </template>
 
@@ -67,15 +106,66 @@ export default {
   name: "T-register",
   data() {
     return {
+      form: this.$form.createForm(this),
       state: {
         imgvc: 1,
         imgArr: new Array(7).join(),
         count: 0,
-        tips: '获取验证码',
+        tips: "获取验证码"
       }
     };
   },
   methods: {
+
+    // 校验用户密码
+    validateUserPwd(rule, value, callback) {
+      if (!!value &&!rule.pattern.test(value)) {
+        return callback(
+          <span>
+            <a-icon
+              type="exclamation-circle"
+              theme="twoTone"
+              twoToneColor="#f5222d"
+            />
+            &nbsp;6-16位，数字、字母、下划线至少有两种元素组成
+          </span>
+        );
+      }
+      return callback();
+    },
+    // 校验短信验证码
+    validateVericode(rule, value, callback) {
+      if (!!value && (value.length < 6 || (value.indexOf(" ") > -1))) {
+        return callback("请输入6位验证码");
+      }
+      return callback();
+    },
+    // 校验图形验证码
+    validateCaptcha(rule, value, callback) {
+      if (!!value && (value.length < 4 || (value.indexOf(" ") > -1))) {
+        return callback("请输入4位图形验证码");
+      }
+      return callback();
+    },
+    // 校验用户手机号
+    validateUserAcc(rule, value, callback) {
+      if (!rule.pattern.test(value)) {
+        return callback(
+          <span>
+            <a-icon
+              type="exclamation-circle"
+              theme="twoTone"
+              twoToneColor="#f5222d"
+            />
+            &nbsp;请输入正确的手机号
+          </span>
+        );
+      }
+      return callback();
+    },
+    // 提交
+    handleSubmit(e) {},
+    // 刷新图形验证码
     getImgvc() {
       // mock for getImgvc
       let rand = Math.floor(Math.random() * this.state.imgArr.length) + 1;
@@ -85,6 +175,7 @@ export default {
       }
       return (this.state.imgvc = rand);
     },
+    // 短信验证码倒计时
     smsCountDown() {
       let count = 60;
       this.state.count = count;
@@ -92,16 +183,14 @@ export default {
         count -= 1;
         this.state.count = count;
         if (count === 0) {
-          this.state.tips = '重新发送';
+          this.state.tips = "重新发送";
           clearInterval(this.interval);
         }
       }, 1000);
     },
+    // 获取短信验证码
     handleSmsCode() {
-      console.log('..........')
-      // check form 
-      // count down
-      this.smsCountDown()
+      this.smsCountDown();
     }
   }
 };
@@ -177,15 +266,14 @@ export default {
     button {
       border: none;
       color: #0181fe;
-      background-color: transparent!important;
+      background-color: transparent !important;
     }
-    /deep/ [ant-click-animating-without-extra-node]:after, .ant-click-animating-node {
+    /deep/ [ant-click-animating-without-extra-node]:after,
+    .ant-click-animating-node {
       display: none;
     }
   }
 }
-
-
 </style>
 
 
