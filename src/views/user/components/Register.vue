@@ -82,7 +82,13 @@
         </div>
 
         <div class="btn-wrap">
-          <a-button type="primary" size="large" block :disabled="!state.checked" html-type="submit">立即注册</a-button>
+          <a-button
+            type="primary"
+            size="large"
+            block
+            :disabled="!state.checked"
+            html-type="submit"
+          >立即注册</a-button>
         </div>
 
         <div class="checkbox">
@@ -98,6 +104,25 @@
         </div>
       </div>
     </a-form>
+
+    <a-modal width="480px" :visible="state.visible" :centered="true" :footer="null">
+      <div class="modal-content-wrap">
+        <div class="img-wrap">
+          <img src="@/assets/images/status/success.png" alt>
+        </div>
+        <div class="des-wrap">
+          <span>恭喜您，注册成功！</span>
+          <span>请前往开户认证，认证成功即可出借</span>
+        </div>
+        <div class="btn-wrap">
+          <a-button type="primary" size="large" block>立即开户</a-button>
+        </div>
+        <div class="tips-wrap">
+          先不开户，
+          <router-link to="/">随便逛逛</router-link>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -114,7 +139,8 @@ export default {
         imgArr: new Array(7).join(),
         count: 0,
         tips: "获取验证码",
-        checked: true
+        checked: true,
+        visible: true
       }
     };
   },
@@ -137,7 +163,7 @@ export default {
           }
         })
         .then(response => {
-          console.log('注册', response);
+          console.log("注册", response);
           if (!checkErrorCode(response)) {
             return false;
           }
@@ -348,6 +374,43 @@ export default {
     .ant-click-animating-node {
       display: none;
     }
+  }
+}
+.modal-content-wrap {
+  margin-top: 30px;
+  padding: 0 20px;
+  .img-wrap {
+    text-align: center;
+    img {
+      display: inline-block;
+      width: 62px;
+      height: 62px;
+    }
+  }
+  .des-wrap {
+    margin-top: 20px;
+    & > span {
+      display: block;
+      text-align: center;
+      margin: 10px 0;
+      &:first-child {
+        font-size: 16px;
+        color: #333333;
+      }
+      &:last-child {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
+  }
+  .btn-wrap {
+    margin-top: 30px;
+  }
+  .tips-wrap {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+    text-align: center;
+    margin-top: 30px;
   }
 }
 </style>
