@@ -12,6 +12,11 @@ export const routes = [{
       component: () => import('@/views/home/index.vue')
     },
     {
+      path: '/product/list',
+      name: '/product/list',
+      component: () => import('@/views/product/List.vue')
+    },
+    {
       path: '/product/order',
       name: '/product/order',
       component: () => import('@/views/product/Order.vue')
@@ -19,7 +24,7 @@ export const routes = [{
     // user related...
     {
       path: '/user',
-      name: 'user',
+      name: '/user',
       component: () => import('@/views/user/Index.vue'),
       children: [{
         path: '/user/login',
