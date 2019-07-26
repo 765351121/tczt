@@ -6,12 +6,15 @@
       <div class="filter-wrap">
         <div class="filter loan-time-wrap">
           <div class="title">出借期限</div>
-          <div class="action-wrap">111</div>
+          <div class="action-wrap">
+            <BrushSlot :radios="loanTimeRadios" />
+          </div>
         </div>
-
         <div class="filter product-status-wrap">
           <div class="title">项目状态</div>
-          <div class="action-wrap">222</div>
+          <div class="action-wrap">
+            <BrushSlot :radios="productStatusRadios" />
+          </div>
         </div>
       </div>
     </div>
@@ -20,22 +23,36 @@
 
 <script>
 import ScatTitle from "./components/List/ScatTitle";
+import BrushSlot from "./components/List/BrushSlot";
 
 export default {
   name: "T-product-list",
   components: {
-    ScatTitle
+    ScatTitle,
+    BrushSlot
   },
   data() {
-    return {};
+    return {
+      loanTimeRadios: [
+        { name: '全部', value: 0 },
+        { name: '3个月以下', value: 1 },
+        { name: '3-6个月', value: 2 },
+        { name: '6个月以上', value: 3 },
+      ],
+      productStatusRadios: [
+        { name: '全部', value: 0 },
+        { name: '发售中', value: 10 },
+        { name: '已满标', value: 20 },
+        { name: '还款中', value: 30 },
+        { name: '已结清', value: 40 },
+      ]
+    };
   }
 };
 </script>
 
 <style lang="less" scoped>
-.wrap {
-  //  border: 1px solid #0ff;
-}
+
 .item-list {
   color: #333;
   font-size: 20px;
@@ -44,14 +61,13 @@ export default {
 }
 
 .filter-wrap {
-  border: 1px solid #f0f;
   .filter {
     display: flex;
     justify-content: flex-start;
     height: 55px;
     line-height: 55px;
     .title {
-      background-color: #f4f5f6;
+      background-color: #f0f0f0;
       width: 200px;
       text-align: center;
       font-size: 14px;
@@ -59,15 +75,29 @@ export default {
       color: #333;
     }
     .action-wrap {
-      border: 1px solid #0ff;
       flex: 1;
       background-color: #fff;
+      /deep/ .radio-button-wrap {
+        height: 55px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 30px;
+      }
+      /deep/ .radio-span {
+        width: 150px;
+        font-size: 14px;
+        color: #ff0;
+      }
     }
   }
 }
 
-.loan-time-wrap {
+.product-status-wrap {
+  border-top: 1px solid #e5e5e5;
 }
+
+
 </style>
 
 
