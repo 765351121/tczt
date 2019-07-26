@@ -49,6 +49,11 @@ export default {
   /deep/ .ant-radio-button-wrapper {
     border: none;
   }
+  /deep/ .ant-radio-button-wrapper {
+    height: 24px;
+    line-height: 24px;
+    padding: 0 10px;
+  }
 }
 
 .radio-button-wrap {
