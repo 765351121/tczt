@@ -25,6 +25,11 @@ export default {
       type: Object,
       required: false,
       default: () => {}
+    },
+    onChange: {
+      type: Function,
+      required: false,
+      default: () => new Function
     }
   },
   data() {
@@ -35,6 +40,7 @@ export default {
   methods: {
     handleChange(e) {
       this.value = e.target.value
+      this.onChange(e.target.value)
     }
   },
 };

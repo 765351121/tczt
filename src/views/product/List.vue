@@ -7,13 +7,13 @@
         <div class="filter loan-time-wrap">
           <div class="title">出借期限</div>
           <div class="action-wrap">
-            <BrushSlot :radios="filters.loanTimeRadios"/>
+            <BrushSlot :radios="filters.loanTimeRadios" :onChange="loanFilterChange"/>
           </div>
         </div>
         <div class="filter product-status-wrap">
           <div class="title">项目状态</div>
           <div class="action-wrap">
-            <BrushSlot :radios="filters.productStatusRadios"/>
+            <BrushSlot :radios="filters.productStatusRadios" :onChange="statusFilterChange"/>
           </div>
         </div>
       </div>
@@ -225,12 +225,14 @@ export default {
     return {
       queryParms: {
         page: 1,
-        size: pageSize
+        size: pageSize,
+        loanTimeLimit: 0,
+        productState: 0
       },
       pagination: {
         total: 500,
         pageSize: pageSize,
-        current: 1,
+        current: 1
       },
       table: {
         columns,
@@ -244,6 +246,14 @@ export default {
     };
   },
   methods: {
+    statusFilterChange(value) {
+      this.changeQueryParm({ productState: value });
+      this.getScatterList({ ...this.queryParms });
+    },
+    loanFilterChange(value) {
+      this.changeQueryParm({ loanTimeLimit: value });
+      this.getScatterList({ ...this.queryParms });
+    },
     changeQueryParm(parms) {
       const queryParms = { ...this.queryParms };
       this.queryParms = Object.assign(queryParms, parms);
@@ -269,7 +279,6 @@ export default {
           payload: { ...param }
         })
         .then(response => {
-          console.log(response);
           this.table.loading = false;
           if (!checkErrorCode(response)) {
             return false;

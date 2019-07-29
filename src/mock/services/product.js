@@ -7,7 +7,6 @@ import {
 // 产品列表
 const scatterList = (opts) => {
   let body = JSON.parse(opts.body)
-  console.log(body);
   let {
     page
   } = body
