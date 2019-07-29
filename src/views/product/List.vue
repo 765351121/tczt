@@ -17,13 +17,17 @@
           </div>
         </div>
       </div>
-
       <div class="table-wrap">
-        <a-table :columns="columns" :dataSource="data" :rowKey="rowKey">
+        <a-table
+          :columns="columns"
+          :dataSource="data"
+          :rowKey="rowKey"
+          :rowClassName="rowClassName"
+          :pagination="false"
+        >
           <template slot="annualYield" slot-scope="text, record">
             <span @click="cval(text, record)" style="color: #ec2121">{{text}}%</span>
           </template>
-
           <template slot="productState" slot-scope="text, record">
             <span
               @click="cval(text, record)"
@@ -31,13 +35,13 @@
               :style="(text == 20 || text == 40)? 'color: #0b87ff' : null"
             ></span>
           </template>
-
           <template slot="progress" slot-scope="text, record">
-            <a-progress :percent="progressPercent(text, record)" />
+            <a-progress :percent="progressPercent(text, record)"/>
           </template>
-
-          
         </a-table>
+      </div>
+      <div class="pagination-wrap">
+        <a-pagination :total="500" :itemRender="itemRender"/>
       </div>
     </div>
   </div>
@@ -62,7 +66,7 @@ const columns = [
     dataIndex: "productName",
     key: "productName",
     width: 260,
-    align: "center",
+    align: "center"
   },
   {
     title: "出借期限",
@@ -100,7 +104,7 @@ const columns = [
     dataIndex: "progress",
     key: "progress",
     align: "center",
-    scopedSlots: { customRender: 'progress' }
+    scopedSlots: { customRender: "progress" }
   },
   {
     title: "项目状态",
@@ -154,6 +158,27 @@ const data = [
     show: false,
     hasDepository: false,
     protectFlag: true
+  },
+  {
+    id: 192,
+    productCode: "20190724093859bdxx8842",
+    productName: "YDY--测试产品2",
+    loanTimeLimitType: "day",
+    loanTimeLimitTypeDesc: "天",
+    loanTimeLimit: 30,
+    loanAmount: 15000.0,
+    annualYield: 8.0,
+    minInvestmentAmount: 100.0,
+    increaseAmount: 100.0,
+    productState: 10,
+    repaymentMode: "5",
+    maxSaleVolume: 14900.0,
+    dataType: 0,
+    showType: 0,
+    useCoupon: false,
+    show: false,
+    hasDepository: false,
+    protectFlag: true
   }
 ];
 
@@ -183,9 +208,23 @@ export default {
     };
   },
   methods: {
+    itemRender(current, type, originalElement) {
+      if (type === "prev") {
+        return <a>上一页</a>;
+      } else if (type === "next") {
+        return <a>下一页</a>;
+      }
+      return originalElement;
+    },
+    rowClassName(record, index) {
+      return index % 2 == 0 ? "evenRow" : "oddRow";
+    },
     progressPercent(text, record) {
-      const { loanAmount, maxSaleVolume }  = record
-      return (Fmul(Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount), 100))
+      const { loanAmount, maxSaleVolume } = record;
+      return Number(Fmul(
+        Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount),
+        100
+      ).toFixed(2));
     },
     transformProductState(text) {
       let transform;
@@ -217,9 +256,7 @@ export default {
     rowKey(record, index) {
       return index;
     }
-  },
-
-
+  }
 };
 </script>
 
@@ -271,6 +308,25 @@ export default {
 .table-wrap {
   margin-top: 20px;
   background-color: #fff;
+  /deep/ .ant-progress-bg {
+    height: 6px !important;
+  }
+  /deep/ .ant-progress-text {
+    color: #333333;
+  }
+  /deep/ .oddRow {
+    cursor: pointer;
+    background: #fafafa;
+  }
+  /deep/ .evenRow {
+    cursor: pointer;
+    background: #ffffff;
+  }
+}
+.pagination-wrap {
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 100px;
 }
 </style>
 
