@@ -1,4 +1,6 @@
-import { getScatterProduct, getMerchantUserInfo, getInvestOrder } from '@/services/product'
+import { getScatterProduct, getMerchantUserInfo, getInvestOrder,
+  getScatterList,
+} from '@/services/product'
 
 const product = {
   state: {
@@ -23,6 +25,15 @@ const product = {
   },
 
   actions: {
+    // 产品列表
+    getScatterList ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getScatterList(payload).then(response => {
+          //commit('getScatterList_success', response.data)
+          return resolve(response)
+        })
+      })
+    },
     // 散标产品信息
     getScatterProduct ({ state, commit }, { payload }) {
       return new Promise((resolve, reject) => {

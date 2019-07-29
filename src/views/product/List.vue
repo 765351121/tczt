@@ -7,23 +7,24 @@
         <div class="filter loan-time-wrap">
           <div class="title">出借期限</div>
           <div class="action-wrap">
-            <BrushSlot :radios="loanTimeRadios"/>
+            <BrushSlot :radios="filters.loanTimeRadios"/>
           </div>
         </div>
         <div class="filter product-status-wrap">
           <div class="title">项目状态</div>
           <div class="action-wrap">
-            <BrushSlot :radios="productStatusRadios"/>
+            <BrushSlot :radios="filters.productStatusRadios"/>
           </div>
         </div>
       </div>
       <div class="table-wrap">
         <a-table
-          :columns="columns"
-          :dataSource="data"
+          :columns="table.columns"
+          :dataSource="table.data"
           :rowKey="rowKey"
           :rowClassName="rowClassName"
           :pagination="false"
+          :loading="table.loading"
         >
           <template slot="annualYield" slot-scope="text, record">
             <span @click="cval(text, record)" style="color: #ec2121">{{text}}%</span>
@@ -36,12 +37,18 @@
             ></span>
           </template>
           <template slot="progress" slot-scope="text, record">
-            <a-progress :percent="progressPercent(text, record)"/>
+            <a-progress :percent="progressPercent(text, record)" status="active"/>
           </template>
         </a-table>
       </div>
       <div class="pagination-wrap">
-        <a-pagination :total="500" :itemRender="itemRender"/>
+        <a-pagination
+          :total="pagination.total"
+          :pageSize="pagination.pageSize"
+          :current="pagination.current"
+          :itemRender="itemRender"
+          @change="handlePaginationChange"
+        />
       </div>
     </div>
   </div>
@@ -50,7 +57,14 @@
 <script>
 import ScatTitle from "./components/List/ScatTitle";
 import BrushSlot from "./components/List/BrushSlot";
-import { formatCurrency, Fadd, Fsub, Fmul, Fdiv } from "@/utils/utils";
+import {
+  checkErrorCode,
+  formatCurrency,
+  Fadd,
+  Fsub,
+  Fmul,
+  Fdiv
+} from "@/utils/utils";
 
 const columns = [
   {
@@ -182,6 +196,25 @@ const data = [
   }
 ];
 
+// 出借期限筛选项
+const loanTimeRadios = [
+  { name: "全部", value: 0 },
+  { name: "3个月以下", value: 1 },
+  { name: "3-6个月", value: 2 },
+  { name: "6个月以上", value: 3 }
+];
+
+// 项目状态筛选项
+const productStatusRadios = [
+  { name: "全部", value: 0 },
+  { name: "发售中", value: 10 },
+  { name: "已满标", value: 20 },
+  { name: "还款中", value: 30 },
+  { name: "已结清", value: 40 }
+];
+
+const pageSize = 10;
+
 export default {
   name: "T-product-list",
   components: {
@@ -190,24 +223,60 @@ export default {
   },
   data() {
     return {
-      columns,
-      data,
-      loanTimeRadios: [
-        { name: "全部", value: 0 },
-        { name: "3个月以下", value: 1 },
-        { name: "3-6个月", value: 2 },
-        { name: "6个月以上", value: 3 }
-      ],
-      productStatusRadios: [
-        { name: "全部", value: 0 },
-        { name: "发售中", value: 10 },
-        { name: "已满标", value: 20 },
-        { name: "还款中", value: 30 },
-        { name: "已结清", value: 40 }
-      ]
+      queryParms: {
+        page: 1,
+        size: pageSize
+      },
+      pagination: {
+        total: 500,
+        pageSize: pageSize,
+        current: 1,
+      },
+      table: {
+        columns,
+        data,
+        loading: false
+      },
+      filters: {
+        loanTimeRadios,
+        productStatusRadios
+      }
     };
   },
   methods: {
+    changeQueryParm(parms) {
+      const queryParms = { ...this.queryParms };
+      this.queryParms = Object.assign(queryParms, parms);
+    },
+    handlePaginationChange(page, pageSize) {
+      this.pagination.current = page;
+      this.changeQueryParm({ page, size: pageSize });
+      this.getScatterList({ ...this.queryParms });
+    },
+    updataTableData(response) {
+      const {
+        data: { rows, total, page, size }
+      } = response;
+      this.table.data = rows;
+      this.pagination.total = total;
+      this.pagination.current = page;
+    },
+    getScatterList(param) {
+      this.table.loading = true;
+      this.$store
+        .dispatch({
+          type: "getScatterList",
+          payload: { ...param }
+        })
+        .then(response => {
+          console.log(response);
+          this.table.loading = false;
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.updataTableData(response);
+        });
+    },
     itemRender(current, type, originalElement) {
       if (type === "prev") {
         return <a>上一页</a>;
@@ -221,10 +290,9 @@ export default {
     },
     progressPercent(text, record) {
       const { loanAmount, maxSaleVolume } = record;
-      return Number(Fmul(
-        Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount),
-        100
-      ).toFixed(2));
+      return Number(
+        Fmul(Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount), 100).toFixed(2)
+      );
     },
     transformProductState(text) {
       let transform;
@@ -256,6 +324,9 @@ export default {
     rowKey(record, index) {
       return index;
     }
+  },
+  mounted() {
+    this.getScatterList({ ...this.queryParms });
   }
 };
 </script>

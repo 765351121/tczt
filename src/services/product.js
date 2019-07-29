@@ -3,6 +3,16 @@ import { axios } from '@/utils/request'
 const rootPath = '/finance';
 const mockPath = '/mock';
 
+
+// 产品列表
+export async function getScatterList (params) {
+  return axios({
+    url: `${mockPath}/usercenter/product/scatterList`,
+    method: 'post',
+    data: params
+  })
+}
+
 // 散标产品信息
 export async function getScatterProduct (params) {
   return axios({
