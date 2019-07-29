@@ -25,6 +25,7 @@
           :rowClassName="rowClassName"
           :pagination="false"
           :loading="table.loading"
+          :customRow="customRow"
         >
           <template slot="annualYield" slot-scope="text, record">
             <span @click="cval(text, record)" style="color: #ec2121">{{text}}%</span>
@@ -246,6 +247,18 @@ export default {
     };
   },
   methods: {
+    handleRowClick(record) {
+      this.$router.push({
+        name: '/product/order',
+      })
+    },
+    customRow(record) {
+      return {
+        on: {
+          click: this.handleRowClick.bind(this, record)
+        }
+      };
+    },
     statusFilterChange(value) {
       this.changeQueryParm({ productState: value });
       this.getScatterList({ ...this.queryParms });

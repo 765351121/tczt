@@ -74,7 +74,6 @@
         </div>
       </div>
     </div>
-
     <div class="tab-wrap">
       <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="项目详情" key="1">
@@ -87,9 +86,7 @@
           <InvestOrder :investOrder="investOrder" />
         </a-tab-pane>
       </a-tabs>
-
     </div>
-
   </div>
 </template>
 
@@ -158,11 +155,6 @@ export default {
         this.investOrder = response.data
       })
     },
-    
-
-
-
-    
   },
   mounted() {
     // /finance/usercenter/product/scatterProduct
