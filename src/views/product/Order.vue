@@ -62,6 +62,7 @@
                 <a-button 
                   type="primary" 
                   size="small"
+                  @click="handleRecharge"
                 >
                   充值
                 </a-button>
@@ -103,6 +104,9 @@
         </a-tab-pane>
       </a-tabs>
     </div>
+    <div class="modal-wrap">
+      <MOpenAccount ref="mopacc" />
+    </div>
   </div>
 </template>
 
@@ -110,6 +114,7 @@
 import Details from './components/Details'
 import BorrowInfo from './components/BorrowInfo'
 import InvestOrder from './components/InvestOrder'
+import MOpenAccount from './components/MOpenAccount'
 import {
   checkErrorCode,
   formatCurrency,
@@ -126,6 +131,7 @@ export default {
     Details,
     BorrowInfo,
     InvestOrder,
+    MOpenAccount,
   },
   data() {
     return {
@@ -141,6 +147,10 @@ export default {
     }
   },
   methods: {
+    handleRecharge() {
+      this.$refs.mopacc.visible = true
+      
+    },
     handleLogin() {
       goBack.bind(this, 'set')()
       this.$router.push({
