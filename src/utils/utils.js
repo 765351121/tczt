@@ -187,3 +187,18 @@ export const handleWebStorage = cache => {
 export function tmPhone(phone) {
 	return `${!!phone && phone.substring(0,3)}****${!!phone && phone.substring(7)}`
 }
+
+// goBack
+export function goBack(type, route = '/') {
+  if (!!this) {
+    route = this.$route.fullPath
+  }
+  if (!!type && type == 'set') {
+    return handleWebStorage('session').setItem({
+      goBack: route
+    })
+  }
+  if (!type) {
+    return handleWebStorage('session').getItem('goBack')
+  }
+}

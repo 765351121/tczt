@@ -60,7 +60,8 @@ import {
   checkErrorCode,
   encryptAES,
   handleWebStorage,
-  tmPhone
+  tmPhone,
+  goBack,
 } from "@/utils/utils";
 import { updateAccountStatus, deleteWs } from "@/utils/common";
 
@@ -91,9 +92,11 @@ export default {
           payload: {}
         })
         .then(response => {
-          //console.log(response);
           this.loading = false
-          this.$router.push({ name: '/home' })
+          if (!!goBack()) {
+            return this.$router.push(goBack())  
+          } 
+          return this.$router.push({ name: '/home' })
         });
     },
 

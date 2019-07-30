@@ -45,11 +45,27 @@
           <div class="amount-wrap">
             <div>
               剩余可投金额：
-              <span>1,400.00 元</span>
+              <span>{{ $utils.formatCurrency(scatProduct.maxSaleVolume) }} 元</span>
             </div>
             <div>
               您的账户余额：
-              <a-button type="primary">登录后可以查看</a-button>
+              <a-button 
+                type="primary" 
+                size="small"
+                v-if="!($store.state.global.userInfo.isLogin)"
+                @click="handleLogin"
+              >
+                登录后可以查看
+              </a-button>
+              <span v-if="$store.state.global.userInfo.isLogin">
+                <span class="amount">{{ $utils.formatCurrency(canWithdrawAmount) }} 元</span>
+                <a-button 
+                  type="primary" 
+                  size="small"
+                >
+                  充值
+                </a-button>
+              </span>
             </div>
           </div>
           <div class="invest-wrap">
@@ -101,6 +117,7 @@ import {
   Fsub,
   Fmul,
   Fdiv,
+  goBack,
 } from "@/utils/utils";
 
 export default {
@@ -112,6 +129,7 @@ export default {
   },
   data() {
     return {
+      canWithdrawAmount: 0,
       scatProduct: {
         annualYield: 0,
         loanTimeLimit: 0,
@@ -123,6 +141,12 @@ export default {
     }
   },
   methods: {
+    handleLogin() {
+      goBack.bind(this, 'set')()
+      this.$router.push({
+        name: '/user/login',
+      })
+    },
     progressPercent() {
       const { loanAmount, maxSaleVolume } = this.scatProduct;
       return Number(
@@ -153,7 +177,7 @@ export default {
           productCode: '20190702134228bdxx1599'
         },
       }).then(response => {
-        console.log(response)
+        //console.log(response)
         if (!checkErrorCode(response)) {
           return false;
         }
@@ -192,6 +216,9 @@ export default {
     },
   },
   mounted() {
+    //console.log('...........');
+    //console.log(this.$store.state.global.userInfo.isLogin);
+    //console.log(this.$route)
     // 散标信息
     // /finance/usercenter/product/scatterProduct
     this.getScatterProduct() 
@@ -314,7 +341,14 @@ export default {
     font-size: 13px;
     color: #fff;
   }
-
+  .amount {
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    font-weight: bolder;
+    color: #333;
+    display: inline-block;
+    padding: 0 15px 0 0;
+  }
   /deep/ .ant-btn {
     height: 30px;
   }

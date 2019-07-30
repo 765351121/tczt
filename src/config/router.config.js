@@ -28,11 +28,11 @@ export const routes = [{
       component: () => import('@/views/user/Index.vue'),
       children: [{
         path: '/user/login',
-        name: '/login',
+        name: '/user/login',
         component: () => import('@/views/user/components/Login.vue')
       },{
         path: '/user/register',
-        name: '/register',
+        name: '/user/register',
         component: () => import('@/views/user/components/Register.vue')
       }]
     }
