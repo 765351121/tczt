@@ -2,41 +2,23 @@
   <div class="wrap">
     <div class="content">
       <div>
-        <img src="@/assets/logo/logo_solid.png" alt="">
+        <img src="@/assets/logo/logo_solid.png" alt>
       </div>
       <div>
         <div class="menu_wrap">
-          <a-menu
-            mode="horizontal"
-          >
+          <a-menu mode="horizontal">
             <a-menu-item key="home">
-              首页
+              <router-link to="/home">首页</router-link>
             </a-menu-item>
 
             <a-menu-item key="project">
-              项目
-            </a-menu-item>
+              <router-link to="/product/list">项目</router-link>
+              </a-menu-item>
 
-            <a-menu-item key="info">
-              信息披露
-            </a-menu-item>
-            
-            <a-menu-item key="account">
-              我的账户
-            </a-menu-item>
+            <a-menu-item key="info">信息披露</a-menu-item>
+
+            <a-menu-item key="account">我的账户</a-menu-item>
           </a-menu>
-          
-
-
-
-
-
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -76,7 +58,7 @@ export default {
   :global {
     .ant-menu {
       font-size: 16px;
-      color: rgba(0,0,0,.65);
+      color: rgba(0, 0, 0, 0.65);
     }
     .ant-menu-horizontal {
       text-align: right;
@@ -85,9 +67,6 @@ export default {
     }
   }
 }
-
-
-
 </style>
 
 
