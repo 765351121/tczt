@@ -3,37 +3,37 @@
     <div class="wrap">
       <div class="fix-Wrap">
         <div class="info-wrap">
-          <div>22222</div>
+          <div>{{ scatProduct.productName }}</div>
           <div>
             <div class="product-info">
               <div>
                 <span>约定年化利率</span>
-                <span>5.8%</span>
+                <span>{{ scatProduct.annualYield }}%</span>
               </div>
               <div>
                 <span>出借期限</span>
                 <span>
-                  30
-                  <i>天</i>
+                  {{ scatProduct.loanTimeLimit }}
+                  <i v-text="transformLoanTime()"></i>
                 </span>
               </div>
               <div>
                 <span>起投金额</span>
                 <span>
-                  1,0000.00
+                  {{ $utils.formatCurrency(scatProduct.minInvestmentAmount) }}
                   <i>元</i>
                 </span>
               </div>
               <div>
                 <span>发售金额</span>
                 <span>
-                  3,4000.00
+                  {{ $utils.formatCurrency(scatProduct.loanAmount) }}           
                   <i>元</i>
                 </span>
               </div>
             </div>
             <div class="progress">
-              <a-progress :percent="50" size="small" status="active"/>
+              <a-progress :percent="progressPercent()" status="active" size="small" />
             </div>
             <div class="payment">
               <img src="@/assets/images/product/payment.png" alt>
@@ -94,7 +94,14 @@
 import Details from './components/Details'
 import BorrowInfo from './components/BorrowInfo'
 import InvestOrder from './components/InvestOrder'
-import { checkErrorCode } from '@/utils/utils'
+import {
+  checkErrorCode,
+  formatCurrency,
+  Fadd,
+  Fsub,
+  Fmul,
+  Fdiv
+} from "@/utils/utils";
 
 export default {
   name: "order",
@@ -105,12 +112,37 @@ export default {
   },
   data() {
     return {
-      scatProduct: {},
+      scatProduct: {
+        loanAmount: 0,
+        maxSaleVolume: 0,
+      },
       merchantUserInfo: {},
       investOrder: {},
     }
   },
   methods: {
+    progressPercent() {
+      const { loanAmount, maxSaleVolume } = this.scatProduct;
+      return Number(
+        Fmul(Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount), 100).toFixed(2)
+      );
+    },
+    transformLoanTime() {
+      let key = this.scatProduct.loanTimeLimitType
+      let transform
+      switch (key) {
+        case 'day':
+          transform = '天'
+          break;
+        case 'month':
+          transform = '月'
+          break;
+        default:
+          transform = '年'
+          break;
+      }
+      return transform
+    },
     // 获取散标产品信息
     getScatterProduct() {
       this.$store.dispatch({
@@ -119,6 +151,7 @@ export default {
           productCode: '20190702134228bdxx1599'
         },
       }).then(response => {
+        console.log(response)
         if (!checkErrorCode(response)) {
           return false;
         }
@@ -148,7 +181,7 @@ export default {
           productId: '20190329185836bdxx9354',
         },
       }).then(response => {
-        console.log(response)
+        //console.log(response)
         if (!checkErrorCode(response)) {
           return false;
         }
@@ -157,10 +190,15 @@ export default {
     },
   },
   mounted() {
+    // 散标信息
     // /finance/usercenter/product/scatterProduct
     this.getScatterProduct() 
+
+    // 借款方信息
     // /assetMerchant/userInfo/merchantUserInfo?targetStatus=10&platformUserNo=PN1901311428427961381116319
     this.getMerchantUserInfo()
+    
+    // 出借记录
     // /finance/usercenter/order/getInvestOrder?productId=20190329185836bdxx9354
     this.getInvestOrder()
   
