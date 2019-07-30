@@ -2,6 +2,13 @@ import Mock from 'mockjs'
 import {
   builder
 } from '../util'
+import {
+  handleWebStorage
+} from '@/utils/utils'
+
+const wss = handleWebStorage('session')
+
+
 
 
 // 产品列表
@@ -221,6 +228,8 @@ const scatProduct = (opts) => {
     "hasDepository": false,
     "protectFlag": true
   }
+  data = Object.assign(data, { ...wss.getItem('scat-list-record') })
+
   return builder(data)
 }
 

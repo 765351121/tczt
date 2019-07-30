@@ -64,8 +64,11 @@ import {
   Fadd,
   Fsub,
   Fmul,
-  Fdiv
+  Fdiv,
+  handleWebStorage,
 } from "@/utils/utils";
+
+const wss = handleWebStorage('session')
 
 const columns = [
   {
@@ -248,6 +251,7 @@ export default {
   },
   methods: {
     handleRowClick(record) {
+      wss.setItem({ 'scat-list-record': record }) // mock for api request
       this.$router.push({
         name: '/product/order',
       })

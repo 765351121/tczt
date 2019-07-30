@@ -100,7 +100,7 @@ import {
   Fadd,
   Fsub,
   Fmul,
-  Fdiv
+  Fdiv,
 } from "@/utils/utils";
 
 export default {
@@ -113,6 +113,8 @@ export default {
   data() {
     return {
       scatProduct: {
+        annualYield: 0,
+        loanTimeLimit: 0,
         loanAmount: 0,
         maxSaleVolume: 0,
       },
