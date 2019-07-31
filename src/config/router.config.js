@@ -21,6 +21,11 @@ export const routes = [{
       name: '/product/order',
       component: () => import('@/views/product/Order.vue')
     },
+    {
+      path: '/account/gateway/register',
+      name: '/account/gateway/register',
+      component: () => import('@/views/account/gateway/Register.vue')
+    },
     // user related...
     {
       path: '/user',

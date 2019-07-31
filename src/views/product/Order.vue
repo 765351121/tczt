@@ -158,8 +158,8 @@ export default {
     };
   },
   methods: {
+    // 计算预计投资收益
     handleInvestAmountChange(e) {
-      console.log(".........");
       let { annualYield, loanTimeLimit, loanTimeLimitType } = this.scatProduct;
       switch (loanTimeLimitType) {
         case "year":
@@ -177,6 +177,7 @@ export default {
         365
       );
     },
+    // 投资表单校验
     validateInvestAmount(rule, value, callback) {
       if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
@@ -220,6 +221,7 @@ export default {
       }
       return callback();
     },
+    // 立即加入
     handleBuy(e) {
       e = window.event;
       e.preventDefault();
@@ -231,6 +233,7 @@ export default {
         console.log("succ");
       });
     },
+    // 去风险测评弹窗
     showToRiskModal() {
       this.$confirm({
         title: "提示",
@@ -248,9 +251,11 @@ export default {
         onCancel() {}
       });
     },
+    // 充值
     handleRecharge() {
       this.$refs.mopacc.visible = true;
     },
+    // 登录
     handleLogin() {
       goBack.bind(this, "set")();
       this.$router.push({
@@ -263,6 +268,7 @@ export default {
         Fmul(Fdiv(Fsub(loanAmount, maxSaleVolume), loanAmount), 100).toFixed(2)
       );
     },
+    // 出借时间显示转换
     transformLoanTime() {
       let key = this.scatProduct.loanTimeLimitType;
       let transform;
@@ -330,6 +336,7 @@ export default {
           this.investOrder = response.data;
         });
     },
+    // 获取用户信息
     getUserInfo() {
       this.$store.dispatch({
         type: "getUserInfo",
