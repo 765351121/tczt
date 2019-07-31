@@ -27,13 +27,13 @@
               <div>
                 <span>发售金额</span>
                 <span>
-                  {{ $utils.formatCurrency(scatProduct.loanAmount) }}           
+                  {{ $utils.formatCurrency(scatProduct.loanAmount) }}
                   <i>元</i>
                 </span>
               </div>
             </div>
             <div class="progress">
-              <a-progress :percent="progressPercent()" status="active" size="small" />
+              <a-progress :percent="progressPercent()" status="active" size="small"/>
             </div>
             <div class="payment">
               <img src="@/assets/images/product/payment.png" alt>
@@ -49,23 +49,17 @@
             </div>
             <div>
               您的账户余额：
-              <a-button 
-                type="primary" 
+              <a-button
+                type="primary"
                 size="small"
                 v-if="!($store.state.global.userInfo.isLogin)"
                 @click="handleLogin"
-              >
-                登录后可以查看
-              </a-button>
+              >登录后可以查看</a-button>
               <span v-if="$store.state.global.userInfo.isLogin">
-                <span class="amount">{{ $utils.formatCurrency($store.state.global.userInfo.canWithdrawAmount) }} 元</span>
-                <a-button 
-                  type="primary" 
-                  size="small"
-                  @click="handleRecharge"
-                >
-                  充值
-                </a-button>
+                <span
+                  class="amount"
+                >{{ $utils.formatCurrency($store.state.global.userInfo.canWithdrawAmount) }} 元</span>
+                <a-button type="primary" size="small" @click="handleRecharge">充值</a-button>
               </span>
             </div>
           </div>
@@ -74,11 +68,12 @@
             <div>
               <a-form :form="form">
                 <a-form-item>
-                  <a-input-search 
-                    :placeholder="(`${$utils.formatCurrency(scatProduct.minInvestmentAmount)}元起投，${$utils.formatCurrency(scatProduct.increaseAmount)}元递增`)" 
-                    enterButton="立即加入" 
+                  <a-input-search
+                    :placeholder="(`${$utils.formatCurrency(scatProduct.minInvestmentAmount)}元起投，${$utils.formatCurrency(scatProduct.increaseAmount)}元递增`)"
+                    enterButton="立即加入"
                     size="large"
                     @search="handleBuy"
+                    @change="handleInvestAmountChange"
                     v-decorator="['investAmount', {
                       rules: [{
                         validator: validateInvestAmount,
@@ -89,13 +84,17 @@
                 </a-form-item>
               </a-form>
             </div>
-            <div style="margin-top: 10px">预计出借回报：0.00 元</div>
+            <div style="margin-top: 10px">预计出借回报：
+              <span style="color: #ec2121">{{ $utils.formatCurrency(incomeAmount) }}</span> 元
+            </div>
             <div style="margin-top: 20px" class="checkbox">
               <a-checkbox>
                 我已阅读并同意
                 <a href="http://www.baidu.com" target="_blank">《借款合同》</a>
               </a-checkbox>
-              <div style="padding-left: 22px"><a href="http://www.baidu.com" target="_blank">《网络借贷风险和禁止性行为提示及资金来源合法承诺》</a></div>
+              <div style="padding-left: 22px">
+                <a href="http://www.baidu.com" target="_blank">《网络借贷风险和禁止性行为提示及资金来源合法承诺》</a>
+              </div>
             </div>
             <div></div>
           </div>
@@ -105,27 +104,27 @@
     <div class="tab-wrap">
       <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="项目详情" key="1">
-          <Details :details="scatProduct.productDetails" />
+          <Details :details="scatProduct.productDetails"/>
         </a-tab-pane>
         <a-tab-pane tab="借款方信息" key="2">
-          <BorrowInfo :userInfo="merchantUserInfo"  />
+          <BorrowInfo :userInfo="merchantUserInfo"/>
         </a-tab-pane>
         <a-tab-pane tab="出借记录" key="3">
-          <InvestOrder :investOrder="investOrder" />
+          <InvestOrder :investOrder="investOrder"/>
         </a-tab-pane>
       </a-tabs>
     </div>
     <div class="modal-wrap">
-      <MOpenAccount ref="mopacc" />
+      <MOpenAccount ref="mopacc"/>
     </div>
   </div>
 </template>
 
 <script>
-import Details from './components/Details'
-import BorrowInfo from './components/BorrowInfo'
-import InvestOrder from './components/InvestOrder'
-import MOpenAccount from './components/MOpenAccount'
+import Details from "./components/Details";
+import BorrowInfo from "./components/BorrowInfo";
+import InvestOrder from "./components/InvestOrder";
+import MOpenAccount from "./components/MOpenAccount";
 import {
   checkErrorCode,
   formatCurrency,
@@ -133,7 +132,7 @@ import {
   Fsub,
   Fmul,
   Fdiv,
-  goBack,
+  goBack
 } from "@/utils/utils";
 
 export default {
@@ -142,7 +141,7 @@ export default {
     Details,
     BorrowInfo,
     InvestOrder,
-    MOpenAccount,
+    MOpenAccount
   },
   data() {
     return {
@@ -151,20 +150,46 @@ export default {
         annualYield: 0,
         loanTimeLimit: 0,
         loanAmount: 0,
-        maxSaleVolume: 0,
+        maxSaleVolume: 0
       },
       merchantUserInfo: {},
       investOrder: {},
-    }
+      incomeAmount: 0,
+    };
   },
   methods: {
+    handleInvestAmountChange(e) {
+      console.log(".........");
+      let { annualYield, loanTimeLimit, loanTimeLimitType } = this.scatProduct;
+      switch (loanTimeLimitType) {
+        case "year":
+          loanTimeLimit = Fmul(loanTimeLimit, 365);
+          break;
+        case "month":
+          loanTimeLimit = Fmul(loanTimeLimit, 30);
+          break;
+        case "day":
+          loanTimeLimit = loanTimeLimit;
+          break;
+      }
+      this.incomeAmount = Fdiv(
+        Fmul(Fmul(e.target.value, Fdiv(annualYield, 100)), loanTimeLimit),
+        365
+      );
+    },
     validateInvestAmount(rule, value, callback) {
-      if (parseFloat(value).toString() == 'NaN') {
+      if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
       }
-      const { global: { userInfo } } = this.$store.state
-      const { canWithdrawAmount } = userInfo
-      let { maxSaleVolume, minInvestmentAmount, increaseAmount } = this.scatProduct
+      const {
+        global: { userInfo }
+      } = this.$store.state;
+      const { canWithdrawAmount } = userInfo;
+      let {
+        maxSaleVolume,
+        minInvestmentAmount,
+        increaseAmount
+      } = this.scatProduct;
       // maxSaleVolume = 100
       // minInvestmentAmount = 10
       // 判断扫尾
@@ -173,7 +198,7 @@ export default {
           return callback("该产品剩余可投金额小于起投金额，请全部购买");
         } else {
           // 扫尾投资
-          console.log('扫尾投资')
+          console.log("扫尾投资");
         }
         return callback();
       }
@@ -196,43 +221,41 @@ export default {
       return callback();
     },
     handleBuy(e) {
-      e = window.event
+      e = window.event;
       e.preventDefault();
       this.form.validateFields({ force: true }, (err, values) => {
         if (!!err) {
-          console.log('err')
+          console.log("err");
           return false;
         }
-        console.log('succ')
-        
+        console.log("succ");
       });
-      
     },
     showToRiskModal() {
       this.$confirm({
-        title: '提示',
-        content: '为保护出借人权益,天辰智投为每个用户进行风险承受能力测评,建议您尽快完成测评',
-        iconType: 'exclamation-circle',
+        title: "提示",
+        content:
+          "为保护出借人权益,天辰智投为每个用户进行风险承受能力测评,建议您尽快完成测评",
+        iconType: "exclamation-circle",
         centered: true,
-        cancelText: '暂不测评',
-        okText: '立即测评',
+        cancelText: "暂不测评",
+        okText: "立即测评",
         onOk() {
           return new Promise((resolve, reject) => {
             setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          }).catch(() => console.log('Oops errors!'));
+          }).catch(() => console.log("Oops errors!"));
         },
-        onCancel() {},
+        onCancel() {}
       });
     },
     handleRecharge() {
-      this.$refs.mopacc.visible = true
-      
+      this.$refs.mopacc.visible = true;
     },
     handleLogin() {
-      goBack.bind(this, 'set')()
+      goBack.bind(this, "set")();
       this.$router.push({
-        name: '/user/login',
-      })
+        name: "/user/login"
+      });
     },
     progressPercent() {
       const { loanAmount, maxSaleVolume } = this.scatProduct;
@@ -241,94 +264,98 @@ export default {
       );
     },
     transformLoanTime() {
-      let key = this.scatProduct.loanTimeLimitType
-      let transform
+      let key = this.scatProduct.loanTimeLimitType;
+      let transform;
       switch (key) {
-        case 'day':
-          transform = '天'
+        case "day":
+          transform = "天";
           break;
-        case 'month':
-          transform = '月'
+        case "month":
+          transform = "月";
           break;
         default:
-          transform = '年'
+          transform = "年";
           break;
       }
-      return transform
+      return transform;
     },
     // 获取散标产品信息
     getScatterProduct() {
-      this.$store.dispatch({
-        type: 'getScatterProduct',
-        payload: {
-          productCode: '20190702134228bdxx1599'
-        },
-      }).then(response => {
-        //console.log(response)
-        if (!checkErrorCode(response)) {
-          return false;
-        }
-        this.scatProduct = response.data
-      })
+      this.$store
+        .dispatch({
+          type: "getScatterProduct",
+          payload: {
+            productCode: "20190702134228bdxx1599"
+          }
+        })
+        .then(response => {
+          //console.log(response)
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.scatProduct = response.data;
+        });
     },
     // 获取用户信息
     getMerchantUserInfo() {
-      this.$store.dispatch({
-        type: 'getMerchantUserInfo',
-        payload: {
-          targetStatus: '10',
-          platformUserNo: 'PN1901311428427961381116319'
-        },
-      }).then(response => {
-        if (!checkErrorCode(response)) {
-          return false;
-        }
-        this.merchantUserInfo = response.data
-      })
+      this.$store
+        .dispatch({
+          type: "getMerchantUserInfo",
+          payload: {
+            targetStatus: "10",
+            platformUserNo: "PN1901311428427961381116319"
+          }
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.merchantUserInfo = response.data;
+        });
     },
     // 获取出借记录信息
     getInvestOrder() {
-      this.$store.dispatch({
-        type: 'getInvestOrder',
-        payload: {
-          productId: '20190329185836bdxx9354',
-        },
-      }).then(response => {
-        //console.log(response)
-        if (!checkErrorCode(response)) {
-          return false;
-        }
-        this.investOrder = response.data
-      })
-    },
-    getUserInfo() {
       this.$store
         .dispatch({
-          type: "getUserInfo",
-          payload: {}
+          type: "getInvestOrder",
+          payload: {
+            productId: "20190329185836bdxx9354"
+          }
         })
+        .then(response => {
+          //console.log(response)
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.investOrder = response.data;
+        });
     },
+    getUserInfo() {
+      this.$store.dispatch({
+        type: "getUserInfo",
+        payload: {}
+      });
+    }
   },
   mounted() {
     //console.log('...........');
     //console.log(this.$store.state.global.userInfo.canWithdrawAmount);
     //console.log(this.$route)
 
-    this.getUserInfo()
+    this.getUserInfo();
 
     // 散标信息
     // /finance/usercenter/product/scatterProduct
-    this.getScatterProduct() 
+    this.getScatterProduct();
 
     // 借款方信息
     // /assetMerchant/userInfo/merchantUserInfo?targetStatus=10&platformUserNo=PN1901311428427961381116319
-    this.getMerchantUserInfo()
-    
+    this.getMerchantUserInfo();
+
     // 出借记录
     // /finance/usercenter/order/getInvestOrder?productId=20190329185836bdxx9354
-    this.getInvestOrder()
-  
-  },
+    this.getInvestOrder();
+  }
 };
 </script>
 
@@ -423,7 +450,7 @@ export default {
   font-family: "Microsoft YaHei";
   color: #666;
   padding: 10px 20px;
-  &>div:first-child {
+  & > div:first-child {
     span {
       font-size: 14px;
       font-family: "Microsoft YaHei";
@@ -431,7 +458,7 @@ export default {
       color: #333;
     }
   }
-  &>div:last-child {
+  & > div:last-child {
     margin-top: 15px;
   }
   button {
@@ -474,12 +501,7 @@ export default {
     font-size: 20px;
     font-family: "Microsoft YaHei";
   }
-  
-
-
 }
-
-
 </style>
 
 
