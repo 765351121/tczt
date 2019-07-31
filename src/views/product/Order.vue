@@ -72,11 +72,22 @@
           <div class="invest-wrap">
             <div style="margin-bottom: 10px">买入金额</div>
             <div>
-              <a-input-search 
-                placeholder="1000元起投，1元递增" 
-                enterButton="立即加入" 
-                size="large" 
-              />
+              <a-form :form="form">
+                <a-form-item>
+                  <a-input-search 
+                    :placeholder="(`${$utils.formatCurrency(scatProduct.minInvestmentAmount)}元起投，${$utils.formatCurrency(scatProduct.increaseAmount)}元递增`)" 
+                    enterButton="立即加入" 
+                    size="large"
+                    @search="handleBuy"
+                    v-decorator="['investAmount', {
+                      rules: [{
+                        validator: validateInvestAmount,
+                      }],
+                      validateTrigger: 'onSubmit'
+                    }]"
+                  />
+                </a-form-item>
+              </a-form>
             </div>
             <div style="margin-top: 10px">预计出借回报：0.00 元</div>
             <div style="margin-top: 20px" class="checkbox">
@@ -135,6 +146,7 @@ export default {
   },
   data() {
     return {
+      form: this.$form.createForm(this),
       canWithdrawAmount: 0,
       scatProduct: {
         annualYield: 0,
@@ -147,6 +159,70 @@ export default {
     }
   },
   methods: {
+    validateInvestAmount(rule, value, callback) {
+      if (parseFloat(value).toString() == 'NaN') {
+        return callback("请输入出借金额");
+      }
+      let { maxSaleVolume, minInvestmentAmount, increaseAmount } = this.scatProduct
+      maxSaleVolume = 100
+      minInvestmentAmount = 10
+      // 判断扫尾
+      if (maxSaleVolume < minInvestmentAmount) {
+        if (value != maxSaleVolume) {
+          return callback("该产品剩余可投金额小于起投金额，请全部购买");
+        } else {
+          // 扫尾投资
+          console.log('扫尾投资')
+        }
+        return callback();
+      }
+      // 投资金额不低于起投金额
+      if (value < minInvestmentAmount) {
+        return callback(`买入金额不能低于${minInvestmentAmount}元`);
+      }
+      // 投资金额为递增金额的整倍数
+      if (value % increaseAmount != 0) {
+        return callback(`买入金额应为${increaseAmount}的整数倍`);
+      }
+      // 投资金额不能大于剩余可投金额
+      if (value > maxSaleVolume) {
+        return callback(`买入金额大于剩余可投金额，请重新输入`);
+      }
+      // 投资金额不能大于可用余额
+      if (value > canWithdrawAmount) {
+        return callback(`余额不足请先充值`);
+      }
+      return callback();
+    },
+    handleBuy(e) {
+      e = window.event
+      e.preventDefault();
+      this.form.validateFields({ force: true }, (err, values) => {
+        if (!!err) {
+          console.log('err')
+          return false;
+        }
+        console.log('succ')
+        
+      });
+      
+    },
+    showToRiskModal() {
+      this.$confirm({
+        title: '提示',
+        content: '为保护出借人权益,天辰智投为每个用户进行风险承受能力测评,建议您尽快完成测评',
+        iconType: 'exclamation-circle',
+        centered: true,
+        cancelText: '暂不测评',
+        okText: '立即测评',
+        onOk() {
+          return new Promise((resolve, reject) => {
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          }).catch(() => console.log('Oops errors!'));
+        },
+        onCancel() {},
+      });
+    },
     handleRecharge() {
       this.$refs.mopacc.visible = true
       
