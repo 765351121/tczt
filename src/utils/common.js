@@ -15,7 +15,8 @@ export const accountTemplate = {
   riskLevel: null,
   score: null,
   sessionId: null,
-  userAcc: null
+  userAcc: null,
+  canWithdrawAmount: 0,   // 可提现金额(账户余额)
 }
 
 /**
@@ -32,7 +33,8 @@ export const accountTemplate = {
     "riskLevel": "稳健型",
     "score": 33,
     "sessionId": "7839fef7-a1cb-42e4-b0c8-f5ad7ddcef2f",
-    "userAcc": "141****0010"
+    "userAcc": "141****0010",
+    "canWithdrawAmount": 0,   // 可提现金额(账户余额)
   },
  */
 

@@ -58,7 +58,7 @@
                 登录后可以查看
               </a-button>
               <span v-if="$store.state.global.userInfo.isLogin">
-                <span class="amount">{{ $utils.formatCurrency(canWithdrawAmount) }} 元</span>
+                <span class="amount">{{ $utils.formatCurrency($store.state.global.userInfo.canWithdrawAmount) }} 元</span>
                 <a-button 
                   type="primary" 
                   size="small"
@@ -147,7 +147,6 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this),
-      canWithdrawAmount: 0,
       scatProduct: {
         annualYield: 0,
         loanTimeLimit: 0,
@@ -163,9 +162,11 @@ export default {
       if (parseFloat(value).toString() == 'NaN') {
         return callback("请输入出借金额");
       }
+      const { global: { userInfo } } = this.$store.state
+      const { canWithdrawAmount } = userInfo
       let { maxSaleVolume, minInvestmentAmount, increaseAmount } = this.scatProduct
-      maxSaleVolume = 100
-      minInvestmentAmount = 10
+      // maxSaleVolume = 100
+      // minInvestmentAmount = 10
       // 判断扫尾
       if (maxSaleVolume < minInvestmentAmount) {
         if (value != maxSaleVolume) {
@@ -300,11 +301,21 @@ export default {
         this.investOrder = response.data
       })
     },
+    getUserInfo() {
+      this.$store
+        .dispatch({
+          type: "getUserInfo",
+          payload: {}
+        })
+    },
   },
   mounted() {
     //console.log('...........');
-    //console.log(this.$store.state.global.userInfo.isLogin);
+    //console.log(this.$store.state.global.userInfo.canWithdrawAmount);
     //console.log(this.$route)
+
+    this.getUserInfo()
+
     // 散标信息
     // /finance/usercenter/product/scatterProduct
     this.getScatterProduct() 
