@@ -1,5 +1,7 @@
 import BasicLayout from '@/layouts/BasicLayout'
 import UserLayout from '@/layouts/UserLayout'
+import MockGatewayLayout from '@/layouts/MockGatewayLayout'
+
 
 export const routes = [{
   path: '/',
@@ -42,4 +44,14 @@ export const routes = [{
       }]
     }
   ]
+},{
+  path: '/mock/gateway',
+  component: MockGatewayLayout,
+  name: 'MockGatewayLayout',
+  redirect: '/mock/gateway/register',
+  children: [{
+    path: '/mock/gateway/register',
+    name: '/mock/gateway/register',
+    component: () => import('@/views/account/mockGateway/Register.vue'),
+  }]
 }]
