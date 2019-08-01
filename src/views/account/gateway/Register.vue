@@ -78,7 +78,8 @@ export default {
     },
     getGatewayInfo(values, response) {
       const { encryInfo, randomId } = response.data;
-      const { realName, idNum } = encryptAES({ ...values }, encryInfo);
+      //const { realName, idNum } = encryptAES({ ...values }, encryInfo);
+      const { realName, idNum } = values
       this.$store
         .dispatch({
           type: "gateway/getOpenAccountInfo",
@@ -93,6 +94,7 @@ export default {
           if (!checkErrorCode(response)) {
             return false;
           }
+          this.loading = false
           this.toOpenAccount(response);
         });
     },
@@ -102,6 +104,7 @@ export default {
         if (!!err) {
           return false;
         }
+        this.loading = true
         this.$store
           .dispatch({
             type: "getEncryInfo",
@@ -145,7 +148,7 @@ export default {
       }
       return callback();
     }
-  }
+  },
 };
 </script>
 

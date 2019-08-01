@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrap">
-      <a-form :form="form">
+      <a-form :form="form" @submit="handleSubmit">
         <p class="title">用户信息：</p>
         <a-form-item label="客户姓名" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-input
@@ -13,7 +13,7 @@
                 required: true, 
                 message: '客户姓名不能为空'
               }],
-              initialValue: '哈哈'
+              initialValue: reqData.realName
             }]"
           />
         </a-form-item>
@@ -43,7 +43,7 @@
                 required: true, 
                 message: '证件号不能为空'
               }],
-              initialValue: '11010**********696'
+              initialValue: $utils.tmIdCardNo(reqData.idCardNo)
             }]"
           />
         </a-form-item>
@@ -90,7 +90,11 @@
             </a-form-item>
           </div>
           <span class="sms-code-btn">
-            <a-button>点击获取</a-button>
+            <a-button
+              @click="handleSmsCode"
+              :disabled="!!state.count"
+              v-text="!state.count && state.tips || (`${state.count}s后可重发`)"
+            >点击获取</a-button>
           </span>
         </div>
 
@@ -168,7 +172,7 @@
         </a-form-item>
 
         <div class="btn-wrap">
-          <a-button type="primary" block>同意协议确定注册</a-button>
+          <a-button type="primary" block html-type="submit">同意协议确定注册</a-button>
         </div>
 
         <div class="protocol-wrap">
@@ -185,14 +189,106 @@
 </template>
 
 <script>
+import {
+  checkErrorCode,
+  encryptAES,
+  handleWebStorage,
+  tmPhone,
+  goBack
+} from "@/utils/utils";
+import { updateAccountStatus } from "@/utils/common";
+
 export default {
   name: "T-mock-gateway-register",
   data() {
     return {
       form: this.$form.createForm(this),
       labelCol: { span: 4 },
-      wrapperCol: { span: 10 }
+      wrapperCol: { span: 10 },
+      reqData: {},
+      state: {
+        count: 0,
+        tips: "获取验证码"
+      }
     };
+  },
+  methods: {
+    smsCountDown() {
+      let count = 60;
+      this.state.count = count;
+      this.interval = setInterval(() => {
+        count -= 1;
+        this.state.count = count;
+        if (count === 0) {
+          this.state.tips = "重新发送";
+          clearInterval(this.interval);
+        }
+      }, 1000);
+    },
+    handleSmsCode() {
+      this.form.validateFields(
+        ["phoneNumber"],
+        { force: true },
+        (err, values) => {
+          if (!!err) {
+            return false;
+          }
+          this.smsCountDown();
+          this.$store
+            .dispatch({
+              type: "sendsms",
+              payload: {
+                ...values,
+                smsType: "regist"
+              }
+            })
+            .then(response => {
+              if (!checkErrorCode(response)) {
+                return false;
+              }
+              this.$message.success("验证码已发送");
+            });
+        }
+      );
+    },
+    mockAccount() {
+      updateAccountStatus({
+        isOpenAccount: true,
+      });
+    },
+    handleRegisterSuccess() {
+      this.mockAccount()
+      window.location.href = this.reqData.redirectUrl
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          return false;
+        }
+        this.$store
+          .dispatch({
+            type: "gateway/register",
+            payload: {
+              ...values
+            }
+          })
+          .then(response => {
+            if (!checkErrorCode(response)) {
+              return false;
+            }
+            this.handleRegisterSuccess();
+          });
+      });
+    }
+  },
+  mounted() {
+    let reqData = JSON.parse(this.$route.query.reqData);
+    console.log(reqData);
+    this.reqData = reqData;
+    // let idCardNo = reqData.idCardNo
+    // let a = `${!!idCardNo && idCardNo.substring(0,5)}**********${!!idCardNo && idCardNo.substring(15)}`
+    // console.log(a)
   }
 };
 </script>

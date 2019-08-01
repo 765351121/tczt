@@ -188,6 +188,11 @@ export function tmPhone(phone) {
 	return `${!!phone && phone.substring(0,3)}****${!!phone && phone.substring(7)}`
 }
 
+// 脱敏idCardNo
+export function tmIdCardNo(idCardNo) {
+	return `${!!idCardNo && idCardNo.substring(0,5)}**********${!!idCardNo && idCardNo.substring(15)}`
+}
+
 // goBack
 export function goBack(type, route = '/') {
   if (!!this) {
