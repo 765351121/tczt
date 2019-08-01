@@ -4,7 +4,10 @@
       <a-form :form="form">
         <p class="title">用户信息：</p>
         <a-form-item label="客户姓名" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入客户姓名" disabled
+          <a-input
+            maxlength="11"
+            placeholder="请输入客户姓名"
+            disabled
             v-decorator="['name', {
               rules: [{
                 required: true, 
@@ -16,7 +19,10 @@
         </a-form-item>
 
         <a-form-item label="证件类型" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入证件类型" disabled
+          <a-input
+            maxlength="11"
+            placeholder="请输入证件类型"
+            disabled
             v-decorator="['cardType', {
               rules: [{
                 required: true, 
@@ -28,7 +34,10 @@
         </a-form-item>
 
         <a-form-item label="证件号" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入证件号" disabled 
+          <a-input
+            maxlength="11"
+            placeholder="请输入证件号"
+            disabled
             v-decorator="['cardNumber', {
               rules: [{
                 required: true, 
@@ -40,7 +49,9 @@
         </a-form-item>
 
         <a-form-item label="银行卡" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入银行卡"
+          <a-input
+            maxlength="11"
+            placeholder="请输入银行卡"
             v-decorator="['bankCardNumber', {
               rules: [{
                 required: true, 
@@ -51,7 +62,9 @@
         </a-form-item>
 
         <a-form-item label="预留手机号" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入预留手机号"
+          <a-input
+            maxlength="11"
+            placeholder="请输入预留手机号"
             v-decorator="['phoneNumber', {
               rules: [{
                 required: true, 
@@ -64,7 +77,9 @@
         <div class="sms-code-wrap">
           <div class="sms-code-form">
             <a-form-item label="验证码" :label-col="labelCol" :wrapper-col="{ span: 7 }">
-              <a-input maxlength="6" placeholder="请输入短信验证码"
+              <a-input
+                maxlength="6"
+                placeholder="请输入短信验证码"
                 v-decorator="['smsCode', {
                   rules: [{
                     required: true, 
@@ -80,7 +95,10 @@
         </div>
 
         <a-form-item label="开通授权业务" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入开通授权业务" disabled
+          <a-input
+            maxlength="11"
+            placeholder="请输入开通授权业务"
+            disabled
             v-decorator="['cc', {
               rules: [{
                 required: true, 
@@ -92,7 +110,10 @@
         </a-form-item>
 
         <a-form-item label="授权期限" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入授权期限" disabled
+          <a-input
+            maxlength="11"
+            placeholder="请输入授权期限"
+            disabled
             v-decorator="['ccc', {
               rules: [{
                 required: true, 
@@ -104,7 +125,10 @@
         </a-form-item>
 
         <a-form-item label="授权金额(元)" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入授权金额" disabled
+          <a-input
+            maxlength="11"
+            placeholder="请输入授权金额"
+            disabled
             v-decorator="['cccc', {
               rules: [{
                 required: true, 
@@ -118,7 +142,9 @@
         <p class="title">设置交易密码：</p>
 
         <a-form-item label="创建密码" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入创建密码"
+          <a-input
+            maxlength="11"
+            placeholder="请输入创建密码"
             v-decorator="['password', {
               rules: [{
                 required: true, 
@@ -129,7 +155,9 @@
         </a-form-item>
 
         <a-form-item label="确认密码" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-input maxlength="11" placeholder="请输入确认密码"
+          <a-input
+            maxlength="11"
+            placeholder="请输入确认密码"
             v-decorator="['passwordConform', {
               rules: [{
                 required: true, 

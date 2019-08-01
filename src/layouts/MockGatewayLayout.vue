@@ -96,6 +96,7 @@ export default {
   line-height: 26px;
   width: 978px;
   margin: 30px auto 0 auto;
+  color: #AAAAAA;
 }
 
 .footer-wrap {

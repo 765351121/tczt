@@ -19,7 +19,15 @@
             />
           </a-form-item>
           <div class="btn-wrap">
-            <a-button type="primary" :loading="loading" block html-type="submit">下一步</a-button>
+            <a-button 
+              type="primary" 
+              block 
+              :loading="loading" 
+              :disabled="disabled"
+              html-type="submit"
+            >
+              下一步
+            </a-button>
           </div>
         </a-form>
       </div>
@@ -34,6 +42,7 @@ export default {
     return {
       form: this.$form.createForm(this),
       loading: false,
+      disabled: false,
     };
   }
 };
