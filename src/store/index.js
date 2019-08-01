@@ -4,6 +4,8 @@ import home from './modules/home'
 import product from './modules/product'
 import user from './modules/user'
 import global from './modules/global'
+import gateway from './modules/gateway'
+
 
 Vue.use(Vuex)
 
@@ -13,6 +15,7 @@ export default new Vuex.Store({
     product,
     user,
     global,
+    gateway,
   },
   state: {
     
