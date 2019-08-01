@@ -13,7 +13,12 @@
         <span>平台公司名称：暴风金融1</span>
       </div>
     </div>
-    <div class="content-wrap"><router-view/></div>
+    <div class="content-wrap">
+      <router-view/>
+    </div>
+    <div
+      class="statement-wrap"
+    >温馨提示：XX银行不承担网贷平台的投融资标的物及投融资人的审核责任，不对网贷平台业务提供明示或默示的担保或连带责任，网贷平台的交易风险由投融资人自行承担，与XX银行无关。</div>
     <div class="footer-wrap"></div>
   </div>
 </template>
@@ -79,10 +84,18 @@ export default {
 }
 
 .content-wrap {
-  border: 1px solid #0ff;
-  width: 1200px;
+  width: 1000px;
   min-height: 100vh;
   margin: 0 auto;
+}
+
+.statement-wrap {
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  font-size: 14px;
+  line-height: 26px;
+  width: 978px;
+  margin: 30px auto 0 auto;
 }
 
 .footer-wrap {
