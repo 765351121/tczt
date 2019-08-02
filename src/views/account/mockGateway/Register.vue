@@ -177,10 +177,10 @@
 
         <div class="protocol-wrap">
           <div>
-            <a href="http://www.baidu.com">《用户开户协议》</a>
+            <a href="http://www.baidu.com" target="_blank">《用户开户协议》</a>
           </div>
           <div>
-            <a href="http://www.baidu.com">《免密授权书》</a>
+            <a href="http://www.baidu.com" target="_blank">《免密授权书》</a>
           </div>
         </div>
       </a-form>
@@ -258,7 +258,7 @@ export default {
     },
     handleRegisterSuccess() {
       this.mockAccount()
-      window.location.href = this.reqData.redirectUrl
+      //window.location.href = this.reqData.redirectUrl
     },
     handleSubmit(e) {
       e.preventDefault();

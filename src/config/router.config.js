@@ -1,6 +1,8 @@
 import BasicLayout from '@/layouts/BasicLayout'
 import UserLayout from '@/layouts/UserLayout'
 import MockGatewayLayout from '@/layouts/MockGatewayLayout'
+import ResultGatewayLayout from '@/layouts/ResultGatewayLayout'
+
 
 
 export const routes = [{
@@ -53,5 +55,15 @@ export const routes = [{
     path: '/mock/gateway/register',
     name: '/mock/gateway/register',
     component: () => import('@/views/account/mockGateway/Register.vue'),
+  }]
+},{
+  path: '/result/gateway',
+  component: ResultGatewayLayout,
+  name: 'ResultGatewayLayout',
+  redirect: '/result/gateway/loading',
+  children: [{
+    path: '/result/gateway/loading',
+    name: '/result/gateway/loading',
+    component: () => import('@/views/result/gateway/Loading.vue'),
   }]
 }]
