@@ -26,23 +26,36 @@ export default {
     };
   },
   methods: {
+    getRoute(prefix, type, orderStatus) {
+      if (!type  || !orderStatus) {
+      return this.$message.info('type orderStatus错误')
+    }
+    let map = new Map([
+      [type, () => { 
+        return new Map([
+          [1, `${prefix}/success`],
+          [2, `${prefix}/fail`],
+          [0, `${prefix}/confirm`],
+        ])
+      }],
+    ])
+
+    return map.get(type)().get(orderStatus)
+    },
     checkResult(response) {
       console.log("checkResult", response);
-      // const {
-      //   query: { type },
-      //   pathname
-      // } = this.props.location;
-      // let { orderStatus, failReason } = response;
-      // let prefix = pathname
-      //   .split("/")
-      //   .filter(i => !!i && i != "loading")
-      //   .join("/")
-      //   .replace(/^/, "/");
-      // const parms = {
-      //   pathname: this.getRoute(prefix, type, orderStatus),
-      //   state: { ...response }
-      // };
-      // return router.replace(parms);
+
+      const { query: { type } }  = this.$route
+      let { orderStatus, failReason } = response
+      const parms = {
+        name: this.getRoute('/result', type, orderStatus),
+        params: { 
+          type, 
+          data: encodeURIComponent(JSON.stringify({ ...response }))
+        }
+      };
+
+      return this.$router.replace(parms);
     },
     checkTimeOut(response) {
       let { timeout } = response;
@@ -103,7 +116,7 @@ export default {
               clearInterval(this.interval);
               clearInterval(this.isDoneInterval);
               resolve(response.data);
-            }, 3000);
+            }, 1000);
           }
           return false;
         });

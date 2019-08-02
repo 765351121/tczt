@@ -30,6 +30,21 @@ export const routes = [{
       name: '/account/gateway/register',
       component: () => import('@/views/account/gateway/Register.vue')
     },
+    // result page
+    {
+      path: '/result/success/:type/:data',
+      name: '/result/success',
+      component: () => import('@/views/result/gateway/Success.vue'),
+    },
+    {
+      path: '/result/fail/:type/:data',
+      name: '/result/fail',
+      component: () => import('@/views/result/gateway/Fail.vue'),
+    }, {
+      path: '/result/confirm/:type/:data',
+      name: '/result/confirm',
+      component: () => import('@/views/result/gateway/Confirm.vue'),
+    },
     // user related...
     {
       path: '/user',
@@ -65,5 +80,5 @@ export const routes = [{
     path: '/result/gateway/loading',
     name: '/result/gateway/loading',
     component: () => import('@/views/result/gateway/Loading.vue'),
-  }]
+  },]
 }]
