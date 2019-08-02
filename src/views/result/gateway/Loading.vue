@@ -28,7 +28,8 @@ export default {
   methods: {
     getRoute(prefix, type, orderStatus) {
       if (!type  || !orderStatus) {
-      return this.$message.info('type orderStatus错误')
+        this.$message.info('type orderStatus错误')
+        return "/home"
     }
     let map = new Map([
       [type, () => { 
@@ -146,8 +147,6 @@ export default {
     }
   },
   mounted() {
-    console.log(".................");
-    console.log(this.$route);
     this.initCountDown();
     this.createPom();
   }

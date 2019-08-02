@@ -7,15 +7,16 @@
 <script>
 export default {
   name: 'T-result-success',
+  data() {
+    return {
+      type: '',
+      body: {},
+    }
+  },
   mounted () {
-    console.log('................')
-    console.log(this.$route)
-    let { data }  = this.$route.params
-    let a = decodeURIComponent(data)
-    let b = JSON.parse(a)
-    console.log(a)
-    console.log(b)
-    
+    let { params: { type, data } }  = this.$route
+    this.type = type
+    this.body = JSON.parse(decodeURIComponent(data))
   },
 }
 </script>
