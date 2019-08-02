@@ -16,14 +16,110 @@
 </template>
 
 <script>
+import { checkErrorCode } from "@/utils/utils";
+
 export default {
   name: "T-result-gateway-loading",
   data() {
     return {
-      count: 10,
+      count: 10
     };
   },
   methods: {
+    checkResult(response) {
+      console.log("checkResult", response);
+      // const {
+      //   query: { type },
+      //   pathname
+      // } = this.props.location;
+      // let { orderStatus, failReason } = response;
+      // let prefix = pathname
+      //   .split("/")
+      //   .filter(i => !!i && i != "loading")
+      //   .join("/")
+      //   .replace(/^/, "/");
+      // const parms = {
+      //   pathname: this.getRoute(prefix, type, orderStatus),
+      //   state: { ...response }
+      // };
+      // return router.replace(parms);
+    },
+    checkTimeOut(response) {
+      let { timeout } = response;
+      if (timeout) {
+        return {
+          orderStatus: 0,
+          failReason: ""
+        };
+      }
+      return response;
+    },
+    timer(t) {
+      return new Promise(resolve =>
+        setTimeout(function() {
+          let err = { timeout: true };
+          resolve(err);
+        }, t)
+      );
+    },
+    checkIsCallContinue(response) {
+      /**
+       * @orderStatus number
+       *  1: 成功  2：失败  0：等待中
+       */
+      const {
+        data: { orderStatus }
+      } = response;
+      if (orderStatus == 1 || orderStatus == 2) {
+        return false;
+      }
+
+      return true;
+    },
+    callIsDone(resolve) {
+      const {
+        query: { type, requestNo }
+      } = this.$route;
+      this.$store
+        .dispatch({
+          type: "gateway/isOrderDone",
+          payload: {
+            type,
+            orderCode: requestNo
+          }
+        })
+        .then(response => {
+          console.log("callIsDone", response);
+          if (!checkErrorCode(response)) {
+            clearInterval(this.isDoneInterval);
+            return false;
+          }
+          if (!this.checkIsCallContinue(response)) {
+            // clearInterval(this.interval);
+            // clearInterval(this.isDoneInterval);
+            // resolve(response.data);
+            // mock async delay
+            setTimeout(() => {
+              clearInterval(this.interval);
+              clearInterval(this.isDoneInterval);
+              resolve(response.data);
+            }, 3000);
+          }
+          return false;
+        });
+    },
+    isDone() {
+      return new Promise(resolve => {
+        this.isDoneInterval = setInterval(() => {
+          this.callIsDone(resolve);
+        }, 1000);
+      });
+    },
+    createPom() {
+      Promise.race([this.isDone(), this.timer(10000)])
+        .then(this.checkTimeOut)
+        .then(this.checkResult);
+    },
     initCountDown() {
       let count = 10;
       this.interval = setInterval(() => {
@@ -31,14 +127,17 @@ export default {
         this.count = count;
         if (count === 0) {
           clearInterval(this.interval);
-          //clearInterval(this.isDoneInterval);
+          clearInterval(this.isDoneInterval);
         }
       }, 1000);
     }
   },
-  mounted () {
-    this.initCountDown()
-  },
+  mounted() {
+    console.log(".................");
+    console.log(this.$route);
+    this.initCountDown();
+    this.createPom();
+  }
 };
 </script>
 

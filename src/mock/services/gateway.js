@@ -7,6 +7,20 @@ import {
 } from '@/utils/utils'
 const ws = handleWebStorage()
 
+
+// isOrderDone
+const isOrderDone = (options) => {
+  /**
+   * @orderStatus
+   *  1: 成功  2：失败  0：等待中
+   */
+  let data = {
+    "orderStatus": 1,
+    "failReason": null
+  }
+  return builder(data)
+}
+
 // register
 const register = (options) => {
   let data = null
@@ -16,10 +30,13 @@ const register = (options) => {
 // openAccount
 const openAccount = (options) => {
   let body = JSON.parse(options.body)
-  const { realName, idNum } = body
+  const {
+    realName,
+    idNum
+  } = body
   let failTime = '20210731' // 授权期限
-  let redirectUrl = 'http://www.baidu.com'  // 回调地址
-  let amount = '400000.00'  // 授权金额
+  let redirectUrl = 'http://www.baidu.com' // 回调地址
+  let amount = '400000.00' // 授权金额
 
   let data = {
     "requestNo": "6ce1416b2dcf4ab19eb8d81a15763488",
@@ -33,3 +50,5 @@ const openAccount = (options) => {
 
 Mock.mock(/\/mock\/usercenter\/client\/openAccount/, 'post', openAccount)
 Mock.mock(/\/mock\/gateway\/client\/register/, 'post', register)
+Mock.mock(/\/mock\/usercenter\/account\/isOrderDone/, 'post', isOrderDone)
+

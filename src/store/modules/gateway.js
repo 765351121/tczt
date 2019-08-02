@@ -1,5 +1,5 @@
 import { 
-  getOpenAccountInfo, register,
+  getOpenAccountInfo, register, isOrderDone,
 } from '@/services/gateway'
 
 const gateway = {
@@ -12,6 +12,16 @@ const gateway = {
   },
 
   actions: {
+    
+    // result-loading-isOrderDone
+    ['gateway/isOrderDone'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        isOrderDone(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
+
     // 开户注册
     ['gateway/register'] ({ state, commit }, { payload }) {
       return new Promise((resolve, reject) => {

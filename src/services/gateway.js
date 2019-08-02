@@ -4,6 +4,14 @@ const rootPath = '/finance';
 const mockPath = '/mock';
 
 
+// isOrderDone
+export async function isOrderDone (params) {
+  return axios({
+    url: `${mockPath}/usercenter/account/isOrderDone`,
+    method: 'post',
+    data: params
+  })
+}
 
 // 开户注册
 export async function register (params) {
