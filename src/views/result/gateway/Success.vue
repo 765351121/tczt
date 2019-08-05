@@ -1,22 +1,42 @@
 <template>
   <div>
-    succ
+    <div class="wrap">
+      <RegisterSuccess/>
+    </div>
   </div>
 </template>
 
 <script>
+import {
+  Success as RegisterSuccess,
+} from "./components/Register";
+
 export default {
-  name: 'T-result-success',
+  name: "T-result-success",
+  components: {
+    RegisterSuccess,
+  },
   data() {
     return {
-      type: '',
-      body: {},
-    }
+      type: "",
+      body: {}
+    };
   },
-  mounted () {
-    let { params: { type, data } }  = this.$route
-    this.type = type
-    this.body = JSON.parse(decodeURIComponent(data))
-  },
-}
+  mounted() {
+    let {
+      params: { type, data }
+    } = this.$route;
+    this.type = type;
+    this.body = JSON.parse(decodeURIComponent(data));
+  }
+};
 </script>
+
+<style lang="less" scoped>
+.wrap {
+  min-height: 630px;
+  background-color: #fff;
+  margin: 40px 0 60px 0;
+}
+</style>
+
