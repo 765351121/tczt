@@ -257,8 +257,9 @@ export default {
       });
     },
     handleRegisterSuccess() {
-      this.mockAccount()
-      //window.location.href = this.reqData.redirectUrl
+      //this.mockAccount()
+      const { requestNo } = this.reqData
+      window.location.href = `${this.reqData.redirectUrl}?type=register&requestNo=${requestNo}`
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -284,11 +285,7 @@ export default {
   },
   mounted() {
     let reqData = JSON.parse(this.$route.query.reqData);
-    console.log(reqData);
     this.reqData = reqData;
-    // let idCardNo = reqData.idCardNo
-    // let a = `${!!idCardNo && idCardNo.substring(0,5)}**********${!!idCardNo && idCardNo.substring(15)}`
-    // console.log(a)
   }
 };
 </script>

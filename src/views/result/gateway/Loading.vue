@@ -17,6 +17,7 @@
 
 <script>
 import { checkErrorCode } from "@/utils/utils";
+import { updateAccountStatus } from "@/utils/common";
 
 export default {
   name: "T-result-gateway-loading",
@@ -30,22 +31,45 @@ export default {
       if (!type  || !orderStatus) {
         this.$message.info('type orderStatus错误')
         return "/home"
-    }
-    let map = new Map([
-      [type, () => { 
-        return new Map([
-          [1, `${prefix}/success`],
-          [2, `${prefix}/fail`],
-          [0, `${prefix}/confirm`],
-        ])
-      }],
-    ])
+      }
+      let path = new String()
+      switch (orderStatus) {
+        case 1:
+          path = '/success';
+          break;
+        case 2:
+          path = '/fail';
+          break;
+        case 0:
+          path = '/confirm';
+          break;
 
-    return map.get(type)().get(orderStatus)
+        default:
+        transform = '/fail';
+          break;
+      }
+      let map = new Map([
+        [type, () => { 
+          return new Map([
+            [1, `${prefix}${path}`],
+            [2, `${prefix}${path}`],
+            [0, `${prefix}${path}`],
+          ])
+        }],
+      ])
+      return map.get(type)().get(orderStatus)
+    },
+    mockAccount(response) {
+      const { orderStatus }  = response
+      let isOpenAccount = false
+      if (orderStatus === 1) {
+        isOpenAccount = true
+      }
+      updateAccountStatus({ isOpenAccount })
     },
     checkResult(response) {
-      console.log("checkResult", response);
-
+      // mock update account field isOpenAccount
+      this.mockAccount(response)
       const { query: { type } }  = this.$route
       let { orderStatus, failReason } = response
       const parms = {
@@ -55,7 +79,6 @@ export default {
           data: encodeURIComponent(JSON.stringify({ ...response }))
         }
       };
-
       return this.$router.replace(parms);
     },
     checkTimeOut(response) {
@@ -103,7 +126,6 @@ export default {
           }
         })
         .then(response => {
-          console.log("callIsDone", response);
           if (!checkErrorCode(response)) {
             clearInterval(this.isDoneInterval);
             return false;

@@ -35,7 +35,7 @@ const openAccount = (options) => {
     idNum
   } = body
   let failTime = '20210731' // 授权期限
-  let redirectUrl = 'http://www.baidu.com' // 回调地址
+  let redirectUrl = window.location.origin + '/result/gateway/loading' // 回调地址
   let amount = '400000.00' // 授权金额
 
   let data = {
