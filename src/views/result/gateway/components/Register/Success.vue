@@ -6,8 +6,8 @@
       </div>
       <p class="status-des">开户成功！</p>
       <div class="btn-wrap">
-        <a-button type="primary" size="large">查看账户</a-button>
-        <a-button type="primary" size="large">立即出借</a-button>
+        <a-button type="primary" size="large" @click="toAccount">查看账户</a-button>
+        <a-button type="primary" size="large" @click="toInvest">立即出借</a-button>
       </div>
     </div>
   </div>
@@ -15,9 +15,23 @@
 
 <script>
 export default {
-  name: 'T-result-register-success',
-
-}
+  name: "T-result-register-success",
+  data() {
+    return {};
+  },
+  methods: {
+    toInvest() {
+      this.$router.push({
+        name: "/product/list"
+      });
+    },
+    toAccount() {
+      this.$router.push({
+        name: "/home"
+      });
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>

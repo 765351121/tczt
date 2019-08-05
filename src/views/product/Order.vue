@@ -253,7 +253,15 @@ export default {
     },
     // 充值
     handleRecharge() {
-      this.$refs.mopacc.visible = true;
+      const { userInfo } = this.$store.state.global || {}
+      const { isLogin, isOpenAccount } = userInfo || {}
+      if (!isLogin) {
+        return this.handleLogin()
+      }
+      if (!isOpenAccount) {
+        return this.$refs.mopacc.visible = true;
+      }
+      console.log('to recharge')
     },
     // 登录
     handleLogin() {
