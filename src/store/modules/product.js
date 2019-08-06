@@ -1,5 +1,10 @@
-import { getScatterProduct, getMerchantUserInfo, getInvestOrder,
+import { 
+  getScatterProduct, 
+  getMerchantUserInfo, 
+  getInvestOrder,
   getScatterList,
+  getToken,
+  investOrder,
 } from '@/services/product'
 
 const product = {
@@ -25,6 +30,25 @@ const product = {
   },
 
   actions: {
+
+    // investOrder
+    ['product/investOrder'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        investOrder(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
+
+    // getToken
+    ['product/getToken'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getToken(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
+
     // 产品列表
     getScatterList ({ state, commit }, { payload }) {
       return new Promise((resolve, reject) => {

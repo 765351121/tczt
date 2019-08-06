@@ -84,7 +84,8 @@
                 </a-form-item>
               </a-form>
             </div>
-            <div style="margin-top: 10px">预计出借回报：
+            <div style="margin-top: 10px">
+              预计出借回报：
               <span style="color: #ec2121">{{ $utils.formatCurrency(incomeAmount) }}</span> 元
             </div>
             <div style="margin-top: 20px" class="checkbox">
@@ -125,6 +126,7 @@ import Details from "./components/Details";
 import BorrowInfo from "./components/BorrowInfo";
 import InvestOrder from "./components/InvestOrder";
 import MOpenAccount from "./components/MOpenAccount";
+import { stringify } from "qs";
 import {
   checkErrorCode,
   formatCurrency,
@@ -154,10 +156,50 @@ export default {
       },
       merchantUserInfo: {},
       investOrder: {},
-      incomeAmount: 0,
+      incomeAmount: 0
     };
   },
   methods: {
+    toInvest(response) {
+      const { requestParam, requestUrl } = response.data;
+      let urlParm = stringify(JSON.parse(requestParam || "{}"));
+      let targetUrl = `${requestUrl}?${urlParm}`;
+      window.location.href = targetUrl;
+    },
+    gatewayInvestInfo(response) {
+      const { productCode } = this.$route.query;
+      const { token } = response.data;
+      let investAmount = this.form.getFieldValue("investAmount") || 0;
+      this.$store
+        .dispatch({
+          type: "product/investOrder",
+          payload: {
+            investAmount: Number(investAmount),
+            productCode,
+            token,
+            platform: "pc"
+          }
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.toInvest(response);
+        });
+    },
+    handleInvest() {
+      this.$store
+        .dispatch({
+          type: "product/getToken"
+        })
+        .then(response => {
+          console.log(response);
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.gatewayInvestInfo(response);
+        });
+    },
     // 计算预计投资收益
     handleInvestAmountChange(e) {
       let { annualYield, loanTimeLimit, loanTimeLimitType } = this.scatProduct;
@@ -179,6 +221,7 @@ export default {
     },
     // 投资表单校验
     validateInvestAmount(rule, value, callback) {
+      return callback();
       if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
       }
@@ -223,10 +266,10 @@ export default {
     },
     // 校验投资必要条件(登录 / 开户 / 风险测评)
     checkRequirement() {
-      const { userInfo } = this.$store.state.global || {}
-      const { isLogin, isOpenAccount, isRiskAccess, score } = userInfo || {}
+      const { userInfo } = this.$store.state.global || {};
+      const { isLogin, isOpenAccount, isRiskAccess, score } = userInfo || {};
       if (!isLogin) {
-        this.handleLogin()
+        this.handleLogin();
         return false;
       }
       if (!isOpenAccount) {
@@ -235,56 +278,62 @@ export default {
       }
       // 为测评-去测评
       if (!isRiskAccess) {
-        this.showToRiskModal()
+        this.showToRiskModal();
         return false;
       }
       // 已测评-重新测评
       if (isRiskAccess && score < 16) {
-        this.showReRiskModal()
+        this.showReRiskModal();
         return false;
       }
-      console.log('to invest')
-      return true
+      return true;
     },
     // 立即加入
     handleBuy(e) {
       e = window.event;
       e.preventDefault();
       if (!this.checkRequirement()) {
-        return false
+        return false;
       }
       this.form.validateFields({ force: true }, (err, values) => {
         if (!!err) {
-          console.log("err");
           return false;
         }
         console.log("succ");
+        const { investAmount } = values;
+        const { minInvestmentAmount } = this.scatProduct;
+        if (!investAmount) {
+          this.form.setFieldsValue({
+            investAmount: minInvestmentAmount
+          });
+        }
+        this.handleInvest();
       });
     },
     // 重新风险测评弹窗
     showReRiskModal() {
-      let that = this
-      const { userInfo } = this.$store.state.global || {}
-      const { riskLevel } = userInfo || {}
+      let that = this;
+      const { userInfo } = this.$store.state.global || {};
+      const { riskLevel } = userInfo || {};
       this.$confirm({
         title: "提示",
-        content:
-          `您属于${riskLevel}出借人,风险承受能力极低,不满足出借条件,建议您重新测评`,
+        content: `您属于${riskLevel}出借人,风险承受能力极低,不满足出借条件,建议您重新测评`,
         iconType: "exclamation-circle",
         centered: true,
         cancelText: "暂不测评",
         okText: "重新测评",
         onOk() {
+          goBack.bind(that, "set")();
           that.$router.push({
-            name: '/evaluate/risk'
-          })
+            name: "/evaluate/risk"
+          });
         },
         onCancel() {}
       });
     },
     // 去风险测评弹窗
     showToRiskModal() {
-      let that = this
+      let that = this;
       this.$confirm({
         title: "提示",
         content:
@@ -296,23 +345,23 @@ export default {
         onOk() {
           goBack.bind(that, "set")();
           that.$router.push({
-            name: '/evaluate/risk'
-          })
+            name: "/evaluate/risk"
+          });
         },
         onCancel() {}
       });
     },
     // 充值
     handleRecharge() {
-      const { userInfo } = this.$store.state.global || {}
-      const { isLogin, isOpenAccount } = userInfo || {}
+      const { userInfo } = this.$store.state.global || {};
+      const { isLogin, isOpenAccount } = userInfo || {};
       if (!isLogin) {
-        return this.handleLogin()
+        return this.handleLogin();
       }
       if (!isOpenAccount) {
-        return this.$refs.mopacc.visible = true;
+        return (this.$refs.mopacc.visible = true);
       }
-      console.log('to recharge')
+      console.log("to recharge");
     },
     // 登录
     handleLogin() {

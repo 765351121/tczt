@@ -4,6 +4,24 @@ const rootPath = '/finance';
 const mockPath = '/mock';
 
 
+// investOrder
+export async function investOrder (params) {
+  return axios({
+    url: `${mockPath}/usercenter/order/investOrder`,
+    method: 'post',
+    data: params
+  })
+}
+
+// getToken
+export async function getToken (params) {
+  return axios({
+    url: `${mockPath}/usercenter/order/getToken`,
+    method: 'post',
+    data: params
+  })
+}
+
 // 产品列表
 export async function getScatterList (params) {
   return axios({

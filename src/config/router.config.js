@@ -80,7 +80,11 @@ export const routes = [{
     path: '/mock/gateway/register',
     name: '/mock/gateway/register',
     component: () => import('@/views/account/mockGateway/Register.vue'),
-  }]
+  },{
+    path: '/mock/gateway/invest',
+    name: '/mock/gateway/invest',
+    component: () => import('@/views/account/mockGateway/Invest.vue'),
+  },]
 },{
   path: '/result/gateway',
   component: ResultGatewayLayout,

@@ -9,7 +9,30 @@ import {
 const wss = handleWebStorage('session')
 
 
+// investOrder
+const investOrder = (opts) => {
+  console.log(opts);
+  let redirectUrl = window.location.origin + '/result/gateway/loading' // 回调地址
+  let data = {
+    "message": null,
+    "status": 0,
+    "requestNo": "TZZ20190806142349853144323",
+    //"requestUrl": "https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway",
+    "requestUrl": `${window.location.origin}/mock/gateway/invest`,
+    "requestParam": `{\"keySerial\":\"1\",\"platformNo\":\"6000004334\",\"reqData\":\"{\\\"amount\\\":100,\\\"bizType\\\":\\\"TENDER\\\",\\\"expired\\\":\\\"20190806145349\\\",\\\"platformUserNo\\\":\\\"PN1907311036378301409794003\\\",\\\"projectNo\\\":\\\"20190724110854bdxx2660\\\",\\\"redirectUrl\\\":\\\"${redirectUrl}\\\",\\\"requestNo\\\":\\\"UPT1908061423498581579308935\\\",\\\"timestamp\\\":\\\"20190806142349\\\"}\",\"requestUrl\":\"https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway\",\"serviceName\":\"USER_PRE_TRANSACTION\",\"sign\":\"dOyc5+T8A24tSboCN3G4HgGHGYCepqbx2xfWQZ8EK80f8gnaTMB0A3Y5kYliRqmSNaZwhx9PqA8lA/0VPw87lZxL61H6wmkXXF6GjSiv7I1rz639H5uWynhT8tq6tD600yI27V30Q9DbMnburgsjVigSRQNE8GrS02XqqfyXt6m/oQ9OQ50XBW2L1CcZf9S7PNQgsEQqnFa+4cmgspZwxhW0Yp9w7jkPAOdjHxvY64g2RaFvu1npcYeDsRs1lit4/sR05/N/f9rG3JpeproXCsZeSKaj1Awgv9+/iPGrdM3dRSNB04dNzX6/71Ds1MQvNuwI+kQfg7gS3fT7sjKnXA==\"}`
+  }
+  return builder(data)
+}
 
+// getToken
+const getToken = (opts) => {
+  let data = {
+    "message": null,
+    "status": 0,
+    "token": "7264e63086cb495598d9d2614fcd1a8a"
+  }
+  return builder(data)
+}
 
 // 产品列表
 const scatterList = (opts) => {
@@ -33,7 +56,7 @@ const scatterList = (opts) => {
       "loanAmount": '@integer(100000, 200000)',
       "annualYield": '@integer(1, 20)',
       "minInvestmentAmount|1": [100, 1000, 10000],
-      "increaseAmount|1": [1, 10 , 100],
+      "increaseAmount|1": [1, 10, 100],
       "productState|1": [10, 20, 30, 40, 50],
       "repaymentMode": "5",
       "maxSaleVolume": '@integer(50000, 100000)',
@@ -228,7 +251,8 @@ const scatProduct = (opts) => {
     "hasDepository": false,
     "protectFlag": true
   }
-  data = Object.assign(data, { ...wss.getItem('scat-list-record') })
+  data = Object.assign(data, { ...wss.getItem('scat-list-record')
+  })
 
   return builder(data)
 }
@@ -241,3 +265,5 @@ Mock.mock(/\/mock\/usercenter\/product\/scatterProduct/, 'post', scatProduct)
 Mock.mock(/\/mock\/userInfo\/merchantUserInfo/, 'post', merchantUserInfo)
 Mock.mock(/\/mock\/usercenter\/order\/getInvestOrder/, 'post', getInvestOrder)
 Mock.mock(/\/mock\/usercenter\/product\/scatterList/, 'post', scatterList)
+Mock.mock(/\/mock\/usercenter\/order\/getToken/, 'post', getToken)
+Mock.mock(/\/mock\/usercenter\/order\/investOrder/, 'post', investOrder)

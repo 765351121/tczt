@@ -254,6 +254,9 @@ export default {
       wss.setItem({ 'scat-list-record': record }) // mock for api request
       this.$router.push({
         name: '/product/order',
+        query: {
+          productCode: record.productCode
+        }
       })
     },
     customRow(record) {
