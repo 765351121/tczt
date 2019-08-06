@@ -3,15 +3,15 @@
     <div class="wrap">
       <div class="content-wrap">
         <div class="info-item-wrap">
-          <p class="amount">金额: 100.00元</p>
-          <p class="ava-amount">可用余额： 10700.00元</p>
+          <p class="amount">金额: {{ $utils.formatCurrency(reqData.amount) }}元</p>
+          <p class="ava-amount">可用余额： {{ $utils.formatCurrency(reqData.canWithdrawAmount) }}元</p>
         </div>
         <div class="info-item-wrap">
-          <p>订单编号：UPT1908061535205371227444871</p>
-          <p>客户姓名： 哈哈</p>
+          <p>订单编号：UPT{{ reqData.projectNo }}</p>
+          <p>客户姓名： {{ reqData.realName }}</p>
         </div>
         <div class="info-item-wrap">
-          <p>标的名称：ENTERPRISE201907241108543</p>
+          <p>标的名称：ENTERPRISE{{ reqData.timestamp }}</p>
         </div>
       </div>
       <div class="form-wrap">
@@ -24,8 +24,10 @@
               rules: [{
                 required: true, 
                 message: '交易密码不能为空'
+              },{
+                validator: validateTradPwd,
               }],
-              //initialValue: reqData.realName
+              validateTrigger: 'onSubmit'
             }]"
             />
           </a-form-item>
@@ -39,19 +41,47 @@
 </template>
 
 <script>
+import {
+  handleWebStorage
+} from '@/utils/utils'
+
+const ws = handleWebStorage()
+
 export default {
   name: "T-mock-gateway-invest",
   data() {
     return {
       form: this.$form.createForm(this),
       labelCol: { span: 4 },
-      wrapperCol: { span: 10 }
+      wrapperCol: { span: 10 },
+      reqData: {},
     };
   },
   methods: {
-    handleSubmit() {
-      console.log('1111')
+    validateTradPwd(rule, value, callback) {
+      const { tradPwd }  = ws.getItem('account')
+      if (!!value && value !== tradPwd) {
+        return callback('您输入的密码错误，连续错误5次将被锁定，请确认后重新输入。')
+      }
+      return callback()
+    },
+    handleSubmit(e) {
+      e = window.event;
+      e.preventDefault();
+      this.form.validateFields({ force: true }, (err, values) => {
+        if (!!err) {
+          return false;
+        }
+        console.log("succ");
+      
+      });
     }
+  },
+  mounted() {
+    let reqData = JSON.parse(this.$route.query.reqData);
+    this.reqData = reqData;
+    console.log(reqData)
+    console.log(ws.getItem('account'))
   }
 };
 </script>

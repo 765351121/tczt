@@ -5,7 +5,7 @@ const ws = handleWebStorage()
 export const accountTemplate = {
   bankCode: null,
   bankName: null,
-  cardNo: null,
+  bankCardNo: null,
   idNum: null,
   isLogin: false,
   isOpenAccount: false,
@@ -17,6 +17,7 @@ export const accountTemplate = {
   sessionId: null,
   userAcc: null,
   canWithdrawAmount: 0,   // 可提现金额(账户余额)
+  tradPwd: null, // 交易密码
 }
 
 /**

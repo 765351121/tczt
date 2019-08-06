@@ -8,7 +8,7 @@
             maxlength="11"
             placeholder="请输入客户姓名"
             disabled
-            v-decorator="['name', {
+            v-decorator="['realName', {
               rules: [{
                 required: true, 
                 message: '客户姓名不能为空'
@@ -38,7 +38,7 @@
             maxlength="11"
             placeholder="请输入证件号"
             disabled
-            v-decorator="['cardNumber', {
+            v-decorator="['idNum', {
               rules: [{
                 required: true, 
                 message: '证件号不能为空'
@@ -52,7 +52,7 @@
           <a-input
             maxlength="11"
             placeholder="请输入银行卡"
-            v-decorator="['bankCardNumber', {
+            v-decorator="['bankCardNo', {
               rules: [{
                 required: true, 
                 message: '银行卡号不能为空'
@@ -149,7 +149,7 @@
           <a-input
             maxlength="11"
             placeholder="请输入创建密码"
-            v-decorator="['password', {
+            v-decorator="['tradPwd', {
               rules: [{
                 required: true, 
                 message: '密码不能为空'
@@ -162,7 +162,7 @@
           <a-input
             maxlength="11"
             placeholder="请输入确认密码"
-            v-decorator="['passwordConform', {
+            v-decorator="['tradPwdConform', {
               rules: [{
                 required: true, 
                 message: '确认密码不能为空'
@@ -252,12 +252,14 @@ export default {
       );
     },
     mockAccount() {
+      let values = this.form.getFieldsValue(['realName', 'idNum', 'bankCardNo', 'tradPwd'])
       updateAccountStatus({
+        ...values,
         isOpenAccount: true,
       });
     },
     handleRegisterSuccess() {
-      //this.mockAccount()
+      this.mockAccount()
       const { requestNo } = this.reqData
       window.location.href = `${this.reqData.redirectUrl}?type=register&requestNo=${requestNo}`
     },
