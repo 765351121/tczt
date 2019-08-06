@@ -221,10 +221,38 @@ export default {
       }
       return callback();
     },
+    // 校验投资必要条件(登录 / 开户 / 风险测评)
+    checkRequirement() {
+      const { userInfo } = this.$store.state.global || {}
+      const { isLogin, isOpenAccount, isRiskAccess, score } = userInfo || {}
+      if (!isLogin) {
+        this.handleLogin()
+        return false;
+      }
+      if (!isOpenAccount) {
+        this.$refs.mopacc.visible = true;
+        return false;
+      }
+      // 为测评-去测评
+      if (!isRiskAccess) {
+        this.showToRiskModal()
+        return false;
+      }
+      // 已测评-重新测评
+      if (isRiskAccess && score < 16) {
+        this.showReRiskModal()
+        return false;
+      }
+      console.log('to invest')
+      return true
+    },
     // 立即加入
     handleBuy(e) {
       e = window.event;
       e.preventDefault();
+      if (!this.checkRequirement()) {
+        return false
+      }
       this.form.validateFields({ force: true }, (err, values) => {
         if (!!err) {
           console.log("err");
@@ -233,8 +261,30 @@ export default {
         console.log("succ");
       });
     },
+    // 重新风险测评弹窗
+    showReRiskModal() {
+      let that = this
+      const { userInfo } = this.$store.state.global || {}
+      const { riskLevel } = userInfo || {}
+      this.$confirm({
+        title: "提示",
+        content:
+          `您属于${riskLevel}出借人,风险承受能力极低,不满足出借条件,建议您重新测评`,
+        iconType: "exclamation-circle",
+        centered: true,
+        cancelText: "暂不测评",
+        okText: "重新测评",
+        onOk() {
+          that.$router.push({
+            name: '/evaluate/risk'
+          })
+        },
+        onCancel() {}
+      });
+    },
     // 去风险测评弹窗
     showToRiskModal() {
+      let that = this
       this.$confirm({
         title: "提示",
         content:
@@ -244,9 +294,9 @@ export default {
         cancelText: "暂不测评",
         okText: "立即测评",
         onOk() {
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          }).catch(() => console.log("Oops errors!"));
+          that.$router.push({
+            name: '/evaluate/risk'
+          })
         },
         onCancel() {}
       });

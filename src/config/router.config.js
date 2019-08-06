@@ -45,6 +45,11 @@ export const routes = [{
       name: '/result/confirm',
       component: () => import('@/views/result/gateway/Confirm.vue'),
     },
+    {
+      path: '/evaluate/risk',
+      name: '/evaluate/risk',
+      component: () => import('@/views/evaluate/Risk.vue'),
+    },
     // user related...
     {
       path: '/user',
