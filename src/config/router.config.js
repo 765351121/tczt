@@ -50,6 +50,11 @@ export const routes = [{
       name: '/evaluate/risk',
       component: () => import('@/views/evaluate/Risk.vue'),
     },
+    {
+      path: '/evaluate/result/:data',
+      name: '/evaluate/result',
+      component: () => import('@/views/evaluate/Result.vue'),
+    },
     // user related...
     {
       path: '/user',

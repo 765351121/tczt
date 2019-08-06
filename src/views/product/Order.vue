@@ -294,6 +294,7 @@ export default {
         cancelText: "暂不测评",
         okText: "立即测评",
         onOk() {
+          goBack.bind(that, "set")();
           that.$router.push({
             name: '/evaluate/risk'
           })
