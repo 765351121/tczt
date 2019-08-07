@@ -47,6 +47,7 @@ export default {
 .wrap {
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 150px;
 }
 .nav-wrap {
   background-color: #fff;
