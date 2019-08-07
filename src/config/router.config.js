@@ -66,7 +66,33 @@ export const routes = [{
       children: [{
         path: '/account/overview',
         name: '/account/overview',
+        desc: '账户总览',
         component: () => import('@/views/account/user/Overview.vue')
+      },{
+        path: '/account/funds-detail',
+        name: '/account/funds-detail',
+        desc: '资金明细',
+        component: () => import('@/views/account/user/FundsDetail.vue')
+      },{
+        path: '/account/bank-card',
+        name: '/account/bank-card',
+        desc: '银行卡',
+        component: () => import('@/views/account/user/BankCard.vue')
+      },{
+        path: '/account/lend-record',
+        name: '/account/lend-record',
+        desc: '出借记录',
+        component: () => import('@/views/account/user/LendRecord.vue')
+      },{
+        path: '/account/safety',
+        name: '/account/safety',
+        desc: '安全中心',
+        component: () => import('@/views/account/user/Safety.vue')
+      },{
+        path: '/account/feedback',
+        name: '/account/feedback',
+        desc: '出借记录',
+        component: () => import('@/views/account/user/Feedback.vue')
       }]
     },
     // user related...

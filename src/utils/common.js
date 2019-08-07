@@ -65,13 +65,13 @@ export const accountMenu = [
       path: '/account/overview',
     },{
       name: '资金明细',
-      path: '/account/overview',
+      path: '/account/funds-detail',
     },{
       name: '银行卡',
-      path: '/account/overview',
+      path: '/account/bank-card',
     },{
       name: '出借记录',
-      path: '/account/overview',
+      path: '/account/lend-record',
     },]
   },
   {
@@ -79,10 +79,10 @@ export const accountMenu = [
     icon: icon_2,
     children: [{
       name: '安全中心',
-      path: '/account/overview',
+      path: '/account/safety',
     },{
       name: '意见反馈',
-      path: '/account/overview',
+      path: '/account/feedback',
     }]
   }
 ]
