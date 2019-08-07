@@ -8,7 +8,11 @@
             {{ item.name }}
           </div>
           <ul class="menu menu-sub">
-            <li v-for="(item, index) in item.children" :key="index">
+            <li
+              v-for="(item, index) in item.children"
+              :key="index"
+              :class="$route.path == item.path? 'menu-active' : ''"
+            >
               <router-link :to="item.path">{{ item.name }}</router-link>
             </li>
           </ul>
@@ -31,6 +35,10 @@ export default {
     return {
       menus
     };
+  },
+  mounted() {
+    console.log("..............");
+    console.log(this.$route.path);
   }
 };
 </script>
@@ -82,13 +90,18 @@ export default {
       font-size: 14px;
       color: rgba(0, 0, 0, 0.65);
       text-decoration: none;
+      width: 100%;
       &:hover {
         color: #1890ff;
       }
     }
   }
 }
-
+.menu-active {
+  & > a {
+    color: #1890ff!important;
+  }
+}
 .content-wrap {
   border: 1px solid #0ff;
   flex: 1;
