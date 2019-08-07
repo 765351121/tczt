@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="wrap">
-      <RegisterSuccess/>
+      <RegisterSuccess v-if="this.type === 'register'"/>
+      <InvestSuccess v-if="this.type === 'tender'"/>
     </div>
   </div>
 </template>
@@ -10,11 +11,15 @@
 import {
   Success as RegisterSuccess,
 } from "./components/Register";
+import {
+  Success as InvestSuccess,
+} from "./components/Invest";
 
 export default {
   name: "T-result-success",
   components: {
     RegisterSuccess,
+    InvestSuccess,
   },
   data() {
     return {

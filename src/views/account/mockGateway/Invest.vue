@@ -42,8 +42,10 @@
 
 <script>
 import {
-  handleWebStorage
+  handleWebStorage,
+  Fsub,
 } from '@/utils/utils'
+import { updateAccountStatus } from "@/utils/common";
 
 const ws = handleWebStorage()
 
@@ -65,6 +67,17 @@ export default {
       }
       return callback()
     },
+    mockAccount() {
+      let { amount, canWithdrawAmount }  = this.reqData
+      canWithdrawAmount = Fsub(Number(canWithdrawAmount), Number(amount))
+      updateAccountStatus({ canWithdrawAmount })
+    },
+    handleInvestSuccess() {
+      console.log('123132')
+      this.mockAccount()
+      const { requestNo } = this.reqData
+      window.location.href = `${this.reqData.redirectUrl}?type=tender&requestNo=${requestNo}`
+    },
     handleSubmit(e) {
       e = window.event;
       e.preventDefault();
@@ -73,15 +86,13 @@ export default {
           return false;
         }
         console.log("succ");
-      
+        this.handleInvestSuccess()
       });
     }
   },
   mounted() {
     let reqData = JSON.parse(this.$route.query.reqData);
     this.reqData = reqData;
-    console.log(reqData)
-    console.log(ws.getItem('account'))
   }
 };
 </script>
