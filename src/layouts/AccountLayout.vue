@@ -37,8 +37,6 @@ export default {
     };
   },
   mounted() {
-    console.log("..............");
-    console.log(this.$route.path);
   }
 };
 </script>
@@ -66,9 +64,7 @@ export default {
     border: none;
   }
 }
-.menu {
-  //border: 1px solid #ff0;
-}
+
 .menu-primary {
   display: flex;
   justify-content: flex-start;
@@ -103,7 +99,6 @@ export default {
   }
 }
 .content-wrap {
-  border: 1px solid #0ff;
   flex: 1;
   margin-left: 20px;
   min-height: 40vh;
