@@ -13,11 +13,13 @@
 
             <a-menu-item key="project">
               <router-link to="/product/list">项目</router-link>
-              </a-menu-item>
+            </a-menu-item>
 
             <a-menu-item key="info">信息披露</a-menu-item>
 
-            <a-menu-item key="account">我的账户</a-menu-item>
+            <a-menu-item key="account">
+              <router-link to="/account/overview">我的账户</router-link>
+            </a-menu-item>
           </a-menu>
         </div>
       </div>
