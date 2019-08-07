@@ -121,7 +121,6 @@ export default {
     a {
       color: #fff;
       text-decoration: none;
-      text-decoration: none;
     }
   }
 }

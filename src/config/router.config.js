@@ -2,6 +2,8 @@ import BasicLayout from '@/layouts/BasicLayout'
 import UserLayout from '@/layouts/UserLayout'
 import MockGatewayLayout from '@/layouts/MockGatewayLayout'
 import ResultGatewayLayout from '@/layouts/ResultGatewayLayout'
+import AccountLayout from '@/layouts/AccountLayout'
+
 
 
 
@@ -54,6 +56,18 @@ export const routes = [{
       path: '/evaluate/result/:data',
       name: '/evaluate/result',
       component: () => import('@/views/evaluate/Result.vue'),
+    },
+    // account related...
+    {
+      path: '/account',
+      name: '/account',
+      component: AccountLayout,
+      redirect: '/account/overview',
+      children: [{
+        path: '/account/overview',
+        name: '/account/overview',
+        component: () => import('@/views/account/user/Overview.vue')
+      }]
     },
     // user related...
     {

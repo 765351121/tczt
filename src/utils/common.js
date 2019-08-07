@@ -54,3 +54,36 @@ export const deleteWs = cache => {
   ws.clearItem(cache)
 }
 
+import icon_1 from '@/assets/images/account/user/nav/nav_1.png';
+import icon_2 from '@/assets/images/account/user/nav/nav_2.png';
+export const accountMenu = [
+  {
+    name: '我的账户',
+    icon: icon_1,
+    children: [{
+      name: '资产总览',
+      path: '/account/overview',
+    },{
+      name: '资金明细',
+      path: '/account/overview',
+    },{
+      name: '银行卡',
+      path: '/account/overview',
+    },{
+      name: '出借记录',
+      path: '/account/overview',
+    },]
+  },
+  {
+    name: '个人中心',
+    icon: icon_2,
+    children: [{
+      name: '安全中心',
+      path: '/account/overview',
+    },{
+      name: '意见反馈',
+      path: '/account/overview',
+    }]
+  }
+]
+
