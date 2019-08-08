@@ -103,6 +103,7 @@ export default {
   flex: 1;
   margin-left: 20px;
   min-height: 40vh;
+  overflow-x: hidden;
 }
 </style>
 
