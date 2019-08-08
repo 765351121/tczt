@@ -6,18 +6,15 @@
       </div>
       <div>
         <div class="menu_wrap">
-          <a-menu mode="horizontal">
-            <a-menu-item key="home">
+          <a-menu mode="horizontal" :selectedKeys="selectedKeys()">
+            <a-menu-item key="/home">
               <router-link to="/home">首页</router-link>
             </a-menu-item>
-
-            <a-menu-item key="project">
+            <a-menu-item key="/product">
               <router-link to="/product/list">项目</router-link>
             </a-menu-item>
-
-            <a-menu-item key="info">信息披露</a-menu-item>
-
-            <a-menu-item key="account">
+            <a-menu-item key="/info">信息披露</a-menu-item>
+            <a-menu-item key="/account">
               <router-link to="/account/overview">我的账户</router-link>
             </a-menu-item>
           </a-menu>
@@ -29,10 +26,18 @@
 
 <script>
 export default {
-  name: "globalNav"
+  name: "globalNav",
+  methods: {
+    selectedKeys(url) {
+      url = this.$route.path;
+      const urllist = url.split("/").filter(i => i);
+      return urllist.map((urlItem, index) => {
+        return `/${urllist.slice(0, index + 1).join("/")}`;
+      });
+    }
+  }
 };
 </script>
-
 
 <style lang="less" scoped>
 .wrap {
