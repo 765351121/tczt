@@ -30,8 +30,8 @@
 
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt" v-if="userInfo.isOpenAccount">您已开通新网银行存管账户。</span>
-                <span class="popover-txt" v-if="!userInfo.isOpenAccount">
+                <span class="popover-txt" v-if="userInfo.bankCode">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="!userInfo.bankCode">
                   您还未绑定银行卡。
                   <router-link to="/account/gateway/register">去绑卡</router-link>
                 </span>
@@ -53,7 +53,8 @@
                 <span v-if="userInfo.isRiskAccess" class="popover-txt">您已开通新网银行存管账户。</span>
                 <span v-if="!userInfo.isRiskAccess" class="popover-txt">
                   您还未进行风险测评。
-                  <router-link to="/evaluate/risk">去测评</router-link>
+                  <!-- <router-link to="/evaluate/risk">去测评</router-link> -->
+                  <a @click="handleEvalRisk">去测评</a>
                 </span>
               </template>
               <img
@@ -72,17 +73,21 @@
       </div>
       <div class="account-wrap">
         <div class="total-wrap">
-          <p>11,100.00</p>
+          <p>
+            {{ $utils.formatCurrency(
+            $utils.Fadd(userInfo.canWithdrawAmount || 0, userInfo.lendingAmount || 0)
+            )}}
+          </p>
           <p>总资产(元)</p>
         </div>
         <div class="amount-wrap">
           <p>
             <span>可用余额</span>
-            <span>10,500.00</span>
+            <span>{{ $utils.formatCurrency(userInfo.canWithdrawAmount) }}</span>
           </p>
           <p>
             <span>出借余额</span>
-            <span>600.00</span>
+            <span>{{ $utils.formatCurrency(userInfo.lendingAmount) }}</span>
           </p>
         </div>
         <div class="btn-wrap">
@@ -93,15 +98,15 @@
       <div class="summary-wrap">
         <div class="title">散标</div>
         <div class="total-amount-wrap">
-          <span>600.00</span>
+          <span>{{ $utils.formatCurrency(userInfo.lendingAmount) }}</span>
           <span>累计出借金额(元)</span>
         </div>
         <div class="total-income-wrap">
-          <span>600.00</span>
+          <span>{{ $utils.formatCurrency(userInfo.totalIncome) }}</span>
           <span>累计回报(元)</span>
         </div>
         <div class="sact-num-wrap">
-          <span>600.00</span>
+          <span>{{ userInfo.totalLendingQuantity }}</span>
           <span>出借笔数</span>
         </div>
       </div>
@@ -111,13 +116,21 @@
 
 <script>
 import { mapState } from "vuex";
+import { checkErrorCode, formatCurrency, Fadd, goBack } from "@/utils/utils";
 
 export default {
   name: "T-account-overview",
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    handleEvalRisk() {
+      goBack.bind(this, "set")();
+      this.$router.push({
+        name: "/evaluate/risk"
+      });
+    }
+  },
   computed: {
     ...mapState({
       userInfo: state => state.global.userInfo

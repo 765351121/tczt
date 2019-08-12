@@ -256,6 +256,8 @@ export default {
       updateAccountStatus({
         ...values,
         isOpenAccount: true,
+        bankCode: 'BKCH',
+        bankName: '中国银行',
       });
     },
     handleRegisterSuccess() {

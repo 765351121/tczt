@@ -18,6 +18,9 @@ export const accountTemplate = {
   userAcc: null,
   canWithdrawAmount: 0,   // 可提现金额(账户余额)
   tradPwd: null, // 交易密码
+  lendingAmount: 0,  // 出借余额(投资余额)
+  totalIncome: 0, // 累计回报金额
+  totalLendingQuantity: 0,  //出借笔数
 }
 
 /**
