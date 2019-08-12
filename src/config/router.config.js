@@ -93,6 +93,11 @@ export const routes = [{
         name: '/account/feedback',
         desc: '出借记录',
         component: () => import('@/views/account/user/Feedback.vue')
+      },{
+        path: '/account/recharge',
+        name: '/account/recharge',
+        desc: '充值',
+        component: () => import('@/views/account/user/Recharge.vue')
       }]
     },
     // user related...
