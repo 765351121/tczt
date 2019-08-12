@@ -10,21 +10,62 @@
           <div class="popover">
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="userInfo.isOpenAccount">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="!userInfo.isOpenAccount">
+                  您尚未开通新网银行存管账户。
+                  <router-link to="/account/gateway/register">去开通</router-link>
+                </span>
               </template>
-              <img src="@/assets/images/account/user/overview/bank_card_active.png" alt>
+              <img
+                v-if="userInfo.isOpenAccount"
+                src="@/assets/images/account/user/overview/bank_card_active.png"
+                alt
+              >
+              <img
+                v-if="!userInfo.isOpenAccount"
+                src="@/assets/images/account/user/overview/bank_card_default.png"
+                alt
+              >
             </a-popover>
+
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="userInfo.isOpenAccount">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="!userInfo.isOpenAccount">
+                  您还未绑定银行卡。
+                  <router-link to="/account/gateway/register">去绑卡</router-link>
+                </span>
               </template>
-              <img src="@/assets/images/account/user/overview/icon_active.png" alt>
+              <img
+                v-if="userInfo.bankCode"
+                src="@/assets/images/account/user/overview/icon_active.png"
+                alt
+              >
+              <img
+                v-if="!userInfo.bankCode"
+                src="@/assets/images/account/user/overview/icon_default.png"
+                alt
+              >
             </a-popover>
+
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt">您已开通新网银行存管账户。</span>
+                <span v-if="userInfo.isRiskAccess" class="popover-txt">您已开通新网银行存管账户。</span>
+                <span v-if="!userInfo.isRiskAccess" class="popover-txt">
+                  您还未进行风险测评。
+                  <router-link to="/evaluate/risk">去测评</router-link>
+                </span>
               </template>
-              <img src="@/assets/images/account/user/overview/risk_active.png" alt>
+              <img
+                v-if="userInfo.isRiskAccess"
+                src="@/assets/images/account/user/overview/risk_active.png"
+                alt
+              >
+              <img
+                v-if="!userInfo.isRiskAccess"
+                src="@/assets/images/account/user/overview/risk_default.png"
+                alt
+              >
             </a-popover>
           </div>
         </div>
@@ -69,8 +110,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "T-account-overview"
+  name: "T-account-overview",
+  data() {
+    return {};
+  },
+  methods: {},
+  computed: {
+    ...mapState({
+      userInfo: state => state.global.userInfo
+    })
+  },
+  mounted() {}
 };
 </script>
 
@@ -89,6 +142,7 @@ export default {
     .popover {
       & > img {
         display: inline-block;
+        cursor: pointer;
         &:nth-child(2) {
           margin: 0 15px;
         }

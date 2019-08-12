@@ -1,30 +1,35 @@
 <template>
-  <div class="wrap">
-    <div class="nav-wrap">
-      <div class="menu-item-layout">
-        <div v-for="(item, index) in menus" :key="index" class="menu-item-wrap">
-          <div class="menu menu-primary">
-            <img :src="item.icon" alt>
-            {{ item.name }}
+  <div :style="!userInfo.isOpenAccount? 'margin-top: -20px' : ''">
+    <div class="no-account" v-if="!userInfo.isOpenAccount">
+      您还未开通银行存管账户,出借前请先开通银行存管账户
+      <a @click="handleAccount">立即开户</a>
+    </div>
+    <div class="wrap">
+      <div class="nav-wrap">
+        <div class="menu-item-layout">
+          <div v-for="(item, index) in menus" :key="index" class="menu-item-wrap">
+            <div class="menu menu-primary">
+              <img :src="item.icon" alt>
+              {{ item.name }}
+            </div>
+            <ul class="menu menu-sub">
+              <li
+                v-for="(item, index) in item.children"
+                :key="index"
+                :class="$route.path == item.path? 'menu-active' : ''"
+              >
+                <router-link :to="item.path">{{ item.name }}</router-link>
+              </li>
+            </ul>
           </div>
-          <ul class="menu menu-sub">
-            <li
-              v-for="(item, index) in item.children"
-              :key="index"
-              :class="$route.path == item.path? 'menu-active' : ''"
-            >
-              <router-link :to="item.path">{{ item.name }}</router-link>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
-    <div class="content-wrap">
-      <router-view></router-view>
+      <div class="content-wrap">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
-
 
 <script>
 import { accountMenu as menus } from "@/utils/common";
@@ -33,17 +38,50 @@ export default {
   name: "T-account-layout",
   data() {
     return {
-      menus
+      menus,
+      userInfo: {}
     };
   },
+  methods: {
+    handleAccount() {
+      this.$router.push({
+        name: "/account/gateway/register"
+      });
+    },
+    getUserInfo() {
+      this.$store
+        .dispatch({
+          type: "getUserInfo"
+        })
+        .then(response => {
+          this.userInfo = response.data;
+        });
+    }
+  },
   mounted() {
+    this.getUserInfo();
   }
 };
 </script>
 
-
-
 <style lang="less" scoped>
+.layout-wrap {
+  margin-top: -20px;
+}
+.no-account {
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #ffdf9a;
+  text-align: center;
+  top: 0;
+  background-color: #fff7e7;
+  font-size: 14px;
+  color: #ec2121;
+  & > a {
+    display: inline-block;
+    padding-left: 15px;
+  }
+}
 .wrap {
   display: flex;
   justify-content: flex-start;
@@ -96,7 +134,7 @@ export default {
 }
 .menu-active {
   & > a {
-    color: #1890ff!important;
+    color: #1890ff !important;
   }
 }
 .content-wrap {

@@ -101,7 +101,7 @@ export default {
   width: 1200px;
   margin: 20px auto;
   min-height: 30vh;
-  overflow-x: hidden;
+  // overflow-x: hidden;
 }
 </style>
 
