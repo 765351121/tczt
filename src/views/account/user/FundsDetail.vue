@@ -41,7 +41,17 @@
 
 
 <script>
+import moment from "moment";
 import BrushSlot from "@/components/BrushSlot";
+import {
+  checkErrorCode,
+  formatCurrency,
+  Fadd,
+  Fsub,
+  Fmul,
+  Fdiv,
+  handleWebStorage
+} from "@/utils/utils";
 
 const pageSize = 10;
 
@@ -50,46 +60,67 @@ const columns = [
     title: "交易时间",
     dataIndex: "orderTime",
     key: "orderTime",
-    align: "center"
+    align: "center",
+    customRender: (text, record) => moment(text).format("YYYY-MM-DD HH:mm:ss")
   },
   {
     title: "交易金额(元)",
     dataIndex: "orderAmount",
     key: "orderAmount",
-    align: "center"
+    align: "center",
+    customRender: (text, record) => `${formatCurrency(text)}`
   },
   {
     title: "交易类型",
     dataIndex: "orderStatus",
     key: "orderStatus",
-    align: "center"
+    align: "center",
+    customRender: (status, record) => {
+      const { orderType: type } = record;
+      let typeTxt = "";
+      switch (type) {
+        case "recharge":
+          typeTxt = "充值";
+          break;
+        case "withdraw":
+          typeTxt = "提现";
+          break;
+        case "invest":
+          typeTxt = "出借";
+          break;
+        case "repayClearing":
+          typeTxt = "回款";
+          break;
+        case "failBids":
+          typeTxt = "流标回退";
+          break;
+        case "coupon":
+          typeTxt = "返现";
+        default:
+          break;
+      }
+      let statusTxt = "";
+      switch (status) {
+        case 0:
+          statusTxt = "失败";
+          break;
+        case 1:
+          statusTxt = "成功";
+          break;
+        case 2:
+          statusTxt = "处理中";
+          break;
+        default:
+          break;
+      }
+      return `${typeTxt}${statusTxt}`;
+    }
   },
   {
     title: "流水号",
     dataIndex: "orderCode",
     key: "orderCode",
     align: "center"
-  }
-];
-
-const data = [
-  {
-    orderTime: "2019-08-07 10:03:33",
-    orderAmount: "+1,000.00",
-    orderStatus: "充值成功",
-    orderCode: "TZZ****887582"
-  },
-  {
-    orderTime: "2019-08-07 10:03:33",
-    orderAmount: "+1,000.00",
-    orderStatus: "充值成功",
-    orderCode: "TZZ****887582"
-  },
-  {
-    orderTime: "2019-08-07 10:03:33",
-    orderAmount: "+1,000.00",
-    orderStatus: "充值成功",
-    orderCode: "TZZ****887582"
   }
 ];
 
@@ -111,12 +142,19 @@ export default {
   },
   data() {
     return {
+      queryParms: {
+        page: 1,
+        size: pageSize,
+        createTimeStart: undefined,
+        createTimeEnd: undefined,
+        orderType: "all"
+      },
       filters: {
         tradeTypeRadios
       },
       table: {
         columns,
-        data,
+        data: [],
         loading: false
       },
       pagination: {
@@ -127,14 +165,48 @@ export default {
     };
   },
   methods: {
-    handleTimeChange(date, dateString) {
-      console.log(date, dateString);
+    changeQueryParm(parms) {
+      const queryParms = { ...this.queryParms };
+      this.queryParms = Object.assign(queryParms, parms);
     },
-    tradeTypeChange() {},
+    updataTableData(response) {
+      const {
+        data: { rows, total, page, size }
+      } = response;
+      this.table.data = rows;
+      this.pagination.total = total;
+      this.pagination.current = page;
+    },
+    getCashFlow(parms) {
+      this.table.loading = true;
+      this.$store
+        .dispatch({
+          type: "account/getCashFlow",
+          payload: { ...parms }
+        })
+        .then(response => {
+          this.table.loading = false;
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.updataTableData(response);
+        });
+    },
+    handleTimeChange(m, s) {
+      let [createTimeStart, createTimeEnd] = s;
+      createTimeStart = !!createTimeStart ? createTimeStart : undefined;
+      createTimeEnd = !!createTimeEnd ? createTimeEnd : undefined;
+      this.changeQueryParm({ createTimeStart, createTimeEnd });
+      this.getCashFlow({ ...this.queryParms });
+    },
+    tradeTypeChange(value) {
+      this.changeQueryParm({ orderType: value });
+      this.getCashFlow({ ...this.queryParms });
+    },
     handlePaginationChange(page, pageSize) {
       this.pagination.current = page;
-      // this.changeQueryParm({ page, size: pageSize });
-      // this.getScatterList({ ...this.queryParms });
+      this.changeQueryParm({ page, size: pageSize });
+      this.getCashFlow({ ...this.queryParms });
     },
     itemRender(current, type, originalElement) {
       if (type === "prev") {
@@ -150,6 +222,9 @@ export default {
     rowKey(record, index) {
       return index;
     }
+  },
+  mounted() {
+    this.getCashFlow({ ...this.queryParms });
   }
 };
 </script>

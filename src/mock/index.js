@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/home')
   require('./services/product')
   require('./services/gateway')
+  require('./services/account')
 
   Mock.setup({
     timeout: 300 // setter delay time
