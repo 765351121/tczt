@@ -32,7 +32,10 @@
               <span>10,000.00</span>
               <span>10,000.00</span>
             </div>
-            <p>可用余额：10,500.00元</p>
+            <p>
+              可用余额：
+              <span>10,500.00</span>元
+            </p>
           </div>
           <div class="form-wrap">
             <a-form :form="form">
@@ -57,8 +60,9 @@
             <p>3. 如有任何问题，请联系客服400-085-6566，天辰智投将竭诚为您服务</p>
           </div>
         </div>
-
-        <div class="ebanck-recharge-wrap" v-if="tab == 'ebanck'">222</div>
+        <div class="ebanck-recharge-wrap" v-if="tab == 'ebanck'">
+          <p>暂未开放，敬请期待...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -97,7 +101,6 @@ export default {
 };
 </script>
 
-
 <style lang="less" scoped>
 .panel-wrap {
   & > ul {
@@ -107,7 +110,7 @@ export default {
     margin-bottom: 0;
     & > li {
       padding: 22px 47px;
-      background-color: #f4f5f6;
+      background-color: #f0f0f0;
       color: #666;
       cursor: pointer;
       &:not(:last-child) {
@@ -140,43 +143,71 @@ export default {
   min-height: 100px;
   //padding: 20px 30px 0 30px;
 }
-.title-wrap {
-  padding: 20px 30px 0 30px;
-}
-.limit-amount-wrap {
-  padding: 20px 30px 0 30px;
-  & > div {
-    height: 50px;
-    line-height: 50px;
-    display: flex;
-    &:nth-child(1) {
-      background-color: #f4f5f6;
+.quick-recharge-wrap {
+  .title-wrap {
+    padding: 20px 30px 0 30px;
+  }
+  .limit-amount-wrap {
+    padding: 0 30px 0 30px;
+    & > div {
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      &:nth-child(1) {
+        background-color: #f4f5f6;
+        & > span {
+          color: #666;
+        }
+      }
+      &:nth-child(2) {
+        background-color: #fafafa;
+        & > span {
+          color: #333;
+        }
+      }
       & > span {
-        color: #666;
+        flex: 1;
+        text-align: center;
+        font-size: 14px;
       }
     }
-    &:nth-child(2) {
-      background-color: #fafafa;
+    & > p {
+      margin-top: 20px;
       & > span {
-        color: #333;
+        display: inline-block;
+        padding-right: 5px;
+        color: rgb(236, 33, 33);
       }
     }
-    & > span {
-      flex: 1;
-      text-align: center;
+  }
+  .form-wrap {
+    padding: 20px 30px 0 30px;
+  }
+  .recharge-btn-wrap {
+    border: 1px solid #0ff;
+  }
+  .tips-wrap {
+    background: #f0f0f0;
+    padding: 20px 30px 20px;
+    & > p {
+      color: #999;
       font-size: 14px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
-.form-wrap {
-  padding: 20px 30px 0 30px;
-}
-.recharge-btn-wrap {
-  border: 1px solid #0ff;
-}
-
-.tips-wrap {
-  background: #f0f0f0;
-  padding: 20px 30px 0;
+.ebanck-recharge-wrap {
+  padding: 20px 30px;
+  min-height: 460px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > p {
+    font-size: 16px;
+    color: #666666;
+    // text-align: center;
+  }
 }
 </style>

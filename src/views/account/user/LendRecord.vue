@@ -172,6 +172,11 @@ export default {
       &:not(:last-child) {
         border-right: 1px solid rgb(237, 237, 237);
       }
+      &:hover {
+        & > a {
+          color: #0182ff;
+        }
+      }
       & > a {
         font-size: 18px;
         color: #666;
