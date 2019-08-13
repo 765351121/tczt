@@ -91,7 +91,9 @@
           </p>
         </div>
         <div class="btn-wrap">
-          <a-button type="primary" size="large">充值</a-button>
+          <a-button type="primary" size="large">
+            <router-link to="/account/recharge">充值</router-link>
+          </a-button>
           <a-button size="large">提现</a-button>
         </div>
       </div>
