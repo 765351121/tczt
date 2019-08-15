@@ -12,7 +12,7 @@ export const accountTemplate = {
   isRiskAccess: false,
   platformUserNo: null,
   realName: null,
-  riskLevel: null,
+  riskLevel: "未测评",
   score: null,
   sessionId: null,
   userAcc: null,

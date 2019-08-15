@@ -51,27 +51,49 @@
               </span>
             </span>
             <span>
-              <a-button type="primary" @click="handleBindCard">
-                {{ userInfo.isOpenAccount? '查看' : '绑定' }}
-              </a-button>
+              <a-button
+                type="primary"
+                @click="handleBindCard"
+              >{{ userInfo.isOpenAccount? '查看' : '绑定' }}</a-button>
             </span>
           </div>
         </div>
+
         <div class="item-info-wrap">
           <div class="content-item">
             <span>登录密码</span>
             <span>用于登录天辰智投的密码</span>
-            <span>已设置</span>
             <span>
-              <a-button type="primary">修改</a-button>
+              <span>
+                <img src="@/assets/images/account/user/safety/tick_success.png" alt>
+                已设置
+              </span>
+            </span>
+            <span>
+              <a-button type="primary" @click="handleModifyLoginPwd">修改</a-button>
             </span>
           </div>
           <div class="content-item">
             <span>交易密码</span>
             <span>交易密码在充值、提现、出借操作中使用</span>
-            <span>已设置</span>
             <span>
-              <a-button type="primary">修改</a-button>
+              <span>
+                <img
+                  :src="
+                    userInfo.isOpenAccount?
+                    require('@/assets/images/account/user/safety/tick_success.png') :
+                    require('@/assets/images/account/user/safety/tick_fail.png')
+                  "
+                  alt
+                >
+                {{ userInfo.isOpenAccount? '已设置' : '未设置' }}
+              </span>
+            </span>
+            <span>
+              <a-button
+                type="primary"
+                @click="handleTradePwd"
+              >{{ userInfo.isOpenAccount? '修改' : '设置' }}</a-button>
             </span>
           </div>
         </div>
@@ -79,9 +101,24 @@
           <div class="content-item">
             <span>风险评测</span>
             <span>了解风险承受能力，合理安排出借</span>
-            <span>稳健型</span>
             <span>
-              <a-button type="primary">查看</a-button>
+              <span>
+                <img
+                  :src="
+                    userInfo.isRiskAccess?
+                    require('@/assets/images/account/user/safety/tick_success.png') :
+                    require('@/assets/images/account/user/safety/tick_fail.png')
+                  "
+                  alt
+                >
+                {{ userInfo.riskLevel }}
+              </span>
+            </span>
+            <span>
+              <a-button
+                type="primary"
+                @click="handleEvalRisk"
+              >{{ userInfo.isRiskAccess? '查看' : '测评' }}</a-button>
             </span>
           </div>
         </div>
@@ -114,14 +151,106 @@ export default {
     };
   },
   methods: {
+    transformRiskLevel(riskLevel) {
+      console.log("transformRiskLevel");
+      let txt = "";
+      switch (riskLevel) {
+        case "保守型":
+          txt = (
+            <p>
+              您已通过测评。您的风险承受能力较低，属于<u>保守型</u>
+              出借人。如对测评结果不满意，您可重新测评。
+            </p>
+          );
+          break;
+        case "稳健型":
+          txt = (
+            <p>
+              您已通过测评。您的风险承受能力有限，属于<u>稳健型</u>
+              出借人。如对测评结果不满意，您可重新测评。
+            </p>
+          );
+          break;
+        case "积极型":
+          txt = (
+            <p>
+              您已通过测评。您的风险承受能力较高，属于<u>积极型</u>
+              出借人。如对测评结果不满意，您可重新测评。
+            </p>
+          );
+          break;
+        case "退出型":
+          txt = (
+            <p>
+              很抱歉您未通过本次测评，您的风险承受能力较低，属于<u>退出型</u>
+              出借人，本平台无适合您的出借产品。如对测评结果不满意，您可重新测评。
+            </p>
+          );
+          break;
+        default:
+          txt = (
+            <p>
+              您已通过测评。您的风险承受能力较低，属于<u>保守型</u>
+              出借人。如对测评结果不满意，您可重新测评。
+            </p>
+          );
+      }
+      return txt;
+    },
+    handleRiskModal() {
+      let that = this;
+      const { riskLevel } = this.userInfo;
+      this.$confirm({
+        title: `您的测评结果:${riskLevel}`,
+        iconType: "exclamation-circle",
+        content: <div>{this.transformRiskLevel(riskLevel)}</div>,
+        okText: "重新测评",
+        onOk() {
+          that.$router.push({
+            name: "/evaluate/risk"
+          });
+        }
+      });
+    },
+    handleEvalRisk() {
+      const { isOpenAccount, isRiskAccess } = this.userInfo;
+      /**
+       * > 未开户：开户弹窗
+       * > 开户：
+       *    > 未测评：测评页面
+       *    > 已测评：测评结果弹窗
+       *
+       */
+      if (!isOpenAccount) {
+        return this.handleLogoModal();
+      }
+      if (!isRiskAccess) {
+        this.$router.push({
+          name: "/evaluate/risk"
+        });
+      } else {
+        this.handleRiskModal();
+      }
+    },
+    handleTradePwd() {
+      const { isOpenAccount } = this.userInfo;
+      if (isOpenAccount) {
+        console.log("handleTradePwd");
+      } else {
+        this.handleLogoModal();
+      }
+    },
+    handleModifyLoginPwd() {
+      console.log("handleModifyLoginPwd");
+    },
     handleBindCard() {
-      const { isOpenAccount }  = this.userInfo
+      const { isOpenAccount } = this.userInfo;
       if (isOpenAccount) {
         this.$router.push({
-        name: "/account/bank-card"
-      });
+          name: "/account/bank-card"
+        });
       } else {
-        this.handleLogoModal()
+        this.handleLogoModal();
       }
     },
     accountRegister() {
@@ -189,7 +318,6 @@ export default {
       font-size: 14px;
       color: rgb(51, 51, 51);
       padding-left: 40px;
-      border: 1px solid #0ff;
       & > span {
         display: flex;
         align-items: center;
