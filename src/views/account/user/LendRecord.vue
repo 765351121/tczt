@@ -29,6 +29,7 @@
             :current="pagination.current"
             :itemRender="itemRender"
             @change="handlePaginationChange"
+            :hideOnSinglePage="true"
           />
         </div>
       </div>
@@ -224,6 +225,9 @@ export default {
   background-color: #fff;
   min-height: 40vh;
   padding: 20px 30px;
+  /deep/ .ant-table-placeholder {
+    border-bottom: none;
+  }
 }
 .pagination-wrap {
   text-align: center;
