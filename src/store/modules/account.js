@@ -1,5 +1,6 @@
 import { 
   getCashFlow,
+  getInvestOrderList,
 } from '@/services/account'
 
 const account = {
@@ -12,6 +13,15 @@ const account = {
   },
 
   actions: {
+
+    // getInvestOrderList
+    ['account/getInvestOrderList'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getInvestOrderList(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
 
     // getCashFlow
     ['account/getCashFlow'] ({ state, commit }, { payload }) {

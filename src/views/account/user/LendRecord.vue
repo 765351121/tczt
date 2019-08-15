@@ -37,6 +37,16 @@
 </template>
 
 <script>
+import {
+  checkErrorCode,
+  formatCurrency,
+  Fadd,
+  Fsub,
+  Fmul,
+  Fdiv,
+  handleWebStorage
+} from "@/utils/utils";
+
 const pageSize = 10;
 
 const columns = [
@@ -50,49 +60,28 @@ const columns = [
     title: "出借本金(元)",
     dataIndex: "orderAmount",
     key: "orderAmount",
-    align: "center"
+    align: "center",
+    customRender: (text, record) => `${formatCurrency(text)}`
   },
   {
     title: "约定年化利率",
     dataIndex: "annualYield",
     key: "annualYield",
-    align: "center"
+    align: "center",
+    customRender: (text, record) => `${text}%`
   },
   {
     title: "出借期限",
     dataIndex: "period",
     key: "period",
-    align: "center"
+    align: "center",
+    customRender: (text, record) => `${text}${record.periodType}`
   },
   {
     title: "出借时间",
     dataIndex: "orderTime",
     key: "orderTime",
     align: "center"
-  }
-];
-
-const data = [
-  {
-    productName: "YDY--新产品",
-    orderAmount: "100.00",
-    annualYield: "8%",
-    period: "20天",
-    orderTime: "2019-08-07"
-  },
-  {
-    productName: "YDY--新产品",
-    orderAmount: "100.00",
-    annualYield: "8%",
-    period: "20天",
-    orderTime: "2019-08-07"
-  },
-  {
-    productName: "YDY--新产品",
-    orderAmount: "100.00",
-    annualYield: "8%",
-    period: "20天",
-    orderTime: "2019-08-07"
   }
 ];
 
@@ -118,28 +107,62 @@ export default {
   name: "T-account-lend-record",
   data() {
     return {
+      queryParms: {
+        page: 1,
+        size: pageSize,
+        productStatus: 1
+      },
       panel,
       tabKey: 0,
       table: {
         columns,
-        data,
+        data: [],
         loading: false
       },
       pagination: {
-        total: 500,
+        total: 0,
         pageSize: pageSize,
         current: 1
       }
     };
   },
   methods: {
+    changeQueryParm(parms) {
+      const queryParms = { ...this.queryParms };
+      this.queryParms = Object.assign(queryParms, parms);
+    },
+    updataTableData(response) {
+      const {
+        data: { rows, total, page, size }
+      } = response;
+      this.table.data = rows;
+      this.pagination.total = total;
+      this.pagination.current = page;
+    },
+    getInvestOrderList(parms) {
+      this.table.loading = true;
+      this.$store
+        .dispatch({
+          type: "account/getInvestOrderList",
+          payload: { ...parms }
+        })
+        .then(response => {
+          this.table.loading = false;
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.updataTableData(response);
+        });
+    },
     handleTabClick(key) {
       this.tabKey = key;
+      this.changeQueryParm({ productStatus: ++key });
+      this.getInvestOrderList({ ...this.queryParms });
     },
     handlePaginationChange(page, pageSize) {
       this.pagination.current = page;
-      // this.changeQueryParm({ page, size: pageSize });
-      // this.getScatterList({ ...this.queryParms });
+      this.changeQueryParm({ page, size: pageSize });
+      this.getInvestOrderList({ ...this.queryParms });
     },
     itemRender(current, type, originalElement) {
       if (type === "prev") {
@@ -152,6 +175,9 @@ export default {
     rowKey(record, index) {
       return index;
     }
+  },
+  mounted() {
+    this.getInvestOrderList({ ...this.queryParms });
   }
 };
 </script>

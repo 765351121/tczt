@@ -158,7 +158,7 @@ export default {
         loading: false
       },
       pagination: {
-        total: 500,
+        total: 0,
         pageSize: pageSize,
         current: 1
       }
