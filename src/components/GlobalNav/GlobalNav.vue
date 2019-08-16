@@ -13,7 +13,9 @@
             <a-menu-item key="/product">
               <router-link to="/product/list">项目</router-link>
             </a-menu-item>
-            <a-menu-item key="/info">信息披露</a-menu-item>
+            <a-menu-item key="/info">
+              <router-link to="/information/disclosure">信息披露</router-link>
+            </a-menu-item>
             <a-menu-item key="/account">
               <router-link to="/account/overview">我的账户</router-link>
             </a-menu-item>
