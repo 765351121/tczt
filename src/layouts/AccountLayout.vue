@@ -1,13 +1,18 @@
 <template>
-  <div :style="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount? 'margin-top: -20px' : ''">
-    <div class="no-account" v-if="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount">
+  <div
+    :style="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount? 'margin-top: -20px' : ''"
+  >
+    <div
+      class="no-account"
+      v-if="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount"
+    >
       您还未开通银行存管账户,出借前请先开通银行存管账户
       <a @click="handleAccount">立即开户</a>
     </div>
     <div class="wrap">
       <div class="nav-wrap">
         <div class="menu-item-layout">
-          <div v-for="(item, index) in menus" :key="index" class="menu-item-wrap">
+          <div v-for="(item, index) in computedRoute" :key="index" class="menu-item-wrap">
             <div class="menu menu-primary">
               <img :src="item.icon" alt>
               {{ item.name }}
@@ -32,14 +37,18 @@
 </template>
 
 <script>
-import { accountMenu as menus } from "@/utils/common";
+import {
+  accountMenu as menus,
+  supportCenterMenu as supportMenus
+} from "@/utils/common";
 
 export default {
   name: "T-account-layout",
   data() {
     return {
-      menus,
-      userInfo: {}
+      menus: [],
+      userInfo: {},
+      prefix: ""
     };
   },
   methods: {
@@ -56,6 +65,19 @@ export default {
         .then(response => {
           this.userInfo = response.data;
         });
+    }
+  },
+  computed: {
+    computedRoute() {
+      let { name: path } = this.$route;
+      let prefix = path.replace(/^\//, "").split("/")[0];
+      this.prefix = prefix;
+      if (prefix == "support") {
+        this.menus = supportMenus;
+      } else {
+        this.menus = menus;
+      }
+      return this.menus;
     }
   },
   mounted() {

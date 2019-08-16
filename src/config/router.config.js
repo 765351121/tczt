@@ -68,37 +68,93 @@ export const routes = [{
         name: '/account/overview',
         desc: '账户总览',
         component: () => import('@/views/account/user/Overview.vue')
-      },{
+      }, {
         path: '/account/funds-detail',
         name: '/account/funds-detail',
         desc: '资金明细',
         component: () => import('@/views/account/user/FundsDetail.vue')
-      },{
+      }, {
         path: '/account/bank-card',
         name: '/account/bank-card',
         desc: '银行卡',
         component: () => import('@/views/account/user/BankCard.vue')
-      },{
+      }, {
         path: '/account/lend-record',
         name: '/account/lend-record',
         desc: '出借记录',
         component: () => import('@/views/account/user/LendRecord.vue')
-      },{
+      }, {
         path: '/account/safety',
         name: '/account/safety',
         desc: '安全中心',
         component: () => import('@/views/account/user/Safety.vue')
-      },{
+      }, {
         path: '/account/feedback',
         name: '/account/feedback',
         desc: '出借记录',
         component: () => import('@/views/account/user/Feedback.vue')
-      },{
+      }, {
         path: '/account/recharge',
         name: '/account/recharge',
         desc: '充值',
         component: () => import('@/views/account/user/Recharge.vue')
       }]
+    },
+    // support center related...
+    {
+      path: '/support',
+      name: '/support',
+      component: AccountLayout,
+      redirect: '/support/platform-cost',
+      children: [{
+          path: '/support/platform-cost',
+          name: '/support/platform-cost',
+          desc: '平台费用',
+          component: () => import('@/views/support/PlatformCost.vue')
+        },
+        {
+          path: '/support/lend-explain',
+          name: '/support/lend-explain',
+          desc: '出借说明',
+          component: () => import('@/views/support/LendExplain.vue')
+        },
+        {
+          path: '/support/recharge',
+          name: '/support/recharge',
+          desc: '充值',
+          component: () => import('@/views/support/Recharge.vue')
+        },
+        {
+          path: '/support/withdraw',
+          name: '/support/withdraw',
+          desc: '提现',
+          component: () => import('@/views/support/Withdraw.vue')
+        },
+        {
+          path: '/support/login-regist',
+          name: '/support/login-regist',
+          desc: '注册登录',
+          component: () => import('@/views/support/LoginRegist.vue')
+        },
+        {
+          path: '/support/account-password',
+          name: '/support/account-password',
+          desc: '账户密码',
+          component: () => import('@/views/support/AccountPassword.vue')
+        },
+        {
+          path: '/support/bind-card',
+          name: '/support/bind-card',
+          desc: '开户绑卡',
+          component: () => import('@/views/support/BindCard.vue')
+        },
+        {
+          path: '/support/deposite',
+          name: '/support/deposite',
+          desc: '银行存管',
+          component: () => import('@/views/support/Deposite.vue')
+        },
+      ]
     },
     // user related...
     {
@@ -109,14 +165,14 @@ export const routes = [{
         path: '/user/login',
         name: '/user/login',
         component: () => import('@/views/user/components/Login.vue')
-      },{
+      }, {
         path: '/user/register',
         name: '/user/register',
         component: () => import('@/views/user/components/Register.vue')
       }]
     }
   ]
-},{
+}, {
   path: '/mock/gateway',
   component: MockGatewayLayout,
   name: 'MockGatewayLayout',
@@ -125,12 +181,12 @@ export const routes = [{
     path: '/mock/gateway/register',
     name: '/mock/gateway/register',
     component: () => import('@/views/account/mockGateway/Register.vue'),
-  },{
+  }, {
     path: '/mock/gateway/invest',
     name: '/mock/gateway/invest',
     component: () => import('@/views/account/mockGateway/Invest.vue'),
-  },]
-},{
+  }, ]
+}, {
   path: '/result/gateway',
   component: ResultGatewayLayout,
   name: 'ResultGatewayLayout',
@@ -139,5 +195,5 @@ export const routes = [{
     path: '/result/gateway/loading',
     name: '/result/gateway/loading',
     component: () => import('@/views/result/gateway/Loading.vue'),
-  },]
+  }, ]
 }]

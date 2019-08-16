@@ -16,11 +16,11 @@
         </div>
         <div class="effect" v-if="userInfo.isLogin">
           <span v-text="`您好，${userInfo.userAcc}`"></span>|
-          <span @click="handleLogout">
-            安全退出
-          </span>|
+          <span @click="handleLogout">安全退出</span>|
         </div>
-        <span>帮助中心</span>
+        <span>
+          <router-link to="/support">帮助中心</router-link>
+        </span>
         <span>
           <i>
             <img src="@/assets/icons/rmb.png" alt>
@@ -39,23 +39,22 @@ export default {
     userInfo: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => {}
     },
     logout: {
       type: Function,
       required: true,
-      default: () => null,
+      default: () => null
     }
   },
   data() {
-    return {
-    }
+    return {};
   },
   methods: {
     handleLogout() {
-      this.logout()
+      this.logout();
     }
-  },
+  }
 };
 </script>
 
