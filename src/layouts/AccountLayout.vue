@@ -1,10 +1,10 @@
 <template>
   <div
-    :style="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount? 'margin-top: -20px' : ''"
+    :style="(prefix == 'account') && typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount? 'margin-top: -20px' : ''"
   >
     <div
       class="no-account"
-      v-if="typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount"
+      v-if="(prefix == 'account') && typeof (userInfo.isOpenAccount) != 'undefined' && !userInfo.isOpenAccount"
     >
       您还未开通银行存管账户,出借前请先开通银行存管账户
       <a @click="handleAccount">立即开户</a>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="content-wrap">
+      <div class="content-wrap" :class="{ 'content-wrap-support': prefix == 'support' }">
         <router-view></router-view>
       </div>
     </div>
@@ -164,6 +164,10 @@ export default {
   margin-left: 20px;
   min-height: 40vh;
   overflow-x: hidden;
+}
+.content-wrap-support {
+  background-color: #fff;
+  padding: 30px 30px 40px 30px;
 }
 </style>
 
