@@ -148,3 +148,17 @@ export const supportCenterMenu = [{
     }]
   },
 ]
+
+export const disclosureMenu = [{
+  name: '公司简介',
+  type: 'primary'
+}, {
+  name: '组织信息',
+  children: [{
+    name: '工商信息',
+    type: 'sub'
+  }, {
+    name: '股东信息',
+    type: 'sub'
+  }]
+}]

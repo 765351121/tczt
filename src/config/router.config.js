@@ -156,6 +156,12 @@ export const routes = [{
         },
       ]
     },
+    {
+      path: '/information/disclosure',
+      name: '/information/disclosure',
+      desc: '信息披露',
+      component: () => import('@/views/disclosure/Information.vue')
+    },
     // user related...
     {
       path: '/user',
