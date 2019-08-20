@@ -182,10 +182,12 @@ export const disclosureMenu = [{
     name: '运营数据',
     children: [{
       name: '数据',
-      type: 'sub'
+      type: 'sub',
+      path: '/information/disclosure/op-data'
     }, {
       name: '运营报告',
-      type: 'sub'
+      type: 'sub',
+      path: '/information/disclosure/op-report'
     }],
 
   }

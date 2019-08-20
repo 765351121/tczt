@@ -192,6 +192,16 @@ export const routes = [{
         name: '/information/disclosure/official-channel',
         desc: '官方渠道',
         component: () => import('@/views/disclosure/organize/OfficialChannel.vue')
+      }, {
+        path: '/information/disclosure/op-data',
+        name: '/information/disclosure/op-data',
+        desc: '运营数据',
+        component: () => import('@/views/disclosure/op/OpData.vue')
+      }, {
+        path: '/information/disclosure/op-report',
+        name: '/information/disclosure/op-report',
+        desc: '运营报告',
+        component: () => import('@/views/disclosure/op/OpReport.vue')
       }]
     },
     // user related...
