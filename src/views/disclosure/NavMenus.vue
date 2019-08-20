@@ -46,14 +46,17 @@ export default {
   },
   methods: {
     handleMenuClick(item, index) {
-      console.log(index)
       if (!item.type) {
         return false;
       }
       this.onChange(index);
       this.$router.push({
         name: item.path
-      })
+      });
+      document.body.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     }
   },
   created() {}

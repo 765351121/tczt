@@ -13,7 +13,7 @@
             <a-menu-item key="/product">
               <router-link to="/product/list">项目</router-link>
             </a-menu-item>
-            <a-menu-item key="/info">
+            <a-menu-item key="/information/disclosure">
               <router-link to="/information/disclosure">信息披露</router-link>
             </a-menu-item>
             <a-menu-item key="/account">

@@ -42,7 +42,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   background-color: #fff;
-  min-height: 30vh;
+  min-height: 160vh;
 }
 .nav-menus {
   width: 300px;
@@ -51,6 +51,8 @@ export default {
   flex: 1;
   border-left: 1px solid #f0f0f0;
   padding: 40px;
+  font-size: 20px;
+  color: #333;
 }
 </style>
 
