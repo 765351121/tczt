@@ -189,6 +189,72 @@ export const disclosureMenu = [{
       type: 'sub',
       path: '/information/disclosure/op-report'
     }],
-
-  }
+  },
+  {
+    name: '审计信息',
+    type: 'primary',
+    path: '/information/disclosure/audit'
+  },
+  {
+    name: '合规报告',
+    type: 'primary',
+    path: '/information/disclosure/compliance-report'
+  },
+  {
+    name: '备案信息',
+    type: 'primary',
+    path: '/information/disclosure/archival'
+  },
+  {
+    name: '风险控制',
+    type: 'primary',
+    path: '/information/disclosure/risk-control'
+  },
+  {
+    name: '资金存管',
+    type: 'primary',
+    path: '/information/disclosure/deposit'
+  },
+  {
+    name: '法律法规',
+    type: 'primary',
+    path: '/information/disclosure/legislation'
+  },
+  {
+    name: '重大事项',
+    type: 'primary',
+    path: '/information/disclosure/issues'
+  },
+  {
+    name: '收费标准',
+    type: 'primary',
+    path: '/information/disclosure/rates'
+  },
+  {
+    name: '联系我们',
+    type: 'primary',
+    path: '/information/disclosure/contact'
+  },
+  {
+    name: '法律声明',
+    type: 'primary',
+    path: '/information/disclosure/legal-notice'
+  },
+  {
+    name: '合作伙伴',
+    type: 'primary',
+    path: '/information/disclosure/partner'
+  },
+  {
+    name: '网贷课堂',
+    children: [{
+      name: '风险提示',
+      type: 'sub',
+      path: '/information/disclosure/risk-tips'
+    }, {
+      name: '互金知识',
+      type: 'sub',
+      path: '/information/disclosure/knowledge'
+    }],
+  },
 ]
