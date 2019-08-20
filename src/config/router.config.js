@@ -98,7 +98,12 @@ export const routes = [{
         name: '/account/recharge',
         desc: '充值',
         component: () => import('@/views/account/user/Recharge.vue')
-      }]
+      },{
+        path: '/account/withdraw',
+        name: '/account/withdraw',
+        desc: '充值',
+        component: () => import('@/views/account/user/Withdraw.vue')
+      },]
     },
     // support center related...
     {
