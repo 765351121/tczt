@@ -221,7 +221,6 @@ export default {
     },
     // 投资表单校验
     validateInvestAmount(rule, value, callback) {
-      return callback();
       if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
       }
@@ -361,7 +360,9 @@ export default {
       if (!isOpenAccount) {
         return (this.$refs.mopacc.visible = true);
       }
-      console.log("to recharge");
+      return this.$router.push({
+        name: '/account/recharge'
+      })
     },
     // 登录
     handleLogin() {

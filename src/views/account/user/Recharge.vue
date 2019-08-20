@@ -16,8 +16,8 @@
       <div class="content">
         <div class="quick-recharge-wrap" v-if="tab == 'quick'">
           <div class="title-wrap">
-            <p>银行卡号：********9325</p>
-            <p>开户银行：中国银行</p>
+            <p>银行卡号：********{{ formatCarNum }}</p>
+            <p>开户银行：{{ userInfo.bankName }}</p>
             <p>限额说明：</p>
           </div>
 
@@ -34,13 +34,22 @@
             </div>
             <p>
               可用余额：
-              <span>10,500.00</span>元
+              <span>{{ $utils.formatCurrency(userInfo.canWithdrawAmount) }}</span>元
             </p>
           </div>
           <div class="form-wrap">
-            <a-form :form="form">
+            <a-form :form="form" @submit="handleSubmit">
               <a-form-item label="充值余额" :label-col="{ span: 2 }" :wrapper-col="{ span: 10 }">
-                <a-input :suffix="'元'"/>
+                <a-input
+                  :suffix="'元'"
+                  @change="handleAmountChange"
+                  v-decorator="['orderAmount', {
+                      rules: [{
+                        validator: validateOrderAmount,
+                      }],
+                      validateTrigger: 'onSubmit'
+                    }]"
+                />
               </a-form-item>
               <a-form-item
                 label=" "
@@ -48,7 +57,7 @@
                 :label-col="{ span: 2 }"
                 :wrapper-col="{ span: 10 }"
               >
-                <a-button type="primary" html-type="submit">确认充值</a-button>
+                <a-button type="primary" html-type="submit" :disabled="!btnActive">确认充值</a-button>
               </a-form-item>
             </a-form>
           </div>
@@ -69,6 +78,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { checkErrorCode, formatCurrency, Fadd, goBack } from "@/utils/utils";
+
 const panel = [
   {
     name: "快捷充值"
@@ -85,10 +97,59 @@ export default {
       form: this.$form.createForm(this),
       panel,
       tabKey: 0,
-      tab: "quick"
+      tab: "quick",
+      btnActive: false
     };
   },
   methods: {
+    validateOrderAmount(rule, value, callback) {
+      if (!/^(([1-9]\d*)|0)(\.\d{0,2})?$/g.test(value)) {
+        return callback(`请输入正确的金额`);
+      }
+      if (value < 100) {
+        return callback(`充值金额不能小于${formatCurrency(100)}`);
+      }
+      if (value > 10000) {
+        return callback(`您的开卡行单笔最高充值${formatCurrency(10000)}`);
+      }
+      return callback();
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          console.log("error");
+          return false;
+        }
+        console.log("succ");
+        // /finance/usercenter/account/recharge
+        //this.loading = true
+        this.$store
+          .dispatch({
+            type: "gateway/getRechargeInfo",
+            payload: {
+              ...values,
+              bankCode: "BKCH",
+              platform: "pc",
+              rechargeWay: "SWIFT"
+            }
+          })
+          .then(response => {
+            if (!checkErrorCode(response)) {
+              return false;
+            }
+            console.log(response)
+            //this.toRecharge(response);
+          });
+      });
+    },
+    handleAmountChange(e) {
+      if (!!e.target.value) {
+        this.btnActive = true;
+      } else {
+        this.btnActive = false;
+      }
+    },
     handleTabClick(key) {
       this.tabKey = key;
       if (key == 0) {
@@ -97,6 +158,16 @@ export default {
         this.tab = "ebanck";
       }
     }
+  },
+  computed: {
+    formatCarNum() {
+      let { bankCardNo } = this.userInfo;
+      bankCardNo = bankCardNo || "";
+      return bankCardNo.substring(bankCardNo.length - 4);
+    },
+    ...mapState({
+      userInfo: state => state.global.userInfo
+    })
   }
 };
 </script>

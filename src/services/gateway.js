@@ -4,6 +4,16 @@ const rootPath = '/finance';
 const mockPath = '/mock';
 
 
+// 充值
+export async function getRechargeInfo (params) {
+  return axios({
+    url: `${mockPath}/usercenter/account/recharge`,
+    method: 'post',
+    data: params
+  })
+}
+
+
 // isOrderDone
 export async function isOrderDone (params) {
   return axios({

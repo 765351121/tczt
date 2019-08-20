@@ -1,5 +1,5 @@
 import { 
-  getOpenAccountInfo, register, isOrderDone,
+  getOpenAccountInfo, register, isOrderDone, getRechargeInfo,
 } from '@/services/gateway'
 
 const gateway = {
@@ -12,6 +12,15 @@ const gateway = {
   },
 
   actions: {
+    
+    // 充值
+    ['gateway/getRechargeInfo'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getRechargeInfo(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
     
     // result-loading-isOrderDone
     ['gateway/isOrderDone'] ({ state, commit }, { payload }) {
