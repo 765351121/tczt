@@ -160,7 +160,39 @@ export const routes = [{
       path: '/information/disclosure',
       name: '/information/disclosure',
       desc: '信息披露',
-      component: () => import('@/views/disclosure/Information.vue')
+      redirect: '/information/disclosure/company-profile',
+      component: () => import('@/views/disclosure/Information.vue'),
+      children: [{
+        path: '/information/disclosure/company-profile',
+        name: '/information/disclosure/company-profile',
+        desc: '公司简介',
+        component: () => import('@/views/disclosure/companyProfile/CompanyProfile.vue')
+      }, {
+        path: '/information/disclosure/commitment',
+        name: '/information/disclosure/commitment',
+        desc: '承诺函',
+        component: () => import('@/views/disclosure/commitment/Commitment.vue')
+      }, {
+        path: '/information/disclosure/business',
+        name: '/information/disclosure/business',
+        desc: '工商信息',
+        component: () => import('@/views/disclosure/organize/Business.vue')
+      }, {
+        path: '/information/disclosure/shareholder',
+        name: '/information/disclosure/shareholder',
+        desc: '股东信息',
+        component: () => import('@/views/disclosure/organize/Shareholder.vue')
+      }, {
+        path: '/information/disclosure/structure',
+        name: '/information/disclosure/structure',
+        desc: '组织架构',
+        component: () => import('@/views/disclosure/organize/Structure.vue')
+      }, {
+        path: '/information/disclosure/official-channel',
+        name: '/information/disclosure/official-channel',
+        desc: '官方渠道',
+        component: () => import('@/views/disclosure/organize/OfficialChannel.vue')
+      }]
     },
     // user related...
     {

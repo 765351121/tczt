@@ -150,15 +150,43 @@ export const supportCenterMenu = [{
 ]
 
 export const disclosureMenu = [{
-  name: '公司简介',
-  type: 'primary'
-}, {
-  name: '组织信息',
-  children: [{
-    name: '工商信息',
-    type: 'sub'
+    name: '公司简介',
+    type: 'primary',
+    path: '/information/disclosure/company-profile'
   }, {
-    name: '股东信息',
-    type: 'sub'
-  }]
-}]
+    name: '承诺函',
+    type: 'primary',
+    path: '/information/disclosure/commitment'
+  },
+  {
+    name: '组织信息',
+    children: [{
+      name: '工商信息',
+      type: 'sub',
+      path: '/information/disclosure/business'
+    }, {
+      name: '股东信息',
+      type: 'sub',
+      path: '/information/disclosure/shareholder'
+    }, {
+      name: '组织架构',
+      type: 'sub',
+      path: '/information/disclosure/structure'
+    }, {
+      name: '官方渠道',
+      type: 'sub',
+      path: '/information/disclosure/official-channel'
+    }],
+  },
+  {
+    name: '运营数据',
+    children: [{
+      name: '数据',
+      type: 'sub'
+    }, {
+      name: '运营报告',
+      type: 'sub'
+    }],
+
+  }
+]

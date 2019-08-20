@@ -4,7 +4,9 @@
       <div class="nav-menus">
         <NavMenus :menus="menus" :activeIndex="activeIndex" :onChange="onChange"/>
       </div>
-      <div class="content-wrap">222</div>
+      <div class="content-wrap">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +50,7 @@ export default {
 .content-wrap {
   flex: 1;
   border-left: 1px solid #f0f0f0;
+  padding: 40px;
 }
 </style>
 

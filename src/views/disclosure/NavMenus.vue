@@ -7,12 +7,12 @@
           :class="{ 
           'menu-hover': !!item.type, 
           'sub-menu': (item.type == 'sub'),
-          'menu-active': (activeIndex == index + preIndex) && !!item.type
+          'menu-active': $route.path == item.path
         }"
         >{{ item.name }}</li>
         <T-nav-menus
           :menus="item.children"
-          :preIndex="index"
+          :preIndex="Number(`${index}0`)"
           :activeIndex="activeIndex"
           :onChange="onChange"
         />
@@ -46,10 +46,14 @@ export default {
   },
   methods: {
     handleMenuClick(item, index) {
+      console.log(index)
       if (!item.type) {
         return false;
       }
       this.onChange(index);
+      this.$router.push({
+        name: item.path
+      })
     }
   },
   created() {}
