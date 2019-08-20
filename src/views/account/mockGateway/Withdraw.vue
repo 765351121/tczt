@@ -4,6 +4,7 @@
       <div class="info-wrap">
         <div class="row-wrap">
           <span>金额: 100元</span>
+          <span>可用余额： 10500.00元</span>
         </div>
         <div class="row-wrap">
           <span>订单编号：RC1908201410280861991633925</span>
@@ -51,10 +52,9 @@
             />
           </a-form-item>
           <div class="btn-wrap">
-            <a-button type="primary" ghost>同意协议并支付</a-button>
+            <a-button type="primary" ghost>确 定</a-button>
           </div>
         </a-form>
-        <div class="protocol">《快捷充值协议》</div>
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@
 
 <script>
 export default {
-  name: "T-mock-gateway-recharge",
+  name: "T-mock-gateway-withdraw",
   data() {
     return {
       form: this.$form.createForm(this),
@@ -85,6 +85,15 @@ export default {
     &:nth-child(1) {
       font-size: 18px;
       color: #406dbf;
+      display: flex;
+      justify-content: flex-start;
+      & > span {
+        display: inline-block;
+        flex: 1;
+        &:nth-child(2) {
+          font-size: 14px;
+        }
+      }
     }
     &:nth-child(2) {
       display: flex;
@@ -114,13 +123,5 @@ export default {
     width: 41.5%;
     margin-left: 16.5%;
   }
-}
-.protocol {
-  width: 41.5%;
-  margin-left: 16.5%;
-  text-align: center;
-  color: #406dbf;
-  margin-top: 10px;
-  cursor: pointer;
 }
 </style>

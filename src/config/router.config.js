@@ -313,6 +313,10 @@ export const routes = [{
     path: '/mock/gateway/recharge',
     name: '/mock/gateway/recharge',
     component: () => import('@/views/account/mockGateway/Recharge.vue'),
+  }, {
+    path: '/mock/gateway/withdraw',
+    name: '/mock/gateway/withdraw',
+    component: () => import('@/views/account/mockGateway/Withdraw.vue'),
   }, ]
 }, {
   path: '/result/gateway',
