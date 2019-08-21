@@ -106,10 +106,10 @@
       </div>
     </a-form>
 
-    <a-modal 
-      width="480px" 
-      :visible="state.visible" 
-      :centered="true" 
+    <a-modal
+      width="480px"
+      :visible="state.visible"
+      :centered="true"
       :footer="null"
       @cancel="() => handleCancel()"
     >
@@ -141,7 +141,9 @@ import {
   handleWebStorage,
   tmPhone
 } from "@/utils/utils";
-import { updateAccountStatus, deleteWs } from "@/utils/common";
+import { updateAccountStatus, deleteWs, updateUserList } from "@/utils/common";
+
+const ws = handleWebStorage();
 
 export default {
   name: "T-register",
@@ -156,7 +158,7 @@ export default {
         checked: true,
         visible: false,
         loading: false,
-        backUrl: '/',
+        backUrl: "/"
       }
     };
   },
@@ -168,7 +170,7 @@ export default {
       });
     },
     handleLoginSuccess() {
-      this.mockAccount()
+      this.mockAccount();
       this.$store
         .dispatch({
           type: "getUserInfo",
@@ -178,11 +180,11 @@ export default {
           if (!checkErrorCode(response)) {
             return false;
           }
-          return this.$router.push({ name: this.state.backUrl })
+          return this.$router.push({ name: this.state.backUrl });
         });
     },
     login(values, response) {
-      values = this.form.getFieldsValue(['userAcc', 'userPwd'])
+      values = this.form.getFieldsValue(["userAcc", "userPwd"]);
       const { encryInfo, randomId } = response.data;
       const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
       this.$store
@@ -217,15 +219,21 @@ export default {
     },
     // 立即开户
     handleOpenAccount() {
-      this.state.backUrl = '/login'
-      this.state.visible = false
-      this.getEncryInfo()
+      this.state.backUrl = "/account/gateway/register";
+      this.state.visible = false;
+      this.getEncryInfo();
     },
     // modal cancel
     handleCancel(type) {
-      this.state.backUrl = '/home'
-      this.state.visible = false
-      this.getEncryInfo()
+      this.state.backUrl = "/home";
+      this.state.visible = false;
+      this.getEncryInfo();
+    },
+    mockSetUserlist(values) {
+      const { userAcc, userPwd } = values;
+      updateUserList({
+        [userAcc]: { password: userPwd }
+      });
     },
     // 注册
     regist(values, response) {
@@ -245,13 +253,13 @@ export default {
           }
         })
         .then(response => {
-          console.log("注册", response);
           if (!checkErrorCode(response)) {
             return false;
           }
           //this.$message.success("注册成功");
-          this.state.loading = false
-          this.state.visible = true
+          this.mockSetUserlist(values);
+          this.state.loading = false;
+          this.state.visible = true;
         });
     },
     // 提交
@@ -261,7 +269,7 @@ export default {
         if (!!err) {
           return false;
         }
-        this.state.loading = true
+        this.state.loading = true;
         this.$store
           .dispatch({
             type: "getEncryInfo",

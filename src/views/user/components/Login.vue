@@ -61,7 +61,7 @@ import {
   encryptAES,
   handleWebStorage,
   tmPhone,
-  goBack,
+  goBack
 } from "@/utils/utils";
 import { updateAccountStatus, deleteWs } from "@/utils/common";
 
@@ -74,7 +74,7 @@ export default {
       },
       form: this.$form.createForm(this),
       ws: handleWebStorage(),
-      loading: false,
+      loading: false
     };
   },
   methods: {
@@ -85,21 +85,34 @@ export default {
       });
     },
     handleLoginSuccess() {
-      this.mockAccount()
+      this.mockAccount();
       this.$store
         .dispatch({
           type: "getUserInfo",
           payload: {}
         })
         .then(response => {
-          this.loading = false
+          this.loading = false;
           if (!!goBack()) {
-            return this.$router.push(goBack())  
-          } 
-          return this.$router.push({ name: '/home' })
+            return this.$router.push(goBack());
+          }
+          return this.$router.push({ name: "/home" });
         });
     },
-
+    checkUserList(values) {
+      let { userAcc, userPwd } = values;
+      let userListCache = this.ws.getItem("userList");
+      let userList = Object.keys(userListCache || {});
+      if (userList.indexOf(userAcc) == -1) {
+        this.$message.error("用户未注册，请先注册");
+        return false;
+      }
+      if (!(userListCache[userAcc].password == userPwd)) {
+        this.$message.error("登录密码不正确，请重新输入");
+        return false;
+      }
+      return true;
+    },
     login(values, response) {
       const { encryInfo, randomId } = response.data;
       const { userAcc, userPwd } = encryptAES({ ...values }, encryInfo);
@@ -114,7 +127,12 @@ export default {
           }
         })
         .then(response => {
+          if (!this.checkUserList(values)) {
+            this.loading = false;
+            return false;
+          }
           if (!checkErrorCode(response)) {
+            this.loading = false;
             return false;
           }
           this.$message.success("登录成功");
@@ -128,7 +146,7 @@ export default {
         if (!!err) {
           return false;
         }
-        this.loading = true
+        this.loading = true;
         this.$store
           .dispatch({
             type: "getEncryInfo",

@@ -60,6 +60,17 @@ export const updateAccountStatus = content => {
       })
     }
   })
+  //deleteWs('userList')
+}
+
+// 更改userList
+export const updateUserList = content => {
+  ws.setItem({
+    userList: { ...Object.assign({ ...(ws.getItem('userList') || {})
+      }, { ...content
+      })
+    }
+  })
 }
 
 // delete ws
