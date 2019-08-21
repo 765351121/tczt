@@ -11,17 +11,15 @@ const ws = handleWebStorage()
 // recharge
 const recharge = (options) => {
   let body = JSON.parse(options.body)
-  const {
-    realName,
-    idNum
-  } = body
+  let userInfo = ws.getItem('account')
+  let { orderAmount } = body
   let redirectUrl = window.location.origin + '/result/gateway/loading' // 回调地址
 
   let data = {
     "requestNo": "CZZ20190820175045254164704",
-    "requestParam": "{\"keySerial\":\"1\",\"platformNo\":\"6000004334\",\"reqData\":\"{\\\"amount\\\":1000,\\\"bankcode\\\":\\\"BKCH\\\",\\\"callbackMode\\\":\\\"DIRECT_CALLBACK\\\",\\\"expectPayCompany\\\":\\\"YEEPAY\\\",\\\"expired\\\":\\\"20190820182045\\\",\\\"platformUserNo\\\":\\\"PN1907311036378301409794003\\\",\\\"rechargeWay\\\":\\\"SWIFT\\\",\\\"redirectUrl\\\":\\\"http://192.168.2.42/pudge/result/loading?type=recharge&requestNo=CZZ20190820175045254164704\\\",\\\"requestNo\\\":\\\"RC1908201750452631158704111\\\",\\\"riskitem\\\":\\\"{\\\\\\\"merEquipmentIp\\\\\\\":\\\\\\\"47.94.115.242\\\\\\\"}\\\",\\\"timestamp\\\":\\\"20190820175045\\\"}\",\"requestUrl\":\"https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway\",\"serviceName\":\"RECHARGE\",\"sign\":\"HDtxKEFo0qGuH2kpFqeDewJtx/bsMngIV++2HutPJBBOxjx65n2/qgC+M7pe+5qRwzBl38Q6CZkyi1EsMuGh5arcDC78DUIEaHgnM1RCzsYiwtoTXva/hfa7TzWMLB4p+3xUXTPfbVCJxpScVwg9xfUP00b/4vd8zsI4bMPRdrLZ2wtsJCHxyY0S3Rg8/S9qDp5m7nx4VwzgiOsEvb7RDYzyZMqaWIu1FwxDI1glgaB5rID3LfEA/CW1xvPqjSIUV9IvVH3DJggIr7mBVh/k8qasfeYrAnGfA3BfJAjyG8w5K+TlV7K8MdN+rX9eogJ1LSHMU3f5RiwduLr7IrHcsQ==\"}",
+    "requestParam": `{\"keySerial\":\"1\",\"platformNo\":\"6000004334\",\"reqData\":\"{\\\"amount\\\":${orderAmount},\\\"bankcode\\\":\\\"BKCH\\\",\\\"callbackMode\\\":\\\"DIRECT_CALLBACK\\\",\\\"expectPayCompany\\\":\\\"YEEPAY\\\",\\\"expired\\\":\\\"20190821110223\\\",\\\"platformUserNo\\\":\\\"PN1907311036378301409794003\\\",\\\"rechargeWay\\\":\\\"SWIFT\\\",\\\"redirectUrl\\\":\\\"${redirectUrl}\\\",\\\"requestNo\\\":\\\"RC1908211032231459096293703\\\",\\\"riskitem\\\":\\\"{\\\\\\\"merEquipmentIp\\\\\\\":\\\\\\\"47.94.115.242\\\\\\\"}\\\",\\\"timestamp\\\":\\\"20190821103223\\\"}\",\"requestUrl\":\"https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway\",\"serviceName\":\"RECHARGE\",\"sign\":\"eOTOcf27GUvNt6WsKkMelJEnvctv6I7O1RowmBR7tSUxZ5CGvlmWoD3ZEdIfAx+gUAX5LxTeNkVsxd8q77C1v7dZok5psYkQ8woaIbEp27kEZjJAZnjfASMT4pW8ltTFnT4D6UlSME4NL3nvT2UVZgZk8SFtYf5fSaK+fcCseS+org19wsdCUhUxweddXw1VKsQMML2Ks728defmyFKKSgCNfTLW7YN8lGIjh15jbTv3TzPKEpwGQqVGtkwJ7r0kY7jfE9jM861A0g44GGFPyOZPX4sHi8mcqJIDfnlrOgpR3bhD8kkqKth+uIeRPrbnOHsZ/UyF15pdBsBo2LU75g==\"}`,
     //"requestUrl": "https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway",
-    "requestUrl": `${window.location.origin}/mock/gateway/register`
+    "requestUrl": `${window.location.origin}/mock/gateway/recharge`
   }
   return builder(data)
 }

@@ -73,7 +73,6 @@ export default {
       updateAccountStatus({ canWithdrawAmount })
     },
     handleInvestSuccess() {
-      console.log('123132')
       this.mockAccount()
       const { requestNo } = this.reqData
       window.location.href = `${this.reqData.redirectUrl}?type=tender&requestNo=${requestNo}`
@@ -85,7 +84,6 @@ export default {
         if (!!err) {
           return false;
         }
-        console.log("succ");
         this.handleInvestSuccess()
       });
     }

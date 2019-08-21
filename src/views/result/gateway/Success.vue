@@ -3,23 +3,22 @@
     <div class="wrap">
       <RegisterSuccess v-if="this.type === 'register'"/>
       <InvestSuccess v-if="this.type === 'tender'"/>
+      <RechargeSuccess v-if="this.type === 'recharge'"/>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  Success as RegisterSuccess,
-} from "./components/Register";
-import {
-  Success as InvestSuccess,
-} from "./components/Invest";
+import { Success as RegisterSuccess } from "./components/Register";
+import { Success as InvestSuccess } from "./components/Invest";
+import { Success as RechargeSuccess } from "./components/Recharge";
 
 export default {
   name: "T-result-success",
   components: {
     RegisterSuccess,
     InvestSuccess,
+    RechargeSuccess
   },
   data() {
     return {

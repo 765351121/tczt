@@ -221,6 +221,7 @@ export default {
     },
     // 投资表单校验
     validateInvestAmount(rule, value, callback) {
+      return callback()
       if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
       }

@@ -79,6 +79,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { stringify } from "qs";
 import { checkErrorCode, formatCurrency, Fadd, goBack } from "@/utils/utils";
 
 const panel = [
@@ -102,18 +103,13 @@ export default {
     };
   },
   methods: {
-    validateOrderAmount(rule, value, callback) {
-      if (!/^(([1-9]\d*)|0)(\.\d{0,2})?$/g.test(value)) {
-        return callback(`请输入正确的金额`);
-      }
-      if (value < 100) {
-        return callback(`充值金额不能小于${formatCurrency(100)}`);
-      }
-      if (value > 10000) {
-        return callback(`您的开卡行单笔最高充值${formatCurrency(10000)}`);
-      }
-      return callback();
+    toRecharge(response) {
+      const { requestParam, requestUrl } = response.data;
+      let urlParm = stringify(JSON.parse(requestParam || "{}"));
+      let targetUrl = `${requestUrl}?${urlParm}`;
+      window.location.href = targetUrl;
     },
+    
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
@@ -139,9 +135,21 @@ export default {
               return false;
             }
             console.log(response)
-            //this.toRecharge(response);
+            this.toRecharge(response);
           });
       });
+    },
+    validateOrderAmount(rule, value, callback) {
+      if (!/^(([1-9]\d*)|0)(\.\d{0,2})?$/g.test(value)) {
+        return callback(`请输入正确的金额`);
+      }
+      if (value < 100) {
+        return callback(`充值金额不能小于${formatCurrency(100)}`);
+      }
+      if (value > 10000) {
+        return callback(`您的开卡行单笔最高充值${formatCurrency(10000)}`);
+      }
+      return callback();
     },
     handleAmountChange(e) {
       if (!!e.target.value) {

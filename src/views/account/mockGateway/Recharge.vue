@@ -3,73 +3,149 @@
     <div class="wrap">
       <div class="info-wrap">
         <div class="row-wrap">
-          <span>金额: 100元</span>
+          <span>金额: {{ $utils.formatCurrency(reqData.amount) }}元</span>
         </div>
         <div class="row-wrap">
-          <span>订单编号：RC1908201410280861991633925</span>
-          <span>客户名称：哈哈</span>
+          <span>订单编号：RC1908211045450531587452966</span>
+          <span>客户名称：{{ userInfo.realName }}</span>
         </div>
         <div class="row-wrap">
-          <span>到账金额：100元</span>
+          <span>到账金额：{{ $utils.formatCurrency(reqData.amount) }}元</span>
         </div>
       </div>
-
       <div class="form-wrap">
-        <a-form :form="form">
+        <a-form :form="form" @submit="handleSubmit">
           <a-form-item label="银行卡" :label-col="labelCol" :wrapper-col="wrapperCol">
             <div class="bank-card-wrap">
               <img src="@/assets/images/account/gateway/BKCH.jpg" alt>
-              <span>尾号 9325</span>
+              <span>尾号 {{ formatCarNum }}</span>
             </div>
           </a-form-item>
-
           <a-form-item label="预留手机号" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <div class="phone-wrap">141****0010</div>
+            <div class="phone-wrap">{{ userInfo.userAcc }}</div>
           </a-form-item>
           <a-form-item label="验证码" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-input
+              size="large"
               maxlength="6"
-              placeholder="请输入短信验证码"
+              placeholder="请输入短信验证码（000000）"
               v-decorator="['smscode', {
               rules: [{
                 required: true, 
                 message: '短信验证码不能为空'
+              }, {
+                validator: validateSmscode,
               }],
+              validateTrigger: 'onSubmit'
             }]"
             />
           </a-form-item>
           <a-form-item label="交易密码" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-input
+              size="large"
               maxlength="20"
               placeholder="请输入交易密码"
-              v-decorator="['phoneNumber', {
+              type="password"
+              v-decorator="['tradePwd', {
               rules: [{
                 required: true, 
                 message: '交易密码不能为空'
+              }, {
+                validator: validateTradePwd,
               }],
+              validateTrigger: 'onSubmit'
             }]"
             />
           </a-form-item>
           <div class="btn-wrap">
-            <a-button type="primary" ghost>同意协议并支付</a-button>
+            <a-button type="primary" ghost size="large" html-type="submit">同意协议并支付</a-button>
           </div>
         </a-form>
-        <div class="protocol">《快捷充值协议》</div>
+        <div class="protocol">
+          <a href="http://www.baidu.com" target="_blank">《快捷充值协议》</a>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
+import { handleWebStorage, Fadd } from "@/utils/utils";
+import { updateAccountStatus } from "@/utils/common";
+
+const ws = handleWebStorage();
+
 export default {
   name: "T-mock-gateway-recharge",
   data() {
     return {
       form: this.$form.createForm(this),
       labelCol: { span: 4 },
-      wrapperCol: { span: 10 }
+      wrapperCol: { span: 10 },
+      userInfo: ws.getItem("account"),
+      reqData: {}
     };
+  },
+  methods: {
+    mockAccount() {
+      let { canWithdrawAmount } = this.userInfo;
+      let { amount } = this.reqData;
+      canWithdrawAmount = Fadd(Number(canWithdrawAmount), Number(amount));
+      console.log(canWithdrawAmount);
+      updateAccountStatus({ canWithdrawAmount });
+    },
+    handleRechargeSuccess() {
+      this.mockAccount();
+      const { requestNo } = this.reqData;
+      window.location.href = `${
+        this.reqData.redirectUrl
+      }?type=recharge&requestNo=${requestNo}`;
+    },
+    validateTradePwd(rule, value, callback) {
+      const { tradPwd } = ws.getItem("account");
+      if (!!value && value !== tradPwd) {
+        return callback(
+          "您输入的密码错误，连续错误5次将被锁定，请确认后重新输入。"
+        );
+      }
+      return callback();
+    },
+    validateSmscode(rule, value, callback) {
+      if (!!value && value !== "000000") {
+        return callback("验证码不正确（000000）");
+      }
+      return callback();
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          return false;
+        }
+        this.handleRechargeSuccess();
+      });
+    },
+    smsCodeModal() {
+      this.$info({
+        title: "提示",
+        content: `验证码已发送到${this.userInfo.userAcc}手机，请您查收。`,
+        centered: true,
+        okText: "我知道了",
+        onOk() {}
+      });
+    }
+  },
+  computed: {
+    formatCarNum() {
+      let { bankCardNo } = this.userInfo;
+      bankCardNo = bankCardNo || "";
+      return bankCardNo.substring(bankCardNo.length - 4);
+    }
+  },
+  mounted() {
+    let reqData = JSON.parse(this.$route.query.reqData);
+    this.reqData = reqData;
+    this.smsCodeModal();
   }
 };
 </script>
