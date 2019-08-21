@@ -72,6 +72,7 @@
                     :placeholder="(`${$utils.formatCurrency(scatProduct.minInvestmentAmount)}元起投，${$utils.formatCurrency(scatProduct.increaseAmount)}元递增`)"
                     enterButton="立即加入"
                     size="large"
+                    :disabled="!checked"
                     @search="handleBuy"
                     @change="handleInvestAmountChange"
                     v-decorator="['investAmount', {
@@ -89,7 +90,7 @@
               <span style="color: #ec2121">{{ $utils.formatCurrency(incomeAmount) }}</span> 元
             </div>
             <div style="margin-top: 20px" class="checkbox">
-              <a-checkbox>
+              <a-checkbox :checked="checked" @change="handleCheckbox">
                 我已阅读并同意
                 <a href="http://www.baidu.com" target="_blank">《借款合同》</a>
               </a-checkbox>
@@ -148,6 +149,7 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this),
+      checked: true,
       scatProduct: {
         annualYield: 0,
         loanTimeLimit: 0,
@@ -221,7 +223,6 @@ export default {
     },
     // 投资表单校验
     validateInvestAmount(rule, value, callback) {
-      return callback()
       if (parseFloat(value).toString() == "NaN") {
         return callback("请输入出借金额");
       }
@@ -394,6 +395,10 @@ export default {
           break;
       }
       return transform;
+    },
+    // checkbox
+    handleCheckbox(e) {
+      this.checked = e.target.checked
     },
     // 获取散标产品信息
     getScatterProduct() {

@@ -18,6 +18,8 @@
         <a-form :form="form">
           <a-form-item label="交易密码" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-input
+              type="password"
+              size="large"
               maxlength="20"
               placeholder="请输入交易密码"
               v-decorator="['password', {
@@ -33,21 +35,18 @@
           </a-form-item>
         </a-form>
         <div class="btn-wrap">
-            <a-button type="primary" @click="handleSubmit">确 定</a-button>
-          </div>
+          <a-button type="primary" @click="handleSubmit" size="large">确 定</a-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  handleWebStorage,
-  Fsub,
-} from '@/utils/utils'
+import { handleWebStorage, Fsub } from "@/utils/utils";
 import { updateAccountStatus } from "@/utils/common";
 
-const ws = handleWebStorage()
+const ws = handleWebStorage();
 
 export default {
   name: "T-mock-gateway-invest",
@@ -56,26 +55,30 @@ export default {
       form: this.$form.createForm(this),
       labelCol: { span: 4 },
       wrapperCol: { span: 10 },
-      reqData: {},
+      reqData: {}
     };
   },
   methods: {
     validateTradPwd(rule, value, callback) {
-      const { tradPwd }  = ws.getItem('account')
+      const { tradPwd } = ws.getItem("account");
       if (!!value && value !== tradPwd) {
-        return callback('您输入的密码错误，连续错误5次将被锁定，请确认后重新输入。')
+        return callback(
+          "您输入的密码错误，连续错误5次将被锁定，请确认后重新输入。"
+        );
       }
-      return callback()
+      return callback();
     },
     mockAccount() {
-      let { amount, canWithdrawAmount }  = this.reqData
-      canWithdrawAmount = Fsub(Number(canWithdrawAmount), Number(amount))
-      updateAccountStatus({ canWithdrawAmount })
+      let { amount, canWithdrawAmount } = this.reqData;
+      canWithdrawAmount = Fsub(Number(canWithdrawAmount), Number(amount));
+      updateAccountStatus({ canWithdrawAmount });
     },
     handleInvestSuccess() {
-      this.mockAccount()
-      const { requestNo } = this.reqData
-      window.location.href = `${this.reqData.redirectUrl}?type=tender&requestNo=${requestNo}`
+      this.mockAccount();
+      const { requestNo } = this.reqData;
+      window.location.href = `${
+        this.reqData.redirectUrl
+      }?type=tender&requestNo=${requestNo}`;
     },
     handleSubmit(e) {
       e = window.event;
@@ -84,7 +87,7 @@ export default {
         if (!!err) {
           return false;
         }
-        this.handleInvestSuccess()
+        this.handleInvestSuccess();
       });
     }
   },

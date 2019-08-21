@@ -6,8 +6,8 @@
       </div>
       <p class="status-des">出借成功！</p>
       <div class="btn-wrap">
-        <a-button type="primary" size="large" @click="toAccount">查看出借记录</a-button>
-        <a-button type="primary" size="large" @click="toInvest">浏览更多产品</a-button>
+        <a-button type="primary" size="large" @click="showLendList">查看出借记录</a-button>
+        <a-button type="primary" size="large" @click="showMore">浏览更多产品</a-button>
       </div>
     </div>
   </div>
@@ -20,15 +20,15 @@ export default {
     return {};
   },
   methods: {
-    toInvest() {
-      // this.$router.push({
-      //   name: "/product/list"
-      // });
+    showMore() {
+      this.$router.push({
+        name: "/product/list"
+      });
     },
-    toAccount() {
-      // this.$router.push({
-      //   name: "/home"
-      // });
+    showLendList() {
+      this.$router.push({
+        name: "/account/lend-record"
+      });
     }
   }
 };
