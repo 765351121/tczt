@@ -230,6 +230,7 @@ export default {
       this.getEncryInfo();
     },
     mockSetUserlist(values) {
+      console.log('........');
       const { userAcc, userPwd } = values;
       updateUserList({
         [userAcc]: { password: userPwd }
