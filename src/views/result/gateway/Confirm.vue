@@ -1,18 +1,21 @@
 <template>
   <div>
     <div class="wrap">
-      <RegisterConfirm/>
+      <RegisterConfirm v-if="this.type === 'register'"/>
+      <WithdrawConfirm v-if="this.type === 'withdraw'"/>
     </div>
   </div>
 </template>
 
 <script>
 import { Confirm as RegisterConfirm } from "./components/Register";
+import { Confirm as WithdrawConfirm } from "./components/Withdraw";
 
 export default {
   name: "T-result-confirm",
   components: {
-    RegisterConfirm
+    RegisterConfirm,
+    WithdrawConfirm
   },
   data() {
     return {

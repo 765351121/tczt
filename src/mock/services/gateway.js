@@ -8,6 +8,22 @@ import {
 const ws = handleWebStorage()
 
 
+// withdrawal
+const withdrawal = (options) => {
+  let body = JSON.parse(options.body)
+  let userInfo = ws.getItem('account')
+  let { orderAmount } = body
+  let redirectUrl = window.location.origin + '/result/gateway/loading' // 回调地址
+
+  let data = {
+    "requestNo": "CZZ20190820175045254164704",
+    "requestParam": `{\"keySerial\":\"1\",\"platformNo\":\"6000004334\",\"reqData\":\"{\\\"amount\\\":${orderAmount},\\\"bankcode\\\":\\\"BKCH\\\",\\\"callbackMode\\\":\\\"DIRECT_CALLBACK\\\",\\\"expectPayCompany\\\":\\\"YEEPAY\\\",\\\"expired\\\":\\\"20190821110223\\\",\\\"platformUserNo\\\":\\\"PN1907311036378301409794003\\\",\\\"rechargeWay\\\":\\\"SWIFT\\\",\\\"redirectUrl\\\":\\\"${redirectUrl}\\\",\\\"requestNo\\\":\\\"RC1908211032231459096293703\\\",\\\"riskitem\\\":\\\"{\\\\\\\"merEquipmentIp\\\\\\\":\\\\\\\"47.94.115.242\\\\\\\"}\\\",\\\"timestamp\\\":\\\"20190821103223\\\"}\",\"requestUrl\":\"https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway\",\"serviceName\":\"RECHARGE\",\"sign\":\"eOTOcf27GUvNt6WsKkMelJEnvctv6I7O1RowmBR7tSUxZ5CGvlmWoD3ZEdIfAx+gUAX5LxTeNkVsxd8q77C1v7dZok5psYkQ8woaIbEp27kEZjJAZnjfASMT4pW8ltTFnT4D6UlSME4NL3nvT2UVZgZk8SFtYf5fSaK+fcCseS+org19wsdCUhUxweddXw1VKsQMML2Ks728defmyFKKSgCNfTLW7YN8lGIjh15jbTv3TzPKEpwGQqVGtkwJ7r0kY7jfE9jM861A0g44GGFPyOZPX4sHi8mcqJIDfnlrOgpR3bhD8kkqKth+uIeRPrbnOHsZ/UyF15pdBsBo2LU75g==\"}`,
+    //"requestUrl": "https://hubk.lanmaoly.com/bha-neo-app/lanmaotech/gateway",
+    "requestUrl": `${window.location.origin}/mock/gateway/withdraw`
+  }
+  return builder(data)
+}
+
 // recharge
 const recharge = (options) => {
   let body = JSON.parse(options.body)
@@ -31,9 +47,14 @@ const isOrderDone = (options) => {
    * @orderStatus
    *  1: 成功  2：失败  0：等待中
    */
+  let body = JSON.parse(options.body)
+  let { type } = body
   let data = {
     "orderStatus": 1,
     "failReason": null
+  }
+  if (type =='withdraw') {
+    data.orderStatus = 0
   }
   return builder(data)
 }
@@ -69,3 +90,5 @@ Mock.mock(/\/mock\/usercenter\/client\/openAccount/, 'post', openAccount)
 Mock.mock(/\/mock\/gateway\/client\/register/, 'post', register)
 Mock.mock(/\/mock\/usercenter\/account\/isOrderDone/, 'post', isOrderDone)
 Mock.mock(/\/mock\/usercenter\/account\/recharge/, 'post', recharge)
+Mock.mock(/\/mock\/usercenter\/account\/withdrawal/, 'post', withdrawal)
+

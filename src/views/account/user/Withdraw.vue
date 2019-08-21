@@ -20,16 +20,25 @@
           </div>
         </div>
         <div class="account-info-wrap">
-          <p>银行卡号：********9325</p>
+          <p>银行卡号：********{{ formatCarNum }}</p>
           <p>开户银行：中国银行</p>
-          <p>可用余额：11,100.00元</p>
+          <p>可用余额：{{ $utils.formatCurrency(userInfo.canWithdrawAmount) }}元</p>
         </div>
 
         <div class="form-wrap">
-          <a-form :form="form">
+          <a-form :form="form" @submit="handleSubmit">
             <div class="form-input-wrap">
               <a-form-item label="提现余额" :label-col="{ span: 2 }" :wrapper-col="{ span: 10 }">
-                <a-input :suffix="'元'"/>
+                <a-input
+                  :suffix="'元'"
+                  @change="handleAmountChange"
+                  v-decorator="['orderAmount', {
+                    rules: [{
+                      validator: validateOrderAmount,
+                    }],
+                    validateTrigger: 'onSubmit'
+                  }]"
+                />
               </a-form-item>
             </div>
 
@@ -40,7 +49,7 @@
               :wrapper-col="{ span: 10 }"
             >
               <div class="form-amount-wrap">
-                <span>实际到账余额0.00元</span>
+                <span>实际到账余额{{ $utils.formatCurrency(actualAmount) }}元</span>
                 <span>手续费0.00元</span>
               </div>
             </a-form-item>
@@ -51,7 +60,7 @@
               :label-col="{ span: 2 }"
               :wrapper-col="{ span: 10 }"
             >
-              <a-button type="primary" html-type="submit">确认提现</a-button>
+              <a-button type="primary" html-type="submit" :disabled="!btnActive">确认提现</a-button>
             </a-form-item>
           </a-form>
         </div>
@@ -66,12 +75,80 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { stringify } from "qs";
+import { checkErrorCode, formatCurrency, Fadd, goBack } from "@/utils/utils";
+
 export default {
   name: "T-account-withdraw",
   data() {
     return {
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      btnActive: false,
+      actualAmount: 0
     };
+  },
+  methods: {
+    toWithdraw(response) {
+      const { requestParam, requestUrl } = response.data;
+      let urlParm = stringify(JSON.parse(requestParam || "{}"));
+      let targetUrl = `${requestUrl}?${urlParm}`;
+      window.location.href = targetUrl;
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!!err) {
+          return false;
+        }
+        this.$store
+          .dispatch({
+            type: "gateway/getWithdrawInfo",
+            payload: {
+              ...values,
+              bankCode: "BKCH",
+              platform: "pc"
+            }
+          })
+          .then(response => {
+            if (!checkErrorCode(response)) {
+              return false;
+            }
+            this.toWithdraw(response);
+          });
+      });
+    },
+    validateOrderAmount(rule, value, callback) {
+      const { canWithdrawAmount } = this.userInfo;
+      if (!/^(([1-9]\d*)|0)(\.\d{0,2})?$/g.test(value)) {
+        return callback(`请输入正确的金额`);
+      }
+      if (value > canWithdrawAmount) {
+        return callback(
+          `提现金额不能大于${formatCurrency(canWithdrawAmount)}元`
+        );
+      }
+      return callback();
+    },
+    handleAmountChange(e) {
+      if (!!e.target.value) {
+        this.btnActive = true;
+        this.actualAmount = e.target.value;
+      } else {
+        this.btnActive = false;
+        this.actualAmount = 0;
+      }
+    }
+  },
+  computed: {
+    formatCarNum() {
+      let { bankCardNo } = this.userInfo;
+      bankCardNo = bankCardNo || "";
+      return bankCardNo.substring(bankCardNo.length - 4);
+    },
+    ...mapState({
+      userInfo: state => state.global.userInfo
+    })
   }
 };
 </script>

@@ -4,6 +4,15 @@ const rootPath = '/finance';
 const mockPath = '/mock';
 
 
+// 提现
+export async function getWithdrawInfo (params) {
+  return axios({
+    url: `${mockPath}/usercenter/account/withdrawal`,
+    method: 'post',
+    data: params
+  })
+}
+
 // 充值
 export async function getRechargeInfo (params) {
   return axios({

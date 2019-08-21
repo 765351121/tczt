@@ -94,7 +94,9 @@
           <a-button type="primary" size="large">
             <router-link to="/account/recharge">充值</router-link>
           </a-button>
-          <a-button size="large">提现</a-button>
+          <a-button size="large">
+            <router-link to="/account/withdraw">提现</router-link>
+          </a-button>
         </div>
       </div>
       <div class="summary-wrap">

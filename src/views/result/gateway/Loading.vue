@@ -28,8 +28,8 @@ export default {
   },
   methods: {
     getRoute(prefix, type, orderStatus) {
-      if (!type  || !orderStatus) {
-        this.$message.info('type orderStatus错误')
+      if (!type) {
+        this.$message.info('type错误')
         return "/home"
       }
       let path = new String()

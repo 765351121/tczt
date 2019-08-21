@@ -1,5 +1,6 @@
 import { 
   getOpenAccountInfo, register, isOrderDone, getRechargeInfo,
+  getWithdrawInfo,
 } from '@/services/gateway'
 
 const gateway = {
@@ -12,6 +13,15 @@ const gateway = {
   },
 
   actions: {
+
+    // 提现
+    ['gateway/getWithdrawInfo'] ({ state, commit }, { payload }) {
+      return new Promise((resolve, reject) => {
+        getWithdrawInfo(payload).then(response => {
+          return resolve(response)
+        })
+      })
+    },
     
     // 充值
     ['gateway/getRechargeInfo'] ({ state, commit }, { payload }) {
