@@ -6,7 +6,7 @@
       </div>
       <p class="status-des">充值成功 ！</p>
       <div class="btn-wrap">
-        <a-button type="primary" size="large" @click="toAccount">查看充值记录</a-button>
+        <a-button type="primary" size="large" @click="showRecharge">查看充值记录</a-button>
         <a-button type="primary" size="large" @click="toInvest">立即出借</a-button>
       </div>
     </div>
@@ -21,14 +21,14 @@ export default {
   },
   methods: {
     toInvest() {
-      // this.$router.push({
-      //   name: "/product/list"
-      // });
+      this.$router.push({
+        name: "/product/list"
+      });
     },
-    toAccount() {
-      // this.$router.push({
-      //   name: "/home"
-      // });
+    showRecharge() {
+      this.$router.push({
+        name: "/account/funds-detail"
+      });
     }
   }
 };
