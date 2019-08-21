@@ -1,10 +1,7 @@
 <template>
   <div class="root-wrap">
-    <GlobalHeader 
-      :userInfo="$store.state.global.userInfo"
-      :logout="logout"
-    />
-    <GlobalNav/>
+    <GlobalHeader :userInfo="$store.state.global.userInfo" :logout="logout"/>
+    <GlobalNav :isLogin="userInfo.isLogin"/>
     <Banner v-if="name == '/home'"/>
     <div class="content">
       <router-view/>
@@ -20,7 +17,12 @@ import GlobalNav from "@/components/GlobalNav";
 import Banner from "@/components/Banner";
 import GlobalFooter from "@/components/GlobalFooter";
 import { handleWebStorage, checkErrorCode } from "@/utils/utils";
-import { updateAccountStatus, accountTemplate, resetAccountStatus } from "@/utils/common";
+import {
+  updateAccountStatus,
+  accountTemplate,
+  resetAccountStatus
+} from "@/utils/common";
+import { mapState } from "vuex";
 
 export default {
   name: "basiclayout",
@@ -38,19 +40,21 @@ export default {
   },
   methods: {
     resetMockAccount() {
-      resetAccountStatus()
+      resetAccountStatus();
     },
-    logout () {
-      this.$store.dispatch({
-        type: 'logout'
-      })
-      .then(response => {
-        if (!checkErrorCode(response)) {
-          return false
-        }
-        this.resetMockAccount()
-        this.getUserInfo()
-      })
+    logout() {
+      this.$store
+        .dispatch({
+          type: "logout"
+        })
+        .then(response => {
+          if (!checkErrorCode(response)) {
+            return false;
+          }
+          this.resetMockAccount();
+          this.getUserInfo();
+          this.$router.push({ name: "/home" });
+        });
     },
     setBasic() {
       this.name = this.$route.name;
@@ -65,19 +69,17 @@ export default {
       });
     },
     getUserInfo() {
-      this.$store
-        .dispatch({
-          type: "getUserInfo"
-        })
-        // .then(response => {
-        //   console.log(response);
-        // });
+      this.$store.dispatch({
+        type: "getUserInfo"
+      });
     }
   },
-  beforeUpdate() {
-    // console.log('...........')
-    // console.log(this.$store.state.global)
+  computed: {
+    ...mapState({
+      userInfo: state => state.global.userInfo
+    })
   },
+  beforeUpdate() {},
   mounted() {
     this.setBasic();
     this.mockAccount();

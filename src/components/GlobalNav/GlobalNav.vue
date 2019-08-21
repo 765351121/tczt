@@ -17,7 +17,7 @@
               <router-link to="/information/disclosure">信息披露</router-link>
             </a-menu-item>
             <a-menu-item key="/account">
-              <router-link to="/account/overview">我的账户</router-link>
+              <router-link :to="accountLink()">我的账户</router-link>
             </a-menu-item>
           </a-menu>
         </div>
@@ -29,7 +29,21 @@
 <script>
 export default {
   name: "globalNav",
+  props: {
+    isLogin: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
+  },
   methods: {
+    accountLink() {
+      if (this.isLogin) {
+        return "/account/overview";
+      } else {
+        return "/user/login";
+      }
+    },
     selectedKeys(url) {
       url = this.$route.path;
       const urllist = url.split("/").filter(i => i);
