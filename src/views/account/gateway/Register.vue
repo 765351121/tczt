@@ -2,7 +2,7 @@
   <div>
     <div class="wrap">
       <p class="title">开户</p>
-      <p class="des">天辰智投正式接入新网银行存管系统</p>
+      <p class="des">XX智投正式接入XX银行存管系统</p>
       <p class="tips">为保障您的资金安全，需先开通存管账户</p>
       <div class="form-wrap">
         <a-form :form="form" @submit="handleSubmit">

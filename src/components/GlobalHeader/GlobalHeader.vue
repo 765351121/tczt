@@ -3,7 +3,7 @@
     <div>
       <div>
         <img src="@/assets/icons/hot_line.png" alt width="14px" height="14px">
-        <span style="margin-left: 5px">400-085-6566(工作日 9:00-18:00)</span>
+        <span style="margin-left: 5px">400-000-0000(工作日 9:00-18:00)</span>
       </div>
       <div>
         <div class="effect" v-if="!userInfo.isLogin">

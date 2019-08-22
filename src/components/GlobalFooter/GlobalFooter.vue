@@ -5,7 +5,7 @@
         <div>
           <div><img src="@/assets/logo/logo_trans.png" alt=""></div>
           <p>客服热线:</p>
-          <p>400-085-6566</p>
+          <p>400-000-0000</p>
           <p>工作日    9:00-18:00</p>
         </div>
         <div>

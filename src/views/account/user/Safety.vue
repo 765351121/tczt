@@ -62,7 +62,7 @@
         <div class="item-info-wrap">
           <div class="content-item">
             <span>登录密码</span>
-            <span>用于登录天辰智投的密码</span>
+            <span>用于登录XX智投的密码</span>
             <span>
               <span>
                 <img src="@/assets/images/account/user/safety/tick_success.png" alt>

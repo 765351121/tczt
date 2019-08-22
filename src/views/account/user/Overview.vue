@@ -10,9 +10,9 @@
           <div class="popover">
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt" v-if="userInfo.isOpenAccount">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="userInfo.isOpenAccount">您已开通XX银行存管账户。</span>
                 <span class="popover-txt" v-if="!userInfo.isOpenAccount">
-                  您尚未开通新网银行存管账户。
+                  您尚未开通XX银行存管账户。
                   <router-link to="/account/gateway/register">去开通</router-link>
                 </span>
               </template>
@@ -30,7 +30,7 @@
 
             <a-popover placement="bottom">
               <template slot="content">
-                <span class="popover-txt" v-if="userInfo.bankCode">您已开通新网银行存管账户。</span>
+                <span class="popover-txt" v-if="userInfo.bankCode">您已开通XX银行存管账户。</span>
                 <span class="popover-txt" v-if="!userInfo.bankCode">
                   您还未绑定银行卡。
                   <router-link to="/account/gateway/register">去绑卡</router-link>
@@ -50,7 +50,7 @@
 
             <a-popover placement="bottom">
               <template slot="content">
-                <span v-if="userInfo.isRiskAccess" class="popover-txt">您已开通新网银行存管账户。</span>
+                <span v-if="userInfo.isRiskAccess" class="popover-txt">您已开通XX银行存管账户。</span>
                 <span v-if="!userInfo.isRiskAccess" class="popover-txt">
                   您还未进行风险测评。
                   <!-- <router-link to="/evaluate/risk">去测评</router-link> -->

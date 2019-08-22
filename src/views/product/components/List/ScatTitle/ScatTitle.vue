@@ -3,7 +3,7 @@
     <div class="wrap">
       <div class="des-wrap">
         <span>散标</span>
-        <span>散标是天辰智投向借款人（或企业）和出借人推出的网络借贷中介服务，全程由新网银行提供资金存管。</span>
+        <span>散标是XX智投向借款人（或企业）和出借人推出的网络借贷中介服务，全程由XX银行提供资金存管。</span>
       </div>
       <div class="rate-wrap">
         <div>

@@ -95,7 +95,7 @@
         <div class="checkbox">
           <a-checkbox :checked="state.checked" @change="handleCheckbox">
             我已阅读并同意
-            <a href="http://www.baidu.com" target="_blank">《天辰智投平台用户注册及服务协议》</a>
+            <a href="http://www.baidu.com" target="_blank">《XX智投平台用户注册及服务协议》</a>
           </a-checkbox>
         </div>
 

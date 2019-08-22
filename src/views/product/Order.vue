@@ -338,7 +338,7 @@ export default {
       this.$confirm({
         title: "提示",
         content:
-          "为保护出借人权益,天辰智投为每个用户进行风险承受能力测评,建议您尽快完成测评",
+          "为保护出借人权益,XX智投为每个用户进行风险承受能力测评,建议您尽快完成测评",
         iconType: "exclamation-circle",
         centered: true,
         cancelText: "暂不测评",
