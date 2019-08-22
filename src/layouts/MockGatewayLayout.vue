@@ -8,9 +8,9 @@
     </div>
     <div class="nav-wrap">
       <div class="nav-content">
-        <span>开户</span>
-        <span>平台名称：暴风金融1</span>
-        <span>平台公司名称：暴风金融1</span>
+        <span>{{ acType }}</span>
+        <span>平台名称：XX金融</span>
+        <span>平台公司名称：XX金融</span>
       </div>
     </div>
     <div class="content-wrap">
@@ -25,7 +25,28 @@
 
 <script>
 export default {
-  name: "T-mock-gateway-layout"
+  name: "T-mock-gateway-layout",
+  computed: {
+    acType() {
+      let path = this.$route.path.split("/");
+      let type = path[path.length - 1];
+      let txt = "";
+      switch (type) {
+        case "register":
+          txt = "开户";
+          break;
+        case "recharge":
+          txt = "快捷充值";
+          break;
+        case "withdraw":
+          txt = "提现";
+          break;
+        default:
+          break;
+      }
+      return txt;
+    }
+  }
 };
 </script>
 
@@ -96,7 +117,7 @@ export default {
   line-height: 26px;
   width: 978px;
   margin: 30px auto 0 auto;
-  color: #AAAAAA;
+  color: #aaaaaa;
 }
 
 .footer-wrap {
