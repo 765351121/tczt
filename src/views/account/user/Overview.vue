@@ -91,11 +91,13 @@
           </p>
         </div>
         <div class="btn-wrap">
-          <a-button type="primary" size="large">
-            <router-link to="/account/recharge">充值</router-link>
+          <a-button type="primary" size="large" @click="handleLogoModal('recharge')">
+            充值
+            <!-- <router-link to="/account/recharge">充值</router-link> -->
           </a-button>
-          <a-button size="large">
-            <router-link to="/account/withdraw">提现</router-link>
+          <a-button size="large" @click="handleLogoModal('withdraw')">
+            提现
+            <!-- <router-link to="/account/withdraw">提现</router-link> -->
           </a-button>
         </div>
       </div>
@@ -115,17 +117,31 @@
         </div>
       </div>
     </div>
+    <LogoModal :width="510" :visible="visible" :onCancel="onCancel">
+      <template>
+        <div class="logo-modal-content-wrap">
+          <p>为了保护您的权益，您的资金即将由存管银行监管，请先开通存管账户</p>
+          <a-button type="primary" block size="large" @click="accountRegister">立即开通</a-button>
+        </div>
+      </template>
+    </LogoModal>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { checkErrorCode, formatCurrency, Fadd, goBack } from "@/utils/utils";
+import LogoModal from "@/components/LogoModal";
 
 export default {
   name: "T-account-overview",
+  components: {
+    LogoModal
+  },
   data() {
-    return {};
+    return {
+      visible: false
+    };
   },
   methods: {
     handleEvalRisk() {
@@ -133,6 +149,23 @@ export default {
       this.$router.push({
         name: "/evaluate/risk"
       });
+    },
+    accountRegister() {
+      this.$router.push({
+        name: "/account/gateway/register"
+      });
+    },
+    onCancel() {
+      this.visible = !this.visible;
+    },
+    handleLogoModal(type) {
+      const { isOpenAccount } = this.userInfo;
+      if (isOpenAccount) {
+        return this.$router.push({
+          name: `/account/${type}`
+        });
+      }
+      this.visible = !this.visible;
     }
   },
   computed: {
@@ -249,6 +282,17 @@ export default {
     text-align: center;
     color: #333;
     font-size: 18px;
+  }
+}
+.logo-modal-content-wrap {
+  padding: 0 30px 10px;
+  & > p {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
   }
 }
 </style>
