@@ -123,6 +123,9 @@ export default {
       if (!/^(([1-9]\d*)|0)(\.\d{0,2})?$/g.test(value)) {
         return callback(`请输入正确的金额`);
       }
+      if (value <= 0) {
+        return callback(`提现金额必须大于0元`);
+      }
       if (value > canWithdrawAmount) {
         return callback(
           `提现金额不能大于${formatCurrency(canWithdrawAmount)}元`
