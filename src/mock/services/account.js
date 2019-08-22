@@ -17,7 +17,10 @@ const investList = (options) => {
     page,
     productStatus
   } = body
-
+  let userInfo = ws.getItem('account') || {}
+  let {
+    isOpenAccount
+  } = userInfo
   let data = productStatus == 1 ? Mock.mock({
     "page": page,
     "size": 10,
@@ -46,6 +49,16 @@ const investList = (options) => {
     totalAmount: 0,
     totalPage: 0,
   }
+  if (!isOpenAccount) {
+    data = {
+      "page": page,
+      "size": 10,
+      "total": 0,
+      "totalPage": 0,
+      "totalAmount": 0,
+      "rows": []
+    }
+  }
   return builder(data)
 }
 
@@ -61,6 +74,10 @@ const getCashFlow = (options) => {
   let orderTypeEnum = ['recharge', 'withdraw', 'invest', 'repayClearing', 'failBids', 'coupon']
   let startTimestamp = moment(createTimeStart).valueOf()
   let endTimestamp = moment(createTimeEnd).valueOf()
+  let userInfo = ws.getItem('account') || {}
+  let {
+    isOpenAccount
+  } = userInfo
   let data = Mock.mock({
     "page": page,
     "size": 10,
@@ -79,6 +96,16 @@ const getCashFlow = (options) => {
       "superSurprise": "+"
     }]
   })
+  if (!isOpenAccount) {
+    data = {
+      "page": page,
+      "size": 10,
+      "total": 0,
+      "totalPage": 0,
+      "totalAmount": 0,
+      "rows": []
+    }
+  }
   return builder(data)
 }
 
