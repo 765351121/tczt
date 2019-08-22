@@ -40,7 +40,8 @@ export default {
   },
   methods: {
     resetMockAccount() {
-      resetAccountStatus();
+      //resetAccountStatus();
+      updateAccountStatus({ isLogin: false })
     },
     logout() {
       this.$store

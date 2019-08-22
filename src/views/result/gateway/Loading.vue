@@ -69,7 +69,7 @@ export default {
     },
     checkResult(response) {
       // mock update account field isOpenAccount
-      this.mockAccount(response)
+      //this.mockAccount(response)
       const { query: { type } }  = this.$route
       let { orderStatus, failReason } = response
       const parms = {

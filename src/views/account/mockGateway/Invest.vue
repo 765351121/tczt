@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { handleWebStorage, Fsub } from "@/utils/utils";
+import { handleWebStorage, Fadd, Fsub } from "@/utils/utils";
 import { updateAccountStatus } from "@/utils/common";
 
 const ws = handleWebStorage();
@@ -55,6 +55,7 @@ export default {
       form: this.$form.createForm(this),
       labelCol: { span: 4 },
       wrapperCol: { span: 10 },
+      userInfo: ws.getItem("account"),
       reqData: {}
     };
   },
@@ -70,8 +71,11 @@ export default {
     },
     mockAccount() {
       let { amount, canWithdrawAmount } = this.reqData;
+      let { lendingAmount, totalLendingQuantity } = this.userInfo;
       canWithdrawAmount = Fsub(Number(canWithdrawAmount), Number(amount));
-      updateAccountStatus({ canWithdrawAmount });
+      lendingAmount = Fadd(Number(lendingAmount), Number(amount));
+      totalLendingQuantity = ++totalLendingQuantity
+      updateAccountStatus({ canWithdrawAmount,  lendingAmount, totalLendingQuantity });
     },
     handleInvestSuccess() {
       this.mockAccount();
