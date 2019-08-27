@@ -1,4 +1,7 @@
-# tczt
+<h1 align="center">tczt</h1>
+
+## Features
+- :white_check_mark: **Tech Stack **: vue-cli3 + vue + vue-router + vuex
 
 ## Usage
 
